@@ -10,16 +10,16 @@ const Header = () => {
         <img src={logo} alt="" />
       </div>
       <div className="links col-6 flexCenter">
-        <Link to="/about">
-          <p>من نحن</p>
+        <Link to="/">
+          <p>الرئيسية</p>
         </Link>
         <Link to="/special">
           <p>الاختصاصات</p>
         </Link>
-
-        <Link to="/">
-          <p>الرئيسية</p>
+        <Link to="/about">
+          <p>من نحن</p>
         </Link>
+
       </div>
       <div className="login col-3 d-flex ">
         <Button className="login-button">تسجيل الدخول</Button>

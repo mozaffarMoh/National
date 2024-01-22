@@ -1,8 +1,9 @@
 .header {
     justify-content: space-around;
-    height: 220px;
+    height: 240px;
     background-image: url(../../assets/images/Header/background.png);
     background-size: cover;
+    padding: 20px;
 
     .login {
         justify-content: flex-start;
@@ -30,6 +31,7 @@
 
     .logo {
         justify-content: flex-end;
+
         img {
             width: 180px;
         }
@@ -67,15 +69,22 @@
 @media (max-width : 550px) {
     .header {
         .login {
+            width: 30%;
+
             .login-button {
                 font-size: 10px;
             }
         }
 
-        .logo {
-            img {
-                width: 100px;
-            }
+        .links {
+            width: 30%;
+            flex-direction: column;
         }
+
+        .logo {
+            width: 40%;
+        }
+
+
     }
 }
