@@ -1,4 +1,5 @@
 .header {
+    position : relative;
     justify-content: space-around;
     height: 240px;
     background-image: url(../../assets/images/Header/background.png);
@@ -8,6 +9,16 @@
     .header-profile-icon {
         color: #464547;
 
+        .handle-profile{
+            position : absolute;
+            background-color: #B989BD80;
+            padding : 10px 20px;
+            bottom : 15px;
+            flex-direction: column !important;
+            a{
+                color : #464547 ;
+            }
+        }
         .icon-field {
             width: 25px;
             height: 40px;

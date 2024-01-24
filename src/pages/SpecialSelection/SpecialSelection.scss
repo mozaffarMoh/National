@@ -1,0 +1,20 @@
+.special-selection {
+    .special-selection-ads {
+        img {
+            width: 500px;
+            margin-bottom: 100px
+        }
+    }
+}
+
+/* Responsive */
+@media (max-width:700px) {
+    .special-selection {
+        .special-selection-ads {
+            img {
+                width: 350px;
+                margin: 50px 0px;
+            }
+        }
+    }
+}

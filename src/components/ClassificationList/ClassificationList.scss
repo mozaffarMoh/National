@@ -1,0 +1,41 @@
+.classificationList {
+    flex-direction: column !important;
+
+    h1 {
+        margin: 100px;
+    }
+
+    .classificationList-items {
+        width: 60%;
+        flex-wrap: wrap;
+        gap: 51px 65px;
+
+        .classificationList-item {
+            width: fit-content;
+            padding: 24px 32px;
+            border-radius: 5px;
+            border: 3px solid #6F2877;
+
+            p {
+                margin-top: 15px;
+            }
+
+        }
+    }
+}
+
+
+
+/* Responsive */
+@media (max-width:600px) {
+    .classificationList {
+        .classificationList-items {
+            width: 100%;
+
+            .classificationList-item {
+                padding: 10px 26px;
+            }
+
+        }
+    }
+}

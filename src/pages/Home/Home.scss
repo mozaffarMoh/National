@@ -1,0 +1,46 @@
+.home {
+    flex-direction: column;
+
+    /* First Section */
+    .first-section {
+        width: 100%;
+        overflow-y: hidden;
+
+        .home-start-now {
+            width: 50%;
+            height: 450px;
+            padding-left: 100px;
+            padding-right: 100px;
+        }
+
+        .home-ads {
+            width: 50%;
+            justify-content: flex-start;
+
+            img {
+                width: 450px;
+            }
+        }
+    }
+}
+
+
+/* Responsive on 900px */
+@media (max-width : 900px) {
+
+    .home-before-login {
+        .first-section {
+            flex-direction: column;
+
+            .home-start-now,
+            .home-ads {
+                padding: 20px;
+                width: 100%;
+
+                img {
+                    width: 300px;
+                }
+            }
+        }
+    }
+}
