@@ -52,8 +52,10 @@
 /* Responsive on 800px */
 @media (max-width : 800px) {
     .mobile-app {
-        .mobile-background {
+        height: 100%;
+        padding: 100px 20px;
 
+        .mobile-background {
             justify-content: center;
         }
 
