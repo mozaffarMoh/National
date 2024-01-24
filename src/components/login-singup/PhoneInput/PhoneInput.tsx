@@ -5,7 +5,7 @@ const PhoneInput = () => {
   return (
     <div className="item">
       <p>رقم الموبايل</p>
-      <input type="password" required placeholder="رقم الموبايل" />
+      <input type="text" required placeholder="رقم الموبايل" />
       <img src={phoneIcon} alt="" />
     </div>
   );

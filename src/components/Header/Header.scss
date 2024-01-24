@@ -1,5 +1,4 @@
 .header {
-    position : relative;
     justify-content: space-around;
     height: 240px;
     background-image: url(../../assets/images/Header/background.png);
@@ -9,16 +8,31 @@
     .header-profile-icon {
         color: #464547;
 
-        .handle-profile{
-            position : absolute;
+        cursor: pointer;
+
+        .handle-profile {
+            position: absolute;
             background-color: #B989BD80;
-            padding : 10px 20px;
-            bottom : 15px;
+            top: 140px;
             flex-direction: column !important;
-            a{
-                color : #464547 ;
+
+            .handle-profile-item {
+                width: 100%;
+                justify-content: flex-start !important;
+                padding: 5px 20px;
+                gap: 10px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #B989BD;
+                }
+            }
+
+            a {
+                color: #464547;
             }
         }
+
         .icon-field {
             width: 25px;
             height: 40px;

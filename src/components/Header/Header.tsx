@@ -5,12 +5,10 @@ import profileIcon from "../../assets/images/Header/profile.svg";
 import logoutIcon from "../../assets/images/Header/logout.svg";
 import { Link } from "react-router-dom";
 import React from "react";
-import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 
 const Header = () => {
   const token = true;
-  const [handelProfile, setHandleProfile] = React.useState(false);
-  const [showProfileEdit, setShowProfileEdit] = React.useState(false);
+  const [showProfileList, setShowProfileList] = React.useState(false);
 
   return (
     <div className="header flexCenter row ">
@@ -24,32 +22,36 @@ const Header = () => {
         <Link to="/special">
           <p>الاختصاصات</p>
         </Link>
-        <Link to="/about">
+        <Link to="#">
           <p>من نحن</p>
         </Link>
       </div>
       <div className="header-login col-3 d-flex ">
         {token ? (
-          <div className="header-profile-icon flexCenter">
-            <div
-              className="icon-field"
-              onClick={() => setHandleProfile(!handelProfile)}
-            >
+          <div
+            className="header-profile-icon flexCenter"
+            onClick={() => setShowProfileList(!showProfileList)}
+          >
+            <div className="icon-field">
               <img src={profileIcon} alt="" />
             </div>
             <h6>الملف الشخصي</h6>
-            {handelProfile && (
+            {showProfileList && (
               <div className="handle-profile flexCenter">
-                <div
-                  className="flexCenter"
-                  onClick={() => setShowProfileEdit(!showProfileEdit)}
+                <Link
+                  to="/profile-edit"
+                  className="handle-profile-item flexCenter"
                 >
-                  <img src={profileIcon} />
-                  <p>تعديل الملف الشخصي</p>
-                </div>
-                <Link to={"/login"} className="flexCenter">
-                  <img src={logoutIcon} />
-                  <p>تسجيل الخروج</p>
+                  <div className="icon-field mt-3">
+                    <img src={profileIcon} />{" "}
+                  </div>
+                  <p className="mt-3">تعديل الملف الشخصي</p>
+                </Link>
+                <Link to={"/login"} className="handle-profile-item flexCenter">
+                  <div className="icon-field mt-3">
+                    <img src={logoutIcon} />
+                  </div>
+                  <p className="mt-3">تسجيل الخروج</p>
                 </Link>
               </div>
             )}
@@ -59,7 +61,6 @@ const Header = () => {
             <Button className="header-login-button">تسجيل الدخول</Button>
           </Link>
         )}
-        {showProfileEdit && <ProfileEdit />}
       </div>
     </div>
   );
