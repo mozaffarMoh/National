@@ -8,8 +8,8 @@ const Footer = () => {
     <div className="footer row flexCenter">
       <div className="text-field col-8 flexCenter">
         <div className="links flexCenter">
-          <p>الشروط والاستخدام</p>
           <p>سياسة الخصوصية</p>
+          <p>الشروط و الاستخدام</p>
         </div>
         <div className="icons flexCenter">
           <p>جميع الحقوق محفوظة 2023 </p>

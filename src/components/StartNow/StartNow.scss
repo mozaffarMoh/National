@@ -11,5 +11,8 @@
         border: 1px solid #6F2877;
         background-color: #6F2877;
         color: white;
+        &:hover{
+            background-color: #6F2877DD;
+        }
     }
 }

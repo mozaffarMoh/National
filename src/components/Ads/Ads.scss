@@ -1,7 +1,20 @@
 .ads {
     width: 100%;
+    flex-direction: column;
 
-    img {
-        width: 100%
+    .carousel-indicators, .carousel-control-prev-icon, .carousel-control-next-icon {
+        display: none;
     }
+
+
+    .ads-content {
+        width: 100%;
+    }
+
+    .slide-icon {
+        width: 10px !important;
+        margin-left: 5px;
+    }
+
+
 }

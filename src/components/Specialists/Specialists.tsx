@@ -6,7 +6,7 @@ const Specialists = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="specialists flexCenter">
+    <div className="specialists flexCenter" id="specialists">
       <div>
         <h2>الإختصاصات</h2>
       </div>

@@ -19,7 +19,7 @@ const Header = () => {
         <Link to="/">
           <p>الرئيسية</p>
         </Link>
-        <Link to="/special">
+        <Link to="#specialists">
           <p>الاختصاصات</p>
         </Link>
         <Link to="#">
