@@ -98,6 +98,20 @@
     }
 }
 
+/* Responsive on 650px */
+@media (max-width : 650px) {
+
+    .header-profile-icon {
+        .icon-field {
+            width: 35px !important;
+        }
+
+        .handle-profile-item {
+            font-size: 10px;
+
+        }
+    }
+}
 
 /* Responsive on 550px */
 @media (max-width : 550px) {
