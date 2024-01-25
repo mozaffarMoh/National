@@ -19,12 +19,12 @@ const Header = () => {
         <Link to="/">
           <p>الرئيسية</p>
         </Link>
-        <Link to="#specialists">
+        <a href="#specialists">
           <p>الاختصاصات</p>
-        </Link>
-        <Link to="#">
+        </a>
+        <a>
           <p>من نحن</p>
-        </Link>
+        </a>
       </div>
       <div className="header-login col-3 d-flex ">
         {token ? (

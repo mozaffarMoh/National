@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Alexandria&display=swap');
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+
 * {
     padding: 0px;
     margin: 0px;
@@ -16,6 +17,12 @@ a {
 
 .flexCenter {
     display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flexCenterColumn {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }

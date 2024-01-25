@@ -14,10 +14,22 @@
             width: 25%;
             height: 160px;
             flex-direction: column;
-
+            
             img,
             p {
                 cursor: pointer;
+            }
+            img{
+                width : 80px;
+                height: 80px;
+            }
+            
+            &:hover{
+                p{
+                    font-weight: 800;
+                    border-bottom: 4px solid #6F2877;
+                    transition : all ease .2s;
+                }
             }
         }
     }
