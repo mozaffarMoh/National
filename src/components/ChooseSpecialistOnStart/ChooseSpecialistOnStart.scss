@@ -1,0 +1,63 @@
+.choose-specialist-on-start {
+    width: 559px;
+    height: 100%;
+    padding : 30px;
+    border-radius: 64px;
+    background: #FFF;
+    border: 1px solid black;
+    flex-direction: column !important;
+    gap : 30px;
+
+    h1 {
+        color: #000;
+        font-size: 20px;
+        font-weight: 400;
+    }
+
+    p {
+        color: #000;
+        font-family: Alexandria;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    .choose-specialist-on-start-section {
+        align-items: flex-start !important;
+
+        .choose-specialist-on-start-items {
+            width: 100%;
+            flex-wrap: wrap;
+
+
+            .choose-specialist-on-start-item {
+                width: 153px;
+                padding: 0px 10px;
+                border-radius: 5px;
+                border: 1px solid #6F2877;
+
+                p {
+                    margin-top: 15px;
+                }
+
+            }
+        }
+    }
+}
+
+
+
+/* Responsive */
+@media (max-width:600px) {
+    .choose-specialist-on-start {
+        .choose-specialist-on-start-items {
+            width: 100%;
+
+            .choose-specialist-on-start-item {
+                padding: 10px 26px;
+            }
+
+        }
+    }
+}
