@@ -9,6 +9,7 @@ import React from "react";
 const Header = () => {
   const token = true;
   const [showProfileList, setShowProfileList] = React.useState(false);
+  const [active, setActive] = React.useState("");
 
   return (
     <div className="header flexCenter row ">
@@ -16,45 +17,64 @@ const Header = () => {
         <img src={logo} alt="" />
       </div>
       <div className="links col-6 flexCenter">
-        <Link to="/">
+        <Link
+          to="/"
+          className={`link-template ${
+            active === "main" && "link-template-active"
+          }`}
+          onClick={() => setActive("main")}
+        >
           <p>الرئيسية</p>
         </Link>
-        <a href="#specialists">
-          <p>الاختصاصات</p>
+        <a
+          href="#specialists"
+          className={`link-template ${
+            active === "specialists" && "link-template-active"
+          }`}
+          onClick={() => setActive("specialists")}
+        >
+          <p>الإختصاصات</p>
         </a>
-        <a>
+        <a
+          className={`link-template ${
+            active === "about" && "link-template-active"
+          }`}
+          onClick={() => setActive("about")}
+        >
           <p>من نحن</p>
         </a>
       </div>
       <div className="header-login col-3 d-flex ">
         {token ? (
           <div
-            className="header-profile-icon flexCenter"
+            className="header-profile flexCenter"
             onClick={() => setShowProfileList(!showProfileList)}
           >
             <div className="icon-field">
               <img src={profileIcon} alt="" />
             </div>
-            <h6>الملف الشخصي</h6>
-            {showProfileList && (
-              <div className="handle-profile flexCenter">
-                <Link
-                  to="/profile-edit"
-                  className="handle-profile-item flexCenter"
-                >
-                  <div className="icon-field mt-3">
-                    <img src={profileIcon} />{" "}
-                  </div>
-                  <p className="mt-3">تعديل الملف الشخصي</p>
-                </Link>
-                <Link to={"/login"} className="handle-profile-item flexCenter">
-                  <div className="icon-field mt-3">
-                    <img src={logoutIcon} />
-                  </div>
-                  <p className="mt-3">تسجيل الخروج</p>
-                </Link>
-              </div>
-            )}
+            <h6 className={`${showProfileList && "fw-bold"}`}>الملف الشخصي</h6>
+            <div
+              className={`handle-profile flexCenter ${
+                showProfileList ? "showProfileList " : "hideProfileList"
+              }`}
+            >
+              <Link
+                to="/profile-edit"
+                className="handle-profile-item flexCenter"
+              >
+                <div className="icon-field mt-3">
+                  <img src={profileIcon} />{" "}
+                </div>
+                <p className="mt-3">تعديل الملف الشخصي</p>
+              </Link>
+              <Link to={"/login"} className="handle-profile-item flexCenter">
+                <div className="icon-field mt-3">
+                  <img src={logoutIcon} />
+                </div>
+                <p className="mt-3">تسجيل الخروج</p>
+              </Link>
+            </div>
           </div>
         ) : (
           <Link to={"/login"}>

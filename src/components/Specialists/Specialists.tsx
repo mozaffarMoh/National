@@ -1,9 +1,19 @@
+import React from "react";
 import "./Specialists.scss";
 import { SpecialistsImages } from "./specialistsImages";
-import { useNavigate } from "react-router-dom";
+import ChooseSpecialistOnStart from "../ChooseSpecialist/ChooseSpecialistOnStart";
 
 const Specialists = () => {
-  const navigate = useNavigate();
+
+  const [showChooseSpecialist, setShowChooseSpecialist] = React.useState(false)
+
+
+  const handleChoose = (index:number) => {
+    if(index === 4){
+       setShowChooseSpecialist(true);
+    }
+  }
+
 
   return (
     <div className="specialists flexCenter" id="specialists">
@@ -16,7 +26,7 @@ const Specialists = () => {
             <div
               className="special-item flexCenter"
               key={index}
-              onClick={() => navigate("/special-selection")}
+              onClick={() => handleChoose(index)}
             >
               <img src={item.img} />
               <p>{item.title}</p>
@@ -24,6 +34,7 @@ const Specialists = () => {
           );
         })}
       </div>
+      {showChooseSpecialist && <ChooseSpecialistOnStart />}
     </div>
   );
 };

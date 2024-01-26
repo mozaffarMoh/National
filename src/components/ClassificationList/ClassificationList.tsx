@@ -5,7 +5,7 @@ const ClassificationList = () => {
   const classificationsArray = [
     { title: "المترجمات" },
     { title: "الذكاء الاصطناعي" },
-    { title: "فواعد المعطيات" },
+    { title: "قواعد المعطيات" },
     { title: "الأوتومات" },
     { title: "الشبكات" },
     { title: "هندسة البرمجيات" },

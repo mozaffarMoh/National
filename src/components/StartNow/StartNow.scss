@@ -11,8 +11,10 @@
         border: 1px solid #6F2877;
         background-color: #6F2877;
         color: white;
-        &:hover{
-            background-color: #6F2877DD;
+        transition: border .3s ease;
+
+        &:hover {
+            border: 5px solid #B9E5FB;
         }
     }
 }

@@ -1,6 +1,10 @@
+import { Button } from "react-bootstrap";
 import "./ChooseSpecialistOnStart.scss";
+import { useNavigate } from "react-router-dom";
 
 const ChooseSpecialistOnStart = () => {
+  const navigate = useNavigate();
+
   const speicalistArray = [
     { title: "هندسة برمجيات" },
     { title: "الذكاء الاصطناعي" },
@@ -8,6 +12,10 @@ const ChooseSpecialistOnStart = () => {
   ];
 
   const examTypeArray = [{ title: "ماستر" }, { title: "تخرج" }];
+
+  const handleClick = () => {
+    navigate("/special-selection");
+  };
 
   return (
     <div className="choose-specialist-on-start flexCenterColumn">
@@ -30,7 +38,7 @@ const ChooseSpecialistOnStart = () => {
       </div>
 
       <div className="choose-specialist-on-start-section flexCenterColumn ">
-        <p>الاختصاص</p>
+        <p>نوع الامتحان</p>
         <div className="choose-specialist-on-start-items flexCenter">
           {examTypeArray.map((item, index) => {
             return (
@@ -44,6 +52,13 @@ const ChooseSpecialistOnStart = () => {
           })}
         </div>
       </div>
+      <Button
+        className="choose-specialist-on-start-button"
+        variant="secondary"
+        onClick={handleClick}
+      >
+        التالي
+      </Button>
     </div>
   );
 };

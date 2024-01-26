@@ -7,7 +7,7 @@ const LoginButton = () => {
     <div className="item">
       <Button className="login-button">تسجيل الدخول</Button>
       <div className="flexCenter">
-        <Link to={"/register"}>ليس لديك حساب ؟ أنشأ حساب</Link>
+        <a className="text-black">ليس لديك حساب ؟&nbsp;</a><Link to={"/register"}>أنشأ حساب</Link>
       </div>
     </div>
   );

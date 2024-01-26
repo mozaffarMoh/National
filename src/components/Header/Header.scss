@@ -5,27 +5,37 @@
     background-size: cover;
     padding: 20px;
 
-    .header-profile-icon {
+    .header-profile {
         color: #464547;
-
         cursor: pointer;
-
+        
+        .hideProfileList{
+            display: none;
+        }
+        .showProfileList{
+            display: block;
+        }
+        
+        h1 {
+            margin-bottom: 100px;
+        }
+        
         .handle-profile {
             position: absolute;
-            background-color: #B989BD80;
-            top: 140px;
+            top: 120px;
             flex-direction: column !important;
             z-index: 30;
-
+            font-size: 15px;
+            
             .handle-profile-item {
                 width: 100%;
                 justify-content: flex-start !important;
-                padding: 5px 20px;
+                padding: 0px 20px;
                 gap: 10px;
                 cursor: pointer;
 
                 &:hover {
-                    background-color: #B989BD;
+                    background-color: #B989BD80;
                 }
             }
 
@@ -36,7 +46,7 @@
 
         .icon-field {
             width: 25px;
-            height: 40px;
+            height: 35px;
         }
     }
 
@@ -58,9 +68,33 @@
     .links {
         justify-content: flex-start;
 
-        p {
-            margin-right: 50px;
+        .link-template {
+            width: fit-content;
+            height: fit-content;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            margin-right: 40px;
             color: #464547;
+            cursor: pointer;
+            transition: all .3s ease;
+
+            &:hover {
+                border: 3px solid #B9E5FB;
+            }
+
+            p {
+                margin-top: 10px;
+            }
+        }
+
+        .link-template-active {
+            background-color: white;
+            border: 1px solid #464547;
+
+            &:hover {
+                border: 1px solid #464547;
+            }
         }
     }
 
@@ -85,8 +119,8 @@
         }
 
         .links {
-            p {
-                font-size: 14px;
+            .link-template {
+                padding: 5px;
                 margin-right: 10px;
             }
         }
@@ -102,14 +136,27 @@
 /* Responsive on 650px */
 @media (max-width : 650px) {
 
-    .header-profile-icon {
-        .icon-field {
-            width: 35px !important;
+    .header {
+
+        .header-profile-icon {
+            .icon-field {
+                width: 35px !important;
+            }
+
+            .handle-profile-item {
+                font-size: 10px;
+
+            }
         }
 
-        .handle-profile-item {
-            font-size: 10px;
+        .links {
+            .link-template {
+                margin-right: 0px;
 
+                p {
+                    font-size: 15px;
+                }
+            }
         }
     }
 }
@@ -118,10 +165,32 @@
 @media (max-width : 550px) {
     .header {
 
-        .header-profile-icon {
-            p {
-                font-size: 12px;
+        height: 250px;
+
+
+        .header-profile {
+            .icon-field {
+                width: 33px;
             }
+
+            .handle-profile {
+
+                top: 150px;
+
+                .handle-profile-item {
+
+                    p {
+                        font-size: 12px;
+                        margin-right: 10px;
+                    }
+
+                    h6 {
+                        font-size: 12px;
+                    }
+                }
+            }
+
+
         }
 
         .header-login {
@@ -133,14 +202,21 @@
         }
 
         .links {
-            width: 30%;
+            width: 35%;
             flex-direction: column;
+
+            .link-template {
+                margin: 0px;
+
+                p {
+                    font-size: 14px;
+                }
+            }
         }
 
         .logo {
-            width: 40%;
+            width: 35%;
         }
-
 
     }
 }

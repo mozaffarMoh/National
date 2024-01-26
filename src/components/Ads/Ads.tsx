@@ -16,7 +16,7 @@ const Ads = () => {
   };
 
   return (
-    <div className="ads flexCenter">
+    <div className="ads flexCenterColumn">
       <Carousel activeIndex={indexValue} onSelect={handleCarouselSelect}>
         {adsArray.map((item, index) => {
           return (
@@ -29,9 +29,19 @@ const Ads = () => {
       <div className="flexCenter mt-4">
         {adsArray.map((_, index: number) => {
           return index === indexValue ? (
-            <img src={slideFillIcon} alt="" className="slide-icon" />
+            <img
+              src={slideFillIcon}
+              alt=""
+              className="slide-icon"
+              key={index}
+            />
           ) : (
-            <img src={slideEmptyIcon} alt="" className="slide-icon" />
+            <img
+              src={slideEmptyIcon}
+              alt=""
+              className="slide-icon"
+              key={index}
+            />
           );
         })}
       </div>
