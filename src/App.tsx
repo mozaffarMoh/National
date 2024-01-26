@@ -9,6 +9,7 @@ import ProfileEdit from "./pages/ProfileEdit/ProfileEdit";
 import SpecialQuiz from "./pages/SpecialQuiz/SpecialQuiz";
 import DawratQuiz from "./pages/DawratQuiz/DawratQuiz";
 import DawratSelection from "./pages/DawratSelection/DawratSelection";
+import QuizResult from "./pages/QuizResult/QuizResult";
 
 function App() {
   const token = false;
@@ -24,6 +25,7 @@ function App() {
           <Route path="/special-quiz" element={<SpecialQuiz />} />
           <Route path="/dawrat-selection" element={<DawratSelection />} />
           <Route path="/dawrat-quiz" element={<DawratQuiz />} />
+          <Route path="/quiz-result" element={<QuizResult />} />
         </Routes>
       </Router>
     </>

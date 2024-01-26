@@ -3,8 +3,9 @@ import React from "react";
 import Header from "../../components/Header/Header";
 import BackTo from "../../components/BackTo/BackTo";
 import Instructions from "../../components/Instructions/Instructions";
-import DawratQuizQuestions from "../../components/DawratQuizQuestions/DawratQuizQuestions";
+import QuizQuestions from "../../components/QuizQuestions/QuizQuestions";
 import DawratDetails from "../../components/DawratDetails/DawratDetails";
+import Footer from "../../components/Footer/Footer";
 
 const DawratQuiz = () => {
   const [showQuestions, setShowQuestions] = React.useState(false);
@@ -14,7 +15,8 @@ const DawratQuiz = () => {
       <BackTo />
       <DawratDetails />
       <Instructions showQuestions={() => setShowQuestions(true)} />
-      {showQuestions && <DawratQuizQuestions />}
+      {showQuestions && <QuizQuestions />}
+      <Footer />
     </div>
   );
 };

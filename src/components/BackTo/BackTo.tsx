@@ -11,9 +11,9 @@ const BackTo = () => {
       location.pathname === "/special-quiz"
     ) {
       navigate("/special-selection");
-    } else {
-      location.pathname === "/dawrat-quiz" && navigate("/dawrat-selection");
     }
+    location.pathname === "/dawrat-quiz" && navigate("/dawrat-selection");
+    location.pathname === "/quiz-result" && navigate("/dawrat-quiz");
   };
   return (
     <div className="back-to">
