@@ -2,31 +2,41 @@
     width: 100%;
     height: 100px;
     justify-content: space-evenly !important;
-    margin-top : 100px;
+    margin-top: 100px;
+    overflow-y: hidden;
 
     button {
-        padding: 32px 64px;
-        color : white;
+        //padding: 32px 64px;
+        height: 94px;
+        color: white;
         font-size: 20px;
         font-weight: 500;
         border-radius: 5px;
         border: none;
+        transition: border .3s ease;
     }
 
     .dawrat-button {
         background: #6F2877;
+        width: 190px;
 
         &:hover {
-            background: #6F2877DD;
+            background: #6F2877;
+            color: white;
+            border: 5px solid #B9E5FB;
         }
     }
 
+
     .questions-button {
         background: #20C4F4;
+        width: 229px;
 
         &:hover {
-            background: #20C4F4CC;
-            color : white;
+            background: #20C4F4;
+            color: white;
+            border: 5px solid #B9E5FB;
+
         }
     }
 }
@@ -37,7 +47,8 @@
 @media (max-width:600px) {
     .classificationButtons {
         button {
-            padding: 25px 40px;
+            width: 150px !important;
+            height: 70px;
             font-size: 15px;
         }
     }

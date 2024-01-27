@@ -1,11 +1,11 @@
 .header {
     justify-content: space-around;
-    width : 105%;
+    width: 105%;
     height: 200px;
     background-image: url(../../assets/images/Header/background.png);
     background-size: cover;
     padding: 20px;
-    
+
     .header-profile {
         color: #464547;
         cursor: pointer;
@@ -61,39 +61,43 @@
             background-color: white;
             border: 2px solid #6F2877;
             color: #6F2877;
+            transition: border .3s ease;
+
+            &:hover {
+                border: 2px solid #B9E5FB;
+            }
         }
 
-        .header-login-button:hover {
-            background-color: rgb(240, 238, 238);
-        }
     }
 
     .links {
         justify-content: flex-start;
 
         .link-template {
-            width: fit-content;
-            height: fit-content;
+            width: 115px;
+            height: 50px;
+            overflow-y: hidden;
             text-align: center;
-            padding: 10px;
             border-radius: 5px;
-            margin-right: 40px;
+            margin-right: 35px;
             color: #464547;
             cursor: pointer;
             transition: all .3s ease;
 
             &:hover {
-                border: 3px solid #B9E5FB;
+                border: 2px solid #B9E5FB;
             }
 
             p {
                 margin-top: 10px;
             }
+
         }
 
         .link-template-active {
             background-color: white;
-            border: 1px solid #464547;
+            border: 2px solid #6F2877;
+            color: #6F2877;
 
             &:hover {
                 border: 1px solid #464547;
@@ -123,6 +127,8 @@
 
         .links {
             .link-template {
+                width: fit-content;
+                height: fit-content;
                 padding: 5px;
                 margin-right: 10px;
             }

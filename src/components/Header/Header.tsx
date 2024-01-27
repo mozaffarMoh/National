@@ -7,9 +7,13 @@ import { Link } from "react-router-dom";
 import React from "react";
 
 const Header = () => {
-  const token = true;
+  const token = false;
   const [showProfileList, setShowProfileList] = React.useState(false);
   const [active, setActive] = React.useState("");
+
+  const handleSetActive = (value: string) => {
+    active === value ? setActive("") : setActive(value);
+  };
 
   return (
     <div className="header flexCenter row ">
@@ -22,7 +26,7 @@ const Header = () => {
           className={`link-template ${
             active === "main" && "link-template-active"
           }`}
-          onClick={() => setActive("main")}
+          onClick={() => handleSetActive("main")}
         >
           <p>الرئيسية</p>
         </Link>
@@ -31,7 +35,7 @@ const Header = () => {
           className={`link-template ${
             active === "specialists" && "link-template-active"
           }`}
-          onClick={() => setActive("specialists")}
+          onClick={() => handleSetActive("specialists")}
         >
           <p>الإختصاصات</p>
         </a>
@@ -39,7 +43,7 @@ const Header = () => {
           className={`link-template ${
             active === "about" && "link-template-active"
           }`}
-          onClick={() => setActive("about")}
+          onClick={() => handleSetActive("about")}
         >
           <p>من نحن</p>
         </a>

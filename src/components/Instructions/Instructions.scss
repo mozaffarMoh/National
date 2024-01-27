@@ -21,6 +21,8 @@
 
     .start-quiz-button {
         width: 264px;
+        height: 72px;
+        overflow-y: hidden;
         padding: 16px;
         border-radius: 5px;
         border: 1px solid #6F2877;
@@ -28,9 +30,12 @@
         color: #FFF;
         font-size: 20px;
         font-weight: 500;
+        transition: border .3s ease;
 
         &:hover {
-            background-color: #6F2877EE;
+            border: 5px solid #B9E5FB;
+            background: #6F2877;
+            color: #FFF;
         }
     }
 }

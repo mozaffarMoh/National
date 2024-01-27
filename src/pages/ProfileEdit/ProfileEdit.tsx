@@ -1,9 +1,9 @@
 import "./ProfileEdit.scss";
 import avatarIcon from "../../assets/images/ProfileEdit/avatar.svg";
 import { useNavigate } from "react-router-dom";
-import UsernameInputEdit from "../../components/UsernameInputEdit/UsernameInputEdit";
-import PhoneInputEdit from "../../components/PhoneInputEdit/phoneInputEdit";
 import { Button } from "react-bootstrap";
+import UsernameInputEdit from "../../components/UsernameInputEdit/UsernameInputEdit";
+import PhoneInputEdit from "../../components/PhoneInputEdit/PhoneInputEdit";
 
 const ProfileEdit = () => {
   const navigate = useNavigate();

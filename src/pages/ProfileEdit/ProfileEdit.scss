@@ -45,9 +45,10 @@
             height: 57px;
             border-radius: 5px;
             background: #6F2877;
+            transition: border .3s ease;
 
             &:hover {
-                background-color: #6F2877DD;
+                border: 3px solid #B9E5FB;
             }
         }
 
