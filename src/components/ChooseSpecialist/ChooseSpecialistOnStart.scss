@@ -34,10 +34,18 @@
 
             .choose-specialist-on-start-item {
                 width: 153px;
+                height: 51px;
+                overflow-y: hidden;
+                cursor: pointer;
                 margin: 2px 10px;
                 padding: 0px 10px;
                 border-radius: 5px;
                 border: 1px solid #6F2877;
+                transition: border .3s ease;
+
+                &:hover {
+                    border: 5px solid #B9E5FB;
+                }
 
                 p {
                     margin-top: 15px;
@@ -55,9 +63,12 @@
         height: 57px;
         border-radius: 5px;
         background: #6F2877;
+        transition: border .3s ease;
 
         &:hover {
-            background: #6F2877DD;
+            background: #6F2877;
+            color: white;
+            border: 5px solid #B9E5FB;
         }
     }
 }
