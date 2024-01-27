@@ -3,11 +3,13 @@ import { Button } from "react-bootstrap";
 import logo from "../../assets/images/Header/logo darebni.png";
 import profileIcon from "../../assets/images/Header/profile.svg";
 import logoutIcon from "../../assets/images/Header/logout.svg";
+import ProfileEdit from "../ProfileEdit/ProfileEdit";
 import { Link } from "react-router-dom";
 import React from "react";
 
 const Header = () => {
   const token = true;
+  const [showProfileEdit, setShowProfileEdit] = React.useState(false);
   const [showProfileList, setShowProfileList] = React.useState(false);
   const [active, setActive] = React.useState("");
 
@@ -63,15 +65,15 @@ const Header = () => {
                 showProfileList ? "showProfileList " : "hideProfileList"
               }`}
             >
-              <Link
-                to="/profile-edit"
+              <div
                 className="handle-profile-item flexCenter"
+                onClick={() => setShowProfileEdit(true)}
               >
                 <div className="icon-field mt-3">
                   <img src={profileIcon} />{" "}
                 </div>
                 <p className="mt-3">تعديل الملف الشخصي</p>
-              </Link>
+              </div>
               <Link to={"/login"} className="handle-profile-item flexCenter">
                 <div className="icon-field mt-3">
                   <img src={logoutIcon} />
@@ -86,6 +88,10 @@ const Header = () => {
           </Link>
         )}
       </div>
+
+      {showProfileEdit && (
+        <ProfileEdit setShowProfileEdit={() => setShowProfileEdit(false)} />
+      )}
     </div>
   );
 };
