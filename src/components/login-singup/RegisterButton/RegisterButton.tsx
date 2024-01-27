@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const RegisterButton = () => {
   return (
-    <div className="item">
+    <div className="register-button-component">
       <Button className="register-button"> إنشاء حساب</Button>
       <div className="flexCenter">
         <a className="text-black"> لديك حساب ؟&nbsp;</a>

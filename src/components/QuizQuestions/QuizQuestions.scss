@@ -52,6 +52,8 @@
 
         .quiz-footer {
             justify-content: space-between !important;
+            height: 58px;
+            overflow-y: hidden;
 
             img {
                 width: 27px;
@@ -86,6 +88,8 @@
 
     .quiz-questions-button {
         width: 60%;
+        height: 112px;
+        overflow-y: hidden;
         color: #FFF;
         font-size: 25px;
         font-weight: 500;
@@ -128,6 +132,7 @@
         }
 
         .quiz-questions-button {
+            height: 90px;
             padding: 15px 10px;
             font-size: 20px;
         }

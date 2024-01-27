@@ -3,7 +3,7 @@ import passwordIcon from "../../../assets/images/Login/password.svg";
 
 const PasswordInput = () => {
   return (
-    <div className="item">
+    <div className="password-input-component">
       <p>رمز الدخول</p>
       <input type="password" required placeholder="رمز الدخول" />
       <img src={passwordIcon} alt="" />
