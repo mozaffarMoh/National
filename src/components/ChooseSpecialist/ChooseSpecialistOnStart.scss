@@ -6,7 +6,6 @@
     border-radius: 64px;
     background: #FFF;
     border: 1px solid black;
-    flex-direction: column !important;
     gap: 30px;
     z-index: 30;
 
@@ -18,15 +17,12 @@
 
     p {
         color: #000;
-        font-family: Alexandria;
         font-size: 14px;
-        font-style: normal;
         font-weight: 400;
-        line-height: normal;
     }
 
     .choose-specialist-on-start-section {
-        align-items: flex-start !important;
+        align-items: flex-start;
 
         .choose-specialist-on-start-items {
             width: 100%;

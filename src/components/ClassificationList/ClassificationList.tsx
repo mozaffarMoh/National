@@ -13,7 +13,7 @@ const ClassificationList = () => {
   ];
   
   return (
-    <div className="classificationList flexCenter">
+    <div className="classificationList flexCenterColumn">
       <h1>التصنيفات</h1>
       <div className="classificationList-items flexCenter">
         {classificationsArray.map((item, index) => {

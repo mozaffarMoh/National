@@ -6,12 +6,12 @@ import logo from "../../assets/images/Header/logo darebni.png";
 const Footer = () => {
   return (
     <div className="footer row flexCenter">
-      <div className="text-field col-8 flexCenter">
+      <div className="text-field col-8 flexCenterColumnItemsStart">
         <div className="links flexCenter">
           <p>سياسة الخصوصية</p>
           <p>الشروط و الاستخدام</p>
         </div>
-        <div className="icons flexCenter">
+        <div className="icons flexBetween">
           <p>جميع الحقوق محفوظة 2023 </p>
           <img src={facebookLogo} alt="" />
           <img src={instaLogo} alt="" />

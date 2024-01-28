@@ -1,11 +1,10 @@
 .all-dawrat {
     width: 100%;
-    flex-direction: column !important;
     gap: 40px;
 
     .all-dawrat-item {
         position: relative;
-        justify-content: flex-start !important;
+        justify-content: flex-start;
         width: 83%;
         height: 82px;
         padding: 10px;

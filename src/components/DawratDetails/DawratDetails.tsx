@@ -2,7 +2,7 @@ import "./DawratDetails.scss";
 
 const DawratDetails = () => {
   return (
-    <div className="dawrat-details flexCenterColumn">
+    <div className="dawrat-details flexCenterColumnItemsStart">
       <div className="dawrat-details-item flexCenter">
         <h1>2023 دورة تشرين</h1>
       </div>

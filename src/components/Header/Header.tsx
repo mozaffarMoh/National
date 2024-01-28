@@ -5,10 +5,12 @@ import profileIcon from "../../assets/images/Header/profile.svg";
 import logoutIcon from "../../assets/images/Header/logout.svg";
 import ProfileEdit from "../ProfileEdit/ProfileEdit";
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useRef } from "react";
+import { Transition } from "react-transition-group";
 
 const Header = () => {
   const token = true;
+  const ref = useRef();
   const [showProfileEdit, setShowProfileEdit] = React.useState(false);
   const [showProfileList, setShowProfileList] = React.useState(false);
   const [active, setActive] = React.useState("");
@@ -60,27 +62,39 @@ const Header = () => {
               <img src={profileIcon} alt="" />
             </div>
             <h6 className={`${showProfileList && "fw-bold"}`}>الملف الشخصي</h6>
-            <div
-              className={`handle-profile flexCenter ${
-                showProfileList ? "showProfileList " : "hideProfileList"
-              }`}
-            >
-              <div
-                className="handle-profile-item flexCenter"
-                onClick={() => setShowProfileEdit(true)}
-              >
-                <div className="icon-field mt-3">
-                  <img src={profileIcon} />{" "}
+
+            <Transition in={showProfileList} timeout={500} nodeRef={ref}>
+              {(state) => (
+                <div
+                  className="transistion-profile"
+                  style={{ opacity: state === "entered" ? 1 : 0 }}
+                >
+                  {showProfileList && (
+                    <div className="handle-profile flexCenterColumn">
+                      <div
+                        className="handle-profile-item flexStart"
+                        onClick={() => setShowProfileEdit(true)}
+                      >
+                        <div className="icon-field mt-3">
+                          <img src={profileIcon} />{" "}
+                        </div>
+                        <p className="mt-3">تعديل الملف الشخصي</p>
+                      </div>
+
+                      <Link
+                        to={"/login"}
+                        className="handle-profile-item flexCenter"
+                      >
+                        <div className="icon-field mt-3">
+                          <img src={logoutIcon} />
+                        </div>
+                        <p className="mt-3">تسجيل الخروج</p>
+                      </Link>
+                    </div>
+                  )}
                 </div>
-                <p className="mt-3">تعديل الملف الشخصي</p>
-              </div>
-              <Link to={"/login"} className="handle-profile-item flexCenter">
-                <div className="icon-field mt-3">
-                  <img src={logoutIcon} />
-                </div>
-                <p className="mt-3">تسجيل الخروج</p>
-              </Link>
-            </div>
+              )}
+            </Transition>
           </div>
         ) : (
           <Link to={"/login"}>

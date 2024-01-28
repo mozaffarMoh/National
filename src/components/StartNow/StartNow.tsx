@@ -2,7 +2,7 @@ import "./StartNow.scss";
 
 const StartNow = () => {
   return (
-    <div className="start-now flexCenter">
+    <div className="start-now flexEvenly">
       <div>
         <h2>طريقك الأسهل لإجتياز الفحص الوطني الموحد</h2>
         <p>

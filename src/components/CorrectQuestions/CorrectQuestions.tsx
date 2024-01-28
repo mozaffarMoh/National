@@ -47,11 +47,11 @@ const CorrectQuestions = () => {
             <p>{item.title}</p>
             <p>{item.question}</p>
 
-            <div className="answers flexCenter">
+            <div className="answers flexCenterColumn">
               {item.answers.map((child: any, index: number) => {
                 return (
                   <div
-                    className={`answer flexCenter ${handleChangeColor(
+                    className={`answer flexBetween ${handleChangeColor(
                       child.value
                     )}`}
                     key={index}
@@ -73,7 +73,7 @@ const CorrectQuestions = () => {
               })}
             </div>
 
-            <div className="correct-footer flexCenter">
+            <div className="correct-footer flexBetween">
               <div className="flexCenter gap-4 ">
                 <img src={successIcon} alt="" />
                 {!showFillStar ? (

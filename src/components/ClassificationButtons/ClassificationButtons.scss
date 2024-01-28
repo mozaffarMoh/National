@@ -1,7 +1,7 @@
 .classificationButtons {
     width: 100%;
     height: 100px;
-    justify-content: space-evenly !important;
+    justify-content: space-evenly;
     margin-top: 100px;
     overflow-y: hidden;
 
@@ -46,8 +46,10 @@
 /* Responsive */
 @media (max-width:600px) {
     .classificationButtons {
-        button {
-            width: 150px !important;
+
+        .questions-button,
+        .dawrat-button {
+            width: 150px;
             height: 70px;
             font-size: 15px;
         }

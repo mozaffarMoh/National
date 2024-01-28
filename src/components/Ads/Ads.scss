@@ -1,7 +1,9 @@
 .ads {
     width: 100%;
 
-    .carousel-indicators, .carousel-control-prev-icon, .carousel-control-next-icon {
+    .carousel-indicators,
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
         display: none;
     }
 
@@ -10,10 +12,9 @@
         width: 100%;
     }
 
+
     .slide-icon {
-        width: 10px !important;
+        width: 10px;
         margin-left: 5px;
     }
-
-
 }

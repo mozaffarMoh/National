@@ -16,6 +16,11 @@
             text-align: start;
             font-size: 20px;
             font-weight: 500;
+
+            span {
+                margin-left: 10px;
+                color: #B989BD;
+            }
         }
     }
 
@@ -39,8 +44,3 @@
         }
     }
 }
-
-
-/* Responsive */
-
-@media screen {}

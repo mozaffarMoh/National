@@ -8,6 +8,7 @@ const ProfileEdit = ({ setShowProfileEdit }: any) => {
   const handleClose = () => {
     setShowProfileEdit(false);
   };
+
   return (
     <div className="profile-edit flexCenter">
       <div className="profile-edit-title">
@@ -23,7 +24,9 @@ const ProfileEdit = ({ setShowProfileEdit }: any) => {
 
       <UsernameInputEdit />
       <PhoneInputEdit />
-      <Button className="save-changes-button">حفظ التغييرات</Button>
+      <Button className="save-changes-button" variant="secondary">
+        حفظ التغييرات
+      </Button>
       <span onClick={handleClose}>تراجع</span>
     </div>
   );

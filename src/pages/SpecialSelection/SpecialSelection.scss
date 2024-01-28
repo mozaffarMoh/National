@@ -1,6 +1,6 @@
 .special-selection {
     .special-selection-ads {
-        img {
+        .ads-content {
             width: 500px;
         }
     }
@@ -10,7 +10,7 @@
 @media (max-width:700px) {
     .special-selection {
         .special-selection-ads {
-            img {
+            .ads-content {
                 width: 350px;
             }
         }

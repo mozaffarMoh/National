@@ -41,10 +41,10 @@ const QuizQuestions = () => {
             <p>{item.title}</p>
             <p>{item.question}</p>
 
-            <div className="answers flexCenter">
+            <div className="answers flexCenterColumn">
               {item.answers.map((child: any, index: number) => {
                 return (
-                  <div className="answer flexCenter" key={index}>
+                  <div className="answer flexStart" key={index}>
                     <div className="flexCenter">
                       {!selectAnswer[index] ? (
                         <img
@@ -64,7 +64,7 @@ const QuizQuestions = () => {
               })}
             </div>
 
-            <div className="quiz-footer flexCenter">
+            <div className="quiz-footer flexBetween">
               <div className="flexCenter gap-4 ">
                 <img src={successIcon} alt="" />
                 {!showFillStar ? (
@@ -99,7 +99,11 @@ const QuizQuestions = () => {
       {squaresArray.map((_, index) => {
         return <div className="square" key={index}></div>;
       })}
-      <Button className="quiz-questions-button" onClick={handleFinishExam}>
+      <Button
+        className="quiz-questions-button"
+        variant="secondary"
+        onClick={handleFinishExam}
+      >
         أنه الاختبار الان
       </Button>
     </div>

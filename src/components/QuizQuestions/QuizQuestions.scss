@@ -29,10 +29,8 @@
 
         .answers {
             gap: 20px;
-            flex-direction: column !important;
 
             .answer {
-                justify-content: flex-start !important;
                 width: 100%;
                 padding: 13px;
                 gap: 10px;
@@ -51,7 +49,6 @@
         }
 
         .quiz-footer {
-            justify-content: space-between !important;
             height: 58px;
             overflow-y: hidden;
 
@@ -126,8 +123,9 @@
             gap: 15px;
             padding: 10px;
 
-            p {
-                font-size: 15px !important;
+            p,
+            .answers .answer p {
+                font-size: 15px;
             }
         }
 

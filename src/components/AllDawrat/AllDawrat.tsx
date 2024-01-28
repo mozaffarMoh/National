@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 
 const AllDawrat = () => {
   return (
-    <div className="all-dawrat flexCenter">
-      <Link to={"/dawrat-quiz"} className="all-dawrat-item flexCenter">
+    <div className="all-dawrat flexCenterColumn">
+      <Link to={"/dawrat-quiz"} className="all-dawrat-item flexStart">
         <img src={bookIcon} alt="" />
         <p>2023 دورة تشرين</p>
         <img src={arrowGoIcon} alt="" className="arrow-go-icon" />

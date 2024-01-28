@@ -39,7 +39,7 @@
 /* Reponsive on 850px */
 @media (max-width : 850px) {
     .login {
-        flex-direction: column !important;
+        flex-direction: column;
         height: 100%;
 
         .login-form-background {

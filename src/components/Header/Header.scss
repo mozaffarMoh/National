@@ -22,28 +22,33 @@
             margin-bottom: 100px;
         }
 
-        .handle-profile {
+        .transistion-profile {
+            transition: opacity 0.5s ease-in-out;
             position: absolute;
-            top: 120px;
-            flex-direction: column !important;
+            top: 130px;
+            margin-right: 45px;
             z-index: 30;
-            font-size: 15px;
 
-            .handle-profile-item {
-                width: 100%;
-                justify-content: flex-start !important;
-                padding: 0px 20px;
-                gap: 10px;
-                cursor: pointer;
-                transition: background .5s ease;
 
-                &:hover {
-                    background-color: #B989BD80;
+            .handle-profile {
+                font-size: 15px;
+
+                .handle-profile-item {
+                    justify-content: flex-start;
+                    width: 100%;
+                    padding: 0px 20px;
+                    gap: 10px;
+                    cursor: pointer;
+                    transition: background .5s ease;
+
+                    &:hover {
+                        background-color: #B989BD80;
+                    }
                 }
-            }
 
-            a {
-                color: #464547;
+                a {
+                    color: #464547;
+                }
             }
         }
 
@@ -51,6 +56,7 @@
             width: 25px;
             height: 35px;
         }
+
     }
 
     .header-login {
@@ -114,6 +120,16 @@
     }
 }
 
+/* Responsive on 920px */
+@media (max-width : 920px) {
+    .header {
+        .header-profile {
+            .transistion-profile {
+                margin: 0px;
+            }
+        }
+    }
+}
 
 /* Responsive on 800px */
 @media (max-width : 800px) {
@@ -147,9 +163,9 @@
 
     .header {
 
-        .header-profile-icon {
+        .header-profile {
             .icon-field {
-                width: 35px !important;
+                width: 35px;
             }
 
             .handle-profile-item {
@@ -173,18 +189,15 @@
 /* Responsive on 550px */
 @media (max-width : 550px) {
     .header {
-
-        height: 250px;
-
+        height: 350px;
 
         .header-profile {
             .icon-field {
                 width: 33px;
             }
 
-            .handle-profile {
-
-                top: 150px;
+            .transistion-profile {
+                top: 200px;
 
                 .handle-profile-item {
 

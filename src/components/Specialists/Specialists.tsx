@@ -16,8 +16,8 @@ const Specialists = () => {
 
 
   return (
-    <div className="specialists flexCenter" id="specialists">
-      <div>
+    <div className="specialists flexBetweenColumn" id="specialists">
+      <div className="p-5">
         <h2>الإختصاصات</h2>
       </div>
       <div className="specialist-items flexCenter">

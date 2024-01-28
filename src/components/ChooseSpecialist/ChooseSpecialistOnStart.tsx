@@ -23,7 +23,7 @@ const ChooseSpecialistOnStart = () => {
 
       <div className="choose-specialist-on-start-section flexCenterColumn ">
         <p>الاختصاص</p>
-        <div className="choose-specialist-on-start-items flexCenter">
+        <div className="choose-specialist-on-start-items flexCenterItemsStart">
           {speicalistArray.map((item, index) => {
             return (
               <div

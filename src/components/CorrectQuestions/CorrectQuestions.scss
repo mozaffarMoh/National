@@ -29,10 +29,8 @@
 
         .answers {
             gap: 20px;
-            flex-direction: column !important;
 
             .answer {
-                justify-content: space-between !important;
                 width: 100%;
                 padding: 13px;
                 gap: 10px;
@@ -48,27 +46,26 @@
                 }
 
             }
-        }
 
-        .wrong-answer {
-            border: 1px solid red !important;
 
-            p {
-                color: red !important;
+            .wrong-answer {
+                border: 1px solid red;
+
+                p {
+                    color: red;
+                }
+            }
+
+            .success-answer {
+                border: 1px solid #20C4F4;
+
+                p {
+                    color: #20C4F4;
+                }
             }
         }
-
-        .success-answer {
-            border: 1px solid #20C4F4 !important;
-
-            p {
-                color: #20C4F4 !important;
-            }
-        }
-
 
         .correct-footer {
-            justify-content: space-between !important;
             height: 58px;
             overflow-y: hidden;
 
@@ -123,9 +120,11 @@
             gap: 15px;
             padding: 10px;
 
-            p {
-                font-size: 15px !important;
+            p,
+            .answers .answer p {
+                font-size: 15px;
             }
+
         }
     }
 }

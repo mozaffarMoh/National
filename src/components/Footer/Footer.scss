@@ -12,14 +12,12 @@
     }
 
     .text-field {
-        flex-direction: column;
         margin-top: 50px;
-        align-items: flex-start;
 
         .links,
         .icons {
             width: 300px;
-            justify-content: space-between !important;
+            justify-content: space-between;
             margin-right: 100px;
         }
 
@@ -54,11 +52,11 @@
         }
 
         .text-field {
-            justify-content: flex-end !important;
+            justify-content: flex-end;
 
             .links,
             .icons {
-                justify-content: flex-start !important;
+                justify-content: flex-start;
                 margin-right: 0px;
 
                 p {
