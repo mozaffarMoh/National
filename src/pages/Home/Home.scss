@@ -9,8 +9,7 @@
         .home-start-now {
             width: 50%;
             height: 450px;
-            padding-left: 100px;
-            padding-right: 100px;
+            padding: 0px 100px;
         }
 
         .home-ads {
@@ -28,7 +27,7 @@
 /* Responsive on 900px */
 @media (max-width : 900px) {
 
-    .home-before-login {
+    .home {
         .first-section {
             flex-direction: column;
 

@@ -16,6 +16,7 @@ const CorrectQuestions = () => {
   const squaresArray = Array(3).fill("");
   const [showFillStar, setShowFillStar] = React.useState(false);
   const [showHoverStar, setShowHoverStar] = React.useState(false);
+  const [lastIndex, setLastIndex] = React.useState<number | any>(1);
 
   /* Handle Circle Image */
   const handleCircleImage = (value: any) => {
@@ -25,6 +26,16 @@ const CorrectQuestions = () => {
       return wrongCircle;
     } else {
       return emptyCircle;
+    }
+  };
+
+  /* Show next question | if last element of CorrectQuestionsArray are shown this function will not work */
+  const handleNextQuestions = (index: number) => {
+    if (index === lastIndex - 1 && lastIndex < CorrectQuestionsArray.length) {
+      setLastIndex((prev: number) => {
+        const newValue = (prev += +1);
+        return newValue;
+      });
     }
   };
 
@@ -41,73 +52,83 @@ const CorrectQuestions = () => {
 
   return (
     <div className="correct-questions flexCenterColumn">
-      {CorrectQuestionsArray.slice(0, 3).map((item: any, index: number) => {
-        return (
-          <div className="correct-questions-item" key={index}>
-            <p>{item.title}</p>
-            <p>{item.question}</p>
+      {CorrectQuestionsArray.slice(0, lastIndex).map(
+        (item: any, index: number) => {
+          return (
+            <div className="correct-questions-item" key={index}>
+              <p>{item.title}</p>
+              <p>{item.question}</p>
 
-            <div className="answers flexCenterColumn">
-              {item.answers.map((child: any, index: number) => {
-                return (
-                  <div
-                    className={`answer flexBetween ${handleChangeColor(
-                      child.value
-                    )}`}
-                    key={index}
-                  >
-                    <div className="flexCenter gap-2">
-                      <img src={handleCircleImage(child.value)} alt="" />
-                      <p>{child.answer}</p>
+              <div className="answers flexCenterColumn">
+                {item.answers.map((child: any, index: number) => {
+                  return (
+                    <div
+                      className={`answer flexBetween ${handleChangeColor(
+                        child.value
+                      )}`}
+                      key={index}
+                    >
+                      <div className="flexCenter gap-2">
+                        <img src={handleCircleImage(child.value)} alt="" />
+                        <p>{child.answer}</p>
+                      </div>
+                      <div className="flexCenter">
+                        {child.value && child.value === "success" && (
+                          <img src={successIcon} />
+                        )}
+                        {child.value && child.value === "wrong" && (
+                          <img src={wrongIcon} className="" />
+                        )}
+                      </div>
                     </div>
-                    <div className="flexCenter">
-                      {child.value && child.value === "success" && (
-                        <img src={successIcon} />
-                      )}
-                      {child.value && child.value === "wrong" && (
-                        <img src={wrongIcon} className="" />
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
 
-            <div className="correct-footer flexBetween">
-              <div className="flexCenter gap-4 ">
-                <img src={successIcon} alt="" />
-                {!showFillStar ? (
-                  !showHoverStar ? (
-                    <img
-                      src={starEmptyIcon}
-                      alt=""
-                      onMouseEnter={() => setShowHoverStar(true)}
-                    />
+              <div className="correct-footer flexBetween">
+                <div className="flexCenter gap-4 ">
+                  <img src={successIcon} alt="" />
+                  {!showFillStar ? (
+                    !showHoverStar ? (
+                      <img
+                        src={starEmptyIcon}
+                        alt=""
+                        onMouseEnter={() => setShowHoverStar(true)}
+                      />
+                    ) : (
+                      <img
+                        src={starHoverIcon}
+                        alt=""
+                        onClick={() => setShowFillStar(true)}
+                        onMouseLeave={() => setShowHoverStar(false)}
+                      />
+                    )
                   ) : (
                     <img
-                      src={starHoverIcon}
+                      src={starFillIcon}
                       alt=""
-                      onClick={() => setShowFillStar(true)}
-                      onMouseLeave={() => setShowHoverStar(false)}
+                      onClick={() => setShowFillStar(false)}
                     />
-                  )
-                ) : (
-                  <img
-                    src={starFillIcon}
-                    alt=""
-                    onClick={() => setShowFillStar(false)}
-                  />
-                )}
-                <img src={bookIcon} alt="" />
+                  )}
+                  <img src={bookIcon} alt="" />
+                </div>
+                <Button
+                  className="correct-footer-button"
+                  onClick={() => handleNextQuestions(index)}
+                >
+                  التالي
+                </Button>
               </div>
-              <Button className="correct-footer-button">التالي</Button>
             </div>
-          </div>
-        );
-      })}
-      {squaresArray.map((_, index) => {
-        return <div className="square" key={index}></div>;
-      })}
+          );
+        }
+      )}
+
+      {/* Hide squares if questions array is fully visible */}
+      {!(lastIndex === CorrectQuestionsArray.length) &&
+        squaresArray.map((_, index) => {
+          return <div className="square" key={index}></div>;
+        })}
     </div>
   );
 };

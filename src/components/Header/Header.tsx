@@ -103,7 +103,9 @@ const Header = () => {
           </div>
         ) : (
           <Link to={"/login"}>
-            <Button className="header-login-button">تسجيل الدخول</Button>
+            <Button className="header-login-button" variant="light">
+              تسجيل الدخول
+            </Button>
           </Link>
         )}
       </div>

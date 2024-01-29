@@ -46,7 +46,8 @@
         .register-form-background {
             .register-form {
                 width: 100%;
-                padding: 30px;
+                    padding: 30px;
+                    margin-right: 10px;
             }
         }
     }
@@ -78,10 +79,8 @@
 /* Reponsive on 550px */
 @media (max-width : 550px) {
     .register {
+        width: 103%;
         .register-form-background {
-            padding-left: 0px;
-            padding-right: 10px;
-
             .register-form {
                 width: 100%;
             }

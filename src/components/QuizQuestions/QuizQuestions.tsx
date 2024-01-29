@@ -14,91 +14,132 @@ import bookIcon from "../../assets/images/QuizResult/book.svg";
 const QuizQuestions = () => {
   const squaresArray = Array(3).fill("");
   const navigate = useNavigate();
-  const [selectAnswer, setSelectAnswer] = React.useState(Array(5).fill(false));
   const [showFillStar, setShowFillStar] = React.useState(false);
   const [showHoverStar, setShowHoverStar] = React.useState(false);
+  const [lastIndex, setLastIndex] = React.useState<number | any>(1);
+  const [quizQuestionsArray, setQuizQuestionsArray]: any =
+    React.useState(QuizQuestionsArray);
+
+  /* Handle Select Answer */
+  const handleSelectAnswer = (
+    checkValue: boolean,
+    index: number,
+    indexAnswer: number
+  ) => {
+    setQuizQuestionsArray((prevState: any) => {
+      const updatedArray = [...prevState];
+      updatedArray[index].answers[indexAnswer].check = !checkValue;
+      return updatedArray;
+    });
+  };
+
+  /* Show next question */
+  const handleNextQuestions = (index: number) => {
+    if (index === lastIndex - 1 && lastIndex < quizQuestionsArray.length) {
+      setLastIndex((prev: number) => {
+        const newValue = (prev += +1);
+        return newValue;
+      });
+    }
+  };
 
   /* Handle Finish Exam */
   const handleFinishExam = () => {
     navigate("/quiz-result");
   };
 
-  /* Handle Select Answer */
-  const handleSelectAnswer = (index: number) => {
-    setSelectAnswer((prevArray): any => {
-      const newArray = prevArray.map((value, i) => {
-        return i === index ? true : value;
-      });
-      return newArray;
-    });
-  };
-
   return (
     <div className="quiz-questions flexCenterColumn">
-      {QuizQuestionsArray.slice(0, 3).map((item: any, index: number) => {
-        return (
-          <div className="quiz-questions-item" key={index}>
-            <p>{item.title}</p>
-            <p>{item.question}</p>
+      {quizQuestionsArray
+        .slice(0, lastIndex)
+        .map((item: any, index: number) => {
+          return (
+            <div className="quiz-questions-item" key={index}>
+              <p>{item.title}</p>
+              <p>{item.question}</p>
 
-            <div className="answers flexCenterColumn">
-              {item.answers.map((child: any, index: number) => {
-                return (
-                  <div className="answer flexStart" key={index}>
-                    <div className="flexCenter">
-                      {!selectAnswer[index] ? (
-                        <img
-                          src={emptyCircle}
-                          alt=""
-                          onClick={() => handleSelectAnswer(index)}
-                        />
-                      ) : (
-                        <img src={fillCircle} alt="" />
-                      )}
+              <div className="answers flexCenterColumn">
+                {item.answers.map((answer: any, indexAnswer: number) => {
+                  return (
+                    <div className="answer flexStart" key={indexAnswer}>
+                      <div className="flexCenter">
+                        {!answer.check ? (
+                          <img
+                            src={emptyCircle}
+                            alt=""
+                            onClick={() =>
+                              handleSelectAnswer(
+                                answer.check,
+                                index,
+                                indexAnswer
+                              )
+                            }
+                          />
+                        ) : (
+                          <img
+                            src={fillCircle}
+                            alt=""
+                            onClick={() =>
+                              handleSelectAnswer(
+                                answer.check,
+                                index,
+                                indexAnswer
+                              )
+                            }
+                          />
+                        )}
+                      </div>
+                      <div className="flexCenter">
+                        <p>{answer.answer}</p>
+                      </div>
                     </div>
-                    <div className="flexCenter">
-                      <p>{child.answer}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
 
-            <div className="quiz-footer flexBetween">
-              <div className="flexCenter gap-4 ">
-                <img src={successIcon} alt="" />
-                {!showFillStar ? (
-                  !showHoverStar ? (
-                    <img
-                      src={starEmptyIcon}
-                      alt=""
-                      onMouseEnter={() => setShowHoverStar(true)}
-                    />
+              <div className="quiz-footer flexBetween">
+                <div className="flexCenter gap-4 ">
+                  <img src={successIcon} alt="" />
+                  {!showFillStar ? (
+                    !showHoverStar ? (
+                      <img
+                        src={starEmptyIcon}
+                        alt=""
+                        onMouseEnter={() => setShowHoverStar(true)}
+                      />
+                    ) : (
+                      <img
+                        src={starHoverIcon}
+                        alt=""
+                        onClick={() => setShowFillStar(true)}
+                        onMouseLeave={() => setShowHoverStar(false)}
+                      />
+                    )
                   ) : (
                     <img
-                      src={starHoverIcon}
+                      src={starFillIcon}
                       alt=""
-                      onClick={() => setShowFillStar(true)}
-                      onMouseLeave={() => setShowHoverStar(false)}
+                      onClick={() => setShowFillStar(false)}
                     />
-                  )
-                ) : (
-                  <img
-                    src={starFillIcon}
-                    alt=""
-                    onClick={() => setShowFillStar(false)}
-                  />
-                )}
-                <img src={bookIcon} alt="" />
+                  )}
+                  <img src={bookIcon} alt="" />
+                </div>
+                <Button
+                  className="quiz-footer-button"
+                  onClick={() => handleNextQuestions(index)}
+                >
+                  التالي
+                </Button>
               </div>
-              <Button className="quiz-footer-button">التالي</Button>
             </div>
-          </div>
-        );
-      })}
-      {squaresArray.map((_, index) => {
-        return <div className="square" key={index}></div>;
-      })}
+          );
+        })}
+
+      {/* Hide squares if questions array is fully visible */}
+      {!(lastIndex === quizQuestionsArray.length) &&
+        squaresArray.map((_: any, index: number) => {
+          return <div className="square" key={index}></div>;
+        })}
       <Button
         className="quiz-questions-button"
         variant="secondary"

@@ -8,7 +8,7 @@ const ClassificationButtons = () => {
       <Link to={"/dawrat-selection"}>
         <Button className="dawrat-button" variant="secondary">الدورات</Button>
       </Link>
-      <Button className="questions-button" variant="info">بنك الأسئلة</Button>
+      <button className="questions-button">بنك الأسئلة</button>
     </div>
   );
 };
