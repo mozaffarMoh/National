@@ -15,7 +15,6 @@ const ChooseSpecialist = () => {
     setCheckedItems(newCheckedItems);
   };
 
-  console.log(checkedItems);
   return (
     <div className="choose-specialist-from-register">
       <div className="h-25 ">

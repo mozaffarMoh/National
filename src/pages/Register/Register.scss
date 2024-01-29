@@ -42,9 +42,12 @@
 
 /* Reponsive on 1000px */
 @media (max-width : 1000px) {
-    .register-form-background {
-        .register-form {
-            width: 100% !important;
+    .register {
+        .register-form-background {
+            .register-form {
+                width: 100%;
+                padding: 30px;
+            }
         }
     }
 }
@@ -60,7 +63,7 @@
             order: 1;
 
             .register-form {
-                width: 80% !important;
+                width: 80%;
                 padding: 20px;
             }
         }
@@ -80,7 +83,7 @@
             padding-right: 10px;
 
             .register-form {
-                width: 100% !important;
+                width: 100%;
             }
         }
     }

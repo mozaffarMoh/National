@@ -11,7 +11,7 @@
         width: 100%;
         flex-wrap: wrap;
 
-        .special-item {
+        .specialist-item {
             width: 25%;
             height: 160px;
             flex-direction: column;
@@ -42,10 +42,11 @@
     .specialists {
         height: 100%;
 
-        .special-item {
-            width: 200px !important;
-            height: 300px;
-            flex-direction: column;
+        .specialist-items {
+            .specialist-item {
+                width: 180px;
+                height: 200px;
+            }
         }
     }
 }

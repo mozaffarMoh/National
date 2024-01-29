@@ -4,16 +4,13 @@ import { SpecialistsImages } from "./specialistsImages";
 import ChooseSpecialistOnStart from "../ChooseSpecialist/ChooseSpecialistOnStart";
 
 const Specialists = () => {
+  const [showChooseSpecialist, setShowChooseSpecialist] = React.useState(false);
 
-  const [showChooseSpecialist, setShowChooseSpecialist] = React.useState(false)
-
-
-  const handleChoose = (index:number) => {
-    if(index === 4){
-       setShowChooseSpecialist(true);
+  const handleChoose = (index: number) => {
+    if (index === 4) {
+      setShowChooseSpecialist(true);
     }
-  }
-
+  };
 
   return (
     <div className="specialists flexBetweenColumn" id="specialists">
@@ -24,7 +21,7 @@ const Specialists = () => {
         {SpecialistsImages.map((item, index) => {
           return (
             <div
-              className="special-item flexCenter"
+              className="specialist-item flexCenter"
               key={index}
               onClick={() => handleChoose(index)}
             >

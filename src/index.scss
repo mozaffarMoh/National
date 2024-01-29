@@ -1,5 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Alexandria&display=swap');
 @import "../node_modules/bootstrap/scss/bootstrap";
+@import "./assets/styles/FlexStyles.scss";
+
+@font-face {
+    font-family: 'Alexandria';
+    src: url('./assets/fonts/Alexandria_Font/Alexandria-VariableFont_wght.ttf') format('truetype');
+}
 
 
 * {
@@ -13,60 +18,4 @@
 
 a {
     text-decoration: none;
-}
-
-
-/* Flex Row styles */
-.flexCenter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.flexStart {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.flexBetween {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.flexEvenly {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.flexCenterItemsStart {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-
-/* Flex Column styles */
-
-.flexCenterColumn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.flexBetweenColumn {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-
-
-.flexCenterColumnItemsStart {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
 }

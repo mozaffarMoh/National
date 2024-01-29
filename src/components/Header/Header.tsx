@@ -21,9 +21,12 @@ const Header = () => {
 
   return (
     <div className="header flexCenter row ">
+      {/* Darrebni logo */}
       <div className="logo col-3 d-flex">
         <img src={logo} alt="" />
       </div>
+
+      {/* Links */}
       <div className="links col-6 flexCenter">
         <Link
           to="/"
@@ -52,6 +55,8 @@ const Header = () => {
           <p>من نحن</p>
         </a>
       </div>
+
+      {/* Login Button and Profile porperties */}
       <div className="header-login col-3 d-flex ">
         {token ? (
           <div
