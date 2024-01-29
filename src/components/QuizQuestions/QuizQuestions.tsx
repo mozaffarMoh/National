@@ -33,7 +33,7 @@ const QuizQuestions = () => {
     });
   };
 
-  /* Show next question */
+  /* Show next question | if last element of CorrectQuestionsArray are shown this function will not work */
   const handleNextQuestions = (index: number) => {
     if (index === lastIndex - 1 && lastIndex < quizQuestionsArray.length) {
       setLastIndex((prev: number) => {
