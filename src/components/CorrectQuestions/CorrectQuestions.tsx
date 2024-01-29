@@ -29,7 +29,7 @@ const CorrectQuestions = () => {
     }
   };
 
-  /* Show next question | if last element of CorrectQuestionsArray are shown this function will not work */
+  /* Show next question | If the last element of the Correct Questions Array is shown, this function will not work. */
   const handleNextQuestions = (index: number) => {
     if (index === lastIndex - 1 && lastIndex < CorrectQuestionsArray.length) {
       setLastIndex((prev: number) => {
