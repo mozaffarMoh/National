@@ -189,6 +189,8 @@
 /* Responsive on 550px */
 @media (max-width : 550px) {
     .header {
+
+        background-image: url(../../assets/images/Header/backgroundSmall.png);
         height: 350px;
 
         .header-profile {
