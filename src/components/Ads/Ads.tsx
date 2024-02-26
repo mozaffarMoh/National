@@ -1,15 +1,15 @@
 import { Carousel } from "react-bootstrap";
-import ad from "../../assets/images/Ads/ad1.png";
-import ad2 from "../../assets/images/Ads/ad2.png";
-import ad3 from "../../assets/images/Ads/ad3.png";
 import slideEmptyIcon from "../../assets/images/Ads/slide-empty.jpg";
 import slideFillIcon from "../../assets/images/Ads/slide-fill.jpg";
 import "./Ads.scss";
 import React from "react";
+import useGet from "../../api/useGet";
+import { endPoint } from "../../api/endPoints";
 
 const Ads = () => {
-  const adsArray = [{ img: ad3 }, { img: ad2 }, { img: ad }];
   const [indexValue, setIndexValue] = React.useState(2);
+  const uuid = "06ae1f82-8df5-413f-bddb-bc2c1fc6ea51";
+  const [data] = useGet(endPoint.sliders, { isuuid: true, uuid: uuid });
 
   const handleCarouselSelect = (selectedIndex: number) => {
     setIndexValue(selectedIndex);
@@ -18,16 +18,17 @@ const Ads = () => {
   return (
     <div className="ads flexCenterColumn">
       <Carousel activeIndex={indexValue} onSelect={handleCarouselSelect}>
-        {adsArray.map((item, index) => {
-          return (
-            <Carousel.Item key={index}>
-              <img src={item.img} className="ads-content" />
-            </Carousel.Item>
-          );
-        })}
+        {data &&
+          data.map((item: any, index) => {
+            return (
+              <Carousel.Item key={index}>
+                <img src={item.url["1"]} className="ads-content" />
+              </Carousel.Item>
+            );
+          })}
       </Carousel>
       <div className="flexCenter mt-4">
-        {adsArray.map((_, index: number) => {
+        {data.map((_, index: number) => {
           return index === indexValue ? (
             <img
               src={slideFillIcon}

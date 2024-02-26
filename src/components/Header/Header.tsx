@@ -7,9 +7,13 @@ import ProfileEdit from "../ProfileEdit/ProfileEdit";
 import { Link } from "react-router-dom";
 import React, { useRef } from "react";
 import { Transition } from "react-transition-group";
+import Cookies from "js-cookie";
+import useGet from "../../api/useGet";
+import { endPoint } from "../../api/endPoints";
+import apiNational from "../../api/apiNational";
 
 const Header = () => {
-  const token = true;
+  const token = Cookies.get("token");
   const ref = useRef();
   const [showProfileEdit, setShowProfileEdit] = React.useState(false);
   const [showProfileList, setShowProfileList] = React.useState(false);
@@ -17,6 +21,14 @@ const Header = () => {
 
   const handleSetActive = (value: string) => {
     active === value ? setActive("") : setActive(value);
+  };
+
+  const handleLogout = () => {
+    apiNational.get(endPoint.logout).then((res) => {
+      console.log(res);
+      Cookies.remove("token");
+      Cookies.remove("code");
+    });
   };
 
   return (
@@ -89,6 +101,7 @@ const Header = () => {
                       <Link
                         to={"/login"}
                         className="handle-profile-item flexCenter"
+                        onClick={handleLogout}
                       >
                         <div className="icon-field mt-3">
                           <img src={logoutIcon} />

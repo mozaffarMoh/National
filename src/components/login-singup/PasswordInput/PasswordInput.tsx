@@ -1,11 +1,26 @@
 import "./PasswordInput.scss";
 import passwordIcon from "../../../assets/images/Login/password.svg";
 
-const PasswordInput = () => {
+const PasswordInput = ({ setCode, register }: any) => {
   return (
     <div className="password-input-component">
       <p>رمز الدخول</p>
-      <input type="password" required placeholder="رمز الدخول" />
+      <input
+        type="password"
+        placeholder="رمز الدخول"
+        {...register("password", {
+          required: "رمز الدخول مطلوب",
+          minLength: {
+            value: 6,
+            message: "يجب أن يحتوي رمز الدخول على 6 أرقام ",
+          },
+          maxLength: {
+            value: 6,
+            message: "يجب أن يحتوي رمز الدخول على 6 أرقام ",
+          },
+        })}
+        onChange={(e) => setCode(e.target.value)}
+      />
       <img src={passwordIcon} alt="" />
     </div>
   );

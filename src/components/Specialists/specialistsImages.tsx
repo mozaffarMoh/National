@@ -7,21 +7,21 @@ import specialist6 from "../../assets/images/Specialists/specialist5.svg";
 
 export const SpecialistsImages = [
   {
-    img: specialist1,
-    title: "الطب البشري",
+    image: specialist1,
+    name: "الطب البشري",
   },
   {
-    img: specialist2,
-    title: "طب الأسنان",
+    image: specialist2,
+    name: "طب الأسنان",
   },
-  { img: specialist3, title: "الصيدلة" },
-  { img: specialist4, title: "التمريض" },
+  { image: specialist3, name: "الصيدلة" },
+  { image: specialist4, name: "التمريض" },
   {
-    img: specialist5,
-    title: "الهندسة المعلوماتية",
+    image: specialist5,
+    name: "الهندسة المعلوماتية",
   },
   {
-    img: specialist6,
-    title: "الهندسة المعمارية",
+    image: specialist6,
+    name: "الهندسة المعمارية",
   },
 ];

@@ -12,18 +12,22 @@ import starHoverIcon from "../../assets/images/QuizResult/starHover.png";
 import starFillIcon from "../../assets/images/QuizResult/starFill.svg";
 import bookIcon from "../../assets/images/QuizResult/book.svg";
 
-const CorrectQuestions = () => {
+
+const CorrectQuestions = ({data}:any) => {
   const squaresArray = Array(3).fill("");
   const [showFillStar, setShowFillStar] = React.useState(false);
   const [showHoverStar, setShowHoverStar] = React.useState(false);
   const [lastIndex, setLastIndex] = React.useState<number | any>(1);
 
   /* Handle Circle Image */
-  const handleCircleImage = (value: any) => {
-    if (value && value === "success") {
+  const handleCircleImage = (child: any) => {
+    if (child.status === 1) {
       return successCircle;
-    } else if (value && value === "wrong") {
-      return wrongCircle;
+    }
+    if (child.choose === 1) {
+      if (child.status === 0) {
+        return wrongCircle;
+      }
     } else {
       return emptyCircle;
     }
@@ -40,43 +44,43 @@ const CorrectQuestions = () => {
   };
 
   /* Handle Change Color */
-  const handleChangeColor = (value?: any) => {
-    if (value && value === "success") {
+  const handleChangeColor = (child: any) => {
+    if (child.status === 1) {
       return "success-answer";
-    } else if (value && value === "wrong") {
+    }
+
+    if (child.choose === 1 && child.status === 0) {
       return "wrong-answer";
-    } else {
-      return;
     }
   };
 
+
   return (
     <div className="correct-questions flexCenterColumn">
-      {CorrectQuestionsArray.slice(0, lastIndex).map(
-        (item: any, index: number) => {
+      {data.questions &&
+        data.questions.slice(0, lastIndex).map((item: any, index: number) => {
           return (
             <div className="correct-questions-item" key={index}>
-              <p>{item.title}</p>
-              <p>{item.question}</p>
+              <p>السؤال الأول</p>
+              <p>{item.question_text}</p>
 
               <div className="answers flexCenterColumn">
                 {item.answers.map((child: any, index: number) => {
                   return (
                     <div
                       className={`answer flexBetween ${handleChangeColor(
-                        child.value
+                        child
                       )}`}
                       key={index}
                     >
                       <div className="flexCenter gap-2">
-                        <img src={handleCircleImage(child.value)} alt="" />
-                        <p>{child.answer}</p>
+                        <img src={handleCircleImage(child)} alt="" />
+                        <p>{child.answer_text}</p>
                       </div>
                       <div className="flexCenter">
-                        {child.value && child.value === "success" && (
-                          <img src={successIcon} />
-                        )}
-                        {child.value && child.value === "wrong" && (
+                        {(child.choose == 1 && child.status == 1) ||
+                          (child.status == 1 && <img src={successIcon} />)}
+                        {child.choose == 1 && child.status == 0 && (
                           <img src={wrongIcon} className="" />
                         )}
                       </div>
@@ -121,8 +125,7 @@ const CorrectQuestions = () => {
               </div>
             </div>
           );
-        }
-      )}
+        })}
 
       {/* Hide squares if questions array is fully visible */}
       {!(lastIndex === CorrectQuestionsArray.length) &&
