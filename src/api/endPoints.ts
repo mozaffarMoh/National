@@ -1,4 +1,8 @@
 export const endPoint = {
+    adminLogin: '/admin/log-in',
+    adminLogout: '/admin/log-out',
+    adminRegister: '/admin/make-account',
+    sendNotify : '/admin/send-notify',
     login: "/user/login",
     register: "/user/register",
     logout: "/user/logout",

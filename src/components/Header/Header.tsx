@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import React, { useRef } from "react";
 import { Transition } from "react-transition-group";
 import Cookies from "js-cookie";
-import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
 import apiNational from "../../api/apiNational";
 

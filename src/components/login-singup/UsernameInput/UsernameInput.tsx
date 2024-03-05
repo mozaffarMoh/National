@@ -7,7 +7,6 @@ const UsernameInput = ({ setName, register }: any) => {
       <p>اسم المستخدم</p>
       <input
         type="text"
-        required
         placeholder="اسم المستخدم"
         {...register("username", {
           required: "اسم المستخدم مطلوب",

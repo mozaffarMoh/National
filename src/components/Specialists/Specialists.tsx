@@ -36,7 +36,9 @@ const Specialists = () => {
           })}
       </div>
       {showChooseSpecialist && <ChooseSpecialistOnStart />}
-      {showLoginRequired && <LoginRequired setShowLoginRequired={setShowLoginRequired} />}
+      {showLoginRequired && (
+        <LoginRequired setShowLoginRequired={setShowLoginRequired} />
+      )}
     </div>
   );
 };

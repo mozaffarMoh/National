@@ -7,7 +7,6 @@ const PhoneInput = ({ setPhone, register }: any) => {
       <p>رقم الموبايل</p>
       <input
         type="text"
-        required
         placeholder="رقم الموبايل"
         {...register("phone", {
           required: "رقم الهاتف مطلوب",
