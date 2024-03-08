@@ -1,14 +1,42 @@
-.admin-users {
-    width: 100%;
-
+.admin-exams {
 
     h2 {
         margin: 20px;
     }
 
-    .generate-code {
+
+    .select-college {
+        width: 50%;
+        height: 40px;
+        font-size: 20px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .table-container {
+        width: 90%;
+
+        .ant-table-content {
+            overflow-x: auto;
+        }
+
+
+        .ant-pagination {
+            direction: ltr;
+
+            .ant-pagination-item-link {
+                overflow-y: hidden;
+            }
+        }
+    }
+
+    .add-exam {
         width: 80%;
         margin-bottom: 20px;
+
+        h4 {
+            margin: 20px;
+        }
 
         input {
             font-size: 20px;
@@ -45,18 +73,12 @@
             }
         }
 
-
     }
 
-    .table-container {
-        width: 80%;
-
-        .ant-pagination {
-            direction: ltr;
-
-            .ant-pagination-item-link {
-                overflow-y: hidden;
-            }
-        }
+    .select-to-add-exam {
+        width: 50%;
+        height: 40px;
+        cursor: pointer;
+        margin-top: 10px;
     }
 }

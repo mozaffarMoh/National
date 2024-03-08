@@ -3,11 +3,13 @@ import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./SendNotify.scss";
 import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
+import useGet from "../../../api/useGet";
 
 const SendNotify = () => {
+  const [data]: any = useGet(endPoint.colleges);
   const [title, setTitle] = React.useState("");
   const [body, setBody] = React.useState("");
-  const [collegeUUID, setCollegeUUID] = React.useState("");
+  const [collegeUUID, setCollegeUUID] = React.useState("all");
   const [successMessage, setSuccessMesssage] = React.useState("");
   const [showSuccessMessage, setShowSuccessMessage] = React.useState(false);
 
@@ -22,7 +24,7 @@ const SendNotify = () => {
       .post(endPoint.sendNotify, {
         title: title,
         body: body,
-        college_uuid: "06ae1f82-8df5-413f-bddb-bc2c1fc6ea51",
+        college_uuid: collegeUUID,
       })
       .then((res: any) => {
         console.log(res);
@@ -40,23 +42,28 @@ const SendNotify = () => {
     <div>
       <AdminHeader />
       <div className="send-notify flexCenterColumn">
-        <h1>إرسال إشعار</h1>
-        <select className="select-college" onChange={handleChooseCollege}>
-          <option value={"12"}>جميع الكليات</option>
-          <option value={"123"}>الطب</option>
-          <option value={"1234"}>الصيدلة</option>
-          <option value={"12345"}>الهندسة المعلوماتية</option>
+        <h2>إرسال إشعار</h2>
+        <select
+          defaultValue={"all"}
+          className="select-college"
+          onChange={handleChooseCollege}
+        >
+          <option value={"all"}>جميع الكليات</option>
+          {data &&
+            data.map((item: any) => {
+              return <option value={item.college_uuid}>{item.name}</option>;
+            })}
         </select>
         <input
           placeholder="العنوان"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <input
+        <textarea
           placeholder="الوصف"
           value={body}
           onChange={(e) => setBody(e.target.value)}
-        />
+        ></textarea>
         <button onClick={handelSendNotify}>إرسال</button>
 
         {successMessage && showSuccessMessage && (

@@ -1,19 +1,34 @@
-.admin-users {
-    width: 100%;
-
+.admin-colleges {
 
     h2 {
         margin: 20px;
     }
 
-    .generate-code {
-        width: 80%;
-        margin-bottom: 20px;
+
+    .table-container {
+        width: 90%;
+
+        .ant-table-content {
+            overflow-x: auto;
+        }
+
+
+        .ant-pagination {
+            direction: ltr;
+
+            .ant-pagination-item-link {
+                overflow-y: hidden;
+            }
+        }
+    }
+
+    .add-ads {
+        width: 90%;
 
         input {
             font-size: 20px;
             width: 400px;
-            margin-top: 10px;
+            margin: 10px 10px 0px 0px;
             padding: 14px;
             padding-right: 50px;
             border-radius: 5px;
@@ -30,10 +45,17 @@
             }
         }
 
+        .error-message {
+            width: 100px;
+            font-size: 10px;
+            color: red;
+        }
+
         button {
             width: 400px;
             height: 50px;
             margin: 10px 0px;
+            border-radius: 5px;
             background-color: #6F2877;
             color: white;
             border: 1px solid #6F2877;
@@ -45,18 +67,21 @@
             }
         }
 
+        .downlaod-image {
+            width: 200px;
+            height: 60px;
+            margin: 10px 10px 0px 0px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #B9E5FB;
 
-    }
-
-    .table-container {
-        width: 80%;
-
-        .ant-pagination {
-            direction: ltr;
-
-            .ant-pagination-item-link {
-                overflow-y: hidden;
+            &:hover {
+                background-color: #B9E5FBAA;
             }
+        }
+
+        #download-image-id {
+            display: none;
         }
     }
 }

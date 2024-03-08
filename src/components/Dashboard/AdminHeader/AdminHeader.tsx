@@ -21,11 +21,16 @@ const AdminHeader = () => {
 
   /* Logout */
   const handleLogout = () => {
-    apiNational.get(endPoint.adminLogout).then((res: any) => {
-      console.log(res);
-      Cookies.remove("token");
-      navigate("/dashboard/login");
-    });
+    apiNational
+      .get(endPoint.adminLogout)
+      .then((res: any) => {
+        console.log(res);
+        Cookies.remove("token");
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate("/dashboard/login");
+      });
   };
 
   return (

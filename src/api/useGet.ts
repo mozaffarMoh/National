@@ -16,10 +16,9 @@ const useGet = (endPoint: any, isObject?: any) => {
             })
             .catch((err) => {
                 console.log(err.response.data.message);
-                err.response.data.message == "Unauthorize" && window.location.reload();
             });
     }, []);
-    return [data];
+    return [data, setData];
 }
 
 export default useGet;
