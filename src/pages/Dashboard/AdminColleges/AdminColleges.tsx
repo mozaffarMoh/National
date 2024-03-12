@@ -6,14 +6,13 @@ import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import { FaUpload } from "react-icons/fa";
 import apiNational from "../../../api/apiNational";
 import React from "react";
-import Base64 from "../../../assets/constants/Base64";
 import { useForm } from "react-hook-form";
 
 const AdminColleges = () => {
-  const [data]: any = useGet(endPoint.adminColleges);
+  const [data, setData]: any = useGet(endPoint.adminColleges);
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState("");
-  const [uploadedImage, setUploadedImage]: any = React.useState();
+  const [imageFile, setImageFile]: any = React.useState<File | null>(null);
   const {
     register,
     handleSubmit,
@@ -21,23 +20,38 @@ const AdminColleges = () => {
   }: any = useForm();
 
   /* Handle Add Image */
-  const handleAddImage = async (e: any) => {
-    const file = e.target.files[0];
-    const base64 = await Base64(file);
-    setUploadedImage(base64);
+  const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setImageFile(files[0]);
+    }
   };
 
   /* Handle Add College */
   const handleAddCollege = () => {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("type", type);
+    formData.append("image", imageFile);
+
     apiNational
-      .post(endPoint.addCollege, {
-        name: name,
-        type: type,
-        image: uploadedImage,
+      .post(endPoint.addCollege, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
-      .then((res) => {
+      .then((res: any) => {
         console.log(res);
-        location.reload();
+        setData([
+          ...data,
+          {
+            image: imageFile,
+            name,
+            type,
+            college_id: data[data.length - 1].college_id + 1,
+          },
+        ]);
+        setName("");
+        setType("");
+        setImageFile(null);
       });
   };
 
@@ -123,11 +137,15 @@ const AdminColleges = () => {
             {errors.imageFile && (
               <div className="error-message">{errors.imageFile.message}</div>
             )}
-            {uploadedImage && (
-              <img src={uploadedImage} width={250} height={200} />
+            {imageFile && (
+              <img
+                src={URL.createObjectURL(imageFile)}
+                width={250}
+                height={200}
+              />
             )}
             <button type="submit" onSubmit={handleAddCollege}>
-              إضافة الاعلان
+              إضافة
             </button>
           </form>
         </div>

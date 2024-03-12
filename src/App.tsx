@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
-import SpecialSelection from "./pages/SpecialSelection/SpecialSelection";
-import DawratQuiz from "./pages/DawratQuiz/DawratQuiz";
+import SubjectSelection from "./pages/SubjectSelection/SubjectSelection";
+import QuizPage from "./pages/QuizPage/QuizPage";
 import DawratSelection from "./pages/DawratSelection/DawratSelection";
 import QuizResult from "./pages/QuizResult/QuizResult";
 import AdminLogin from "./pages/Dashboard/AdminLogin/AdminLogin";
@@ -27,9 +27,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/special-selection" element={<SpecialSelection />} />
+          <Route path="/subject-selection" element={<SubjectSelection />} />
           <Route path="/dawrat-selection" element={<DawratSelection />} />
-          <Route path="/dawrat-quiz" element={<DawratQuiz />} />
+          <Route path="/quiz-page" element={<QuizPage />} />
           <Route path="/quiz-result" element={<QuizResult />} />
 
           {/* Admin Routes */}

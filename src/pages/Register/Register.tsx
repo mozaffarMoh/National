@@ -6,14 +6,13 @@ import RegisterButton from "../../components/login-singup/RegisterButton/Registe
 import ChooseSpecialist from "../../components/login-singup/ChooseSpecialist/ChooseSpecialist";
 import React from "react";
 import apiNational from "../../api/apiNational";
-import { useNavigate } from "react-router-dom";
 import { endPoint } from "../../api/endPoints";
 import { useForm } from "react-hook-form";
 
 const Register = () => {
-  const router = useNavigate();
   const [name, setName] = React.useState();
   const [phone, setPhone] = React.useState();
+  const [collegeUUID, setCollegeUUID] = React.useState("");
 
   const {
     register,
@@ -26,11 +25,10 @@ const Register = () => {
       .post(endPoint.register, {
         name: name,
         phone: phone,
-        college_uuid: "6bb79145-7f67-4723-86ed-ba139f640900",
+        college_uuid: collegeUUID,
       })
       .then((res) => {
         console.log(res);
-        router("/login");
       })
       .catch((err) => console.log(err));
   };
@@ -50,7 +48,7 @@ const Register = () => {
           {errors.phone && (
             <div className="error-message p-2">{errors.phone.message}</div>
           )}
-          <ChooseSpecialist />
+          <ChooseSpecialist setCollegeUUIDProp={setCollegeUUID} />
           <RegisterButton handleRegister={handleRegister} />
         </form>
       </div>

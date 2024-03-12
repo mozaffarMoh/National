@@ -14,7 +14,7 @@ const AdminSpecialists = () => {
   const [name, setName] = React.useState("");
   const [sepcialityID, setSepcialityID] = React.useState("");
   const [nameEdited, setNameEdited] = React.useState("");
-  const [collegeID, setCollegeID] = React.useState("1");
+  const [collegeID, setCollegeID] = React.useState("");
   const [refreshData, setRefreshData] = React.useState(false);
   const [startEdit, setStartEdit] = React.useState(false);
   const [specialistsData, setSpecialistsData] = React.useState([]);
@@ -34,6 +34,7 @@ const AdminSpecialists = () => {
       });
   };
 
+  /* start edit process */
   const handlePressOnEdit = (id: any) => {
     setStartEdit(true);
     setSepcialityID(id);
@@ -117,6 +118,13 @@ const AdminSpecialists = () => {
         setName("");
       });
   };
+
+  /* fill CollegeId when data fetched */
+  React.useEffect(() => {
+    if (!collegeID) {
+      setCollegeID(data[0]?.college_id);
+    }
+  }, [data]);
 
   return (
     <div>

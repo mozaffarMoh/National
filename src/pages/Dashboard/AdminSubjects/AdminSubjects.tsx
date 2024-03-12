@@ -128,8 +128,6 @@ const AdminSubjects = () => {
       });
   };
 
-  console.log(specialityID);
-
   return (
     <div>
       <AdminHeader />

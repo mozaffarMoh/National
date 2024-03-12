@@ -1,7 +1,6 @@
 .choose-specialist-on-start {
     position: absolute;
-    width: 559px;
-    height: 100%;
+    width: 650px;
     padding: 30px;
     border-radius: 64px;
     background: #FFF;
@@ -51,6 +50,14 @@
                 }
 
             }
+
+            .active-item {
+                background-color: rgb(209, 206, 206);
+
+                &:hover {
+                    border: 1px solid black;
+                }
+            }
         }
     }
 
@@ -58,6 +65,7 @@
         width: 80%;
         height: 57px;
         border-radius: 5px;
+        margin-top: 5px;
         background: #6F2877;
         transition: border .3s ease;
 

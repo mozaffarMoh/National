@@ -82,7 +82,7 @@ const AdminExams = () => {
     setSpecialityID(e.target.value);
   };
 
-  /* Get Exams by ID */
+  /* Get Exams and specialists*/
   React.useEffect(() => {
     if (collegeID) {
       apiNational.get(endPoint.adminExams + collegeID).then((res: any) => {
@@ -92,6 +92,9 @@ const AdminExams = () => {
         .get(endPoint.adminSpecialists + collegeID)
         .then((res: any) => {
           setSpecialistsData(res.data.data);
+          if (res.data.data.length > 0) {
+            setSpecialityID(res.data.data[0].specialty_id);
+          }
         });
     }
   }, [collegeID, refreshData]);

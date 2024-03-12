@@ -5,11 +5,18 @@ import "./Ads.scss";
 import React from "react";
 import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
+import Cookies from "js-cookie";
 
 const Ads = () => {
   const [indexValue, setIndexValue] = React.useState(2);
-  const uuid = "06ae1f82-8df5-413f-bddb-bc2c1fc6ea51";
-  const [data] = useGet(endPoint.sliders, { isuuid: true, uuid: uuid });
+  const collegeUUID = Cookies.get("collegeUUID");
+  const position = location.pathname == "/subject-selection" ? "exam" : "home";
+  const [data]: any = useGet(endPoint.sliders, {
+    isCollege_UUID: true,
+    college_UUID: collegeUUID,
+    isPosition: true,
+    position: position,
+  });
 
   const handleCarouselSelect = (selectedIndex: number) => {
     setIndexValue(selectedIndex);
@@ -19,32 +26,35 @@ const Ads = () => {
     <div className="ads flexCenterColumn">
       <Carousel activeIndex={indexValue} onSelect={handleCarouselSelect}>
         {data &&
-          data.map((item: any, index) => {
+          data.map((item: any, index: number) => {
             return (
-              <Carousel.Item key={index}>
-                <img src={item.url["1"]} className="ads-content" />
+              <Carousel.Item key={index} className="ads-item">
+                {item.url.map((path: any, pathIndex: number) => {
+                  return <img src={path.url} key={pathIndex} alt="img" />;
+                })}
               </Carousel.Item>
             );
           })}
       </Carousel>
-      <div className="flexCenter mt-4">
-        {data.map((_, index: number) => {
-          return index === indexValue ? (
-            <img
-              src={slideFillIcon}
-              alt=""
-              className="slide-icon"
-              key={index}
-            />
-          ) : (
-            <img
-              src={slideEmptyIcon}
-              alt=""
-              className="slide-icon"
-              key={index}
-            />
-          );
-        })}
+      <div className="flexCenter slide-icons-container">
+        {data &&
+          data.map((_: any, index: number) => {
+            return index === indexValue ? (
+              <img
+                src={slideFillIcon}
+                alt=""
+                className="slide-icon"
+                key={index}
+              />
+            ) : (
+              <img
+                src={slideEmptyIcon}
+                alt=""
+                className="slide-icon"
+                key={index}
+              />
+            );
+          })}
       </div>
     </div>
   );

@@ -1,18 +1,22 @@
 import "./AllDawrat.scss";
 import arrowGoIcon from "../../assets/images/Dawrat/dawrat-go.svg";
 import bookIcon from "../../assets/images/Dawrat/dawrat-book.svg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
+import Cookies from "js-cookie";
 
 const AllDawrat = () => {
-  const uuid =
-    "06ae1f82-8df5-413f-bddb-bc2c1fc6ea51&specialty_uuid=e9d9a3b4-7448-4dad-a915-8443e131ff96";
-  const degree = "master";
-  const [data] = useGet(endPoint.dawrat, {
-    isuuid: true,
-    uuid: uuid,
+  const navigate = useNavigate();
+  const collegeUUID = Cookies.get("collegeUUID");
+  const specialityUUID = Cookies.get("specialityUUID");
+  const degree = Cookies.get("degree");
+  const [data]: any = useGet(endPoint.quizByDegree, {
+    isCollege_UUID: true,
+    isSpeciality_UUID: true,
     isDegree: true,
+    college_UUID: collegeUUID,
+    speciality_UUID: specialityUUID,
     degree: degree,
   });
 
@@ -23,20 +27,30 @@ const AllDawrat = () => {
       return "all-dawrat-item all-dawrat-item-2";
     }
   };
+
+  /* Handle choose dawrat */
+  const handleChooseDawrat = (uuid: any) => {
+    Cookies.set("isSpecialityUUID", "true");
+    Cookies.set("isExamUUID", "true");
+    Cookies.set("isSubjectUUID", "");
+    Cookies.set("examUUID", uuid);
+    navigate("/quiz-page");
+  };
+
   return (
     <div className="all-dawrat flexCenterColumn">
       {data &&
         data.map((item: any, index: number) => {
           return (
-            <Link
-              to={"/dawrat-quiz"}
+            <button
               key={index}
               className={`${changeBgColor(index)} flexStart`}
+              onClick={() => handleChooseDawrat(item.exam_uuid)}
             >
               <img src={bookIcon} alt="" />
               <p>{item.name}</p>
               <img src={arrowGoIcon} alt="" className="arrow-go-icon" />
-            </Link>
+            </button>
           );
         })}
     </div>

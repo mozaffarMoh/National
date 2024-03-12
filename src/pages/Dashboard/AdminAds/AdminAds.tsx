@@ -1,17 +1,15 @@
 import "./AdminAds.scss";
 import { Table } from "antd";
 import { endPoint } from "../../../api/endPoints";
-import useGet from "../../../api/useGet";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaUpload } from "react-icons/fa";
 import apiNational from "../../../api/apiNational";
 import React from "react";
-import Base64 from "../../../assets/constants/Base64";
 import { useForm } from "react-hook-form";
 
 const AdminAds = () => {
-  const [data, setData]: any = useGet(endPoint.showAds);
+  const [data, setData] = React.useState([]);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [position, setPosition] = React.useState("");
@@ -21,6 +19,16 @@ const AdminAds = () => {
     handleSubmit,
     formState: { errors },
   }: any = useForm();
+
+  /* Get Ads Data */
+  const getAdsData = () => {
+    apiNational.get(endPoint.showAds).then((res) => {
+      setData(res.data.data);
+    });
+  };
+  React.useEffect(() => {
+    getAdsData();
+  }, []);
 
   /* Handle delete Ads */
   const handleDelete = (id: any) => {
@@ -33,29 +41,34 @@ const AdminAds = () => {
   };
 
   /* Handle Add Image */
-  const handleAddImage = async (e: any) => {
-    const file = e.target.files[0];
-    const base64 = await Base64(file);
-    setImagesArray((prevArray: any) => {
-      let newArray = [...prevArray];
-      newArray.push(base64);
-      return newArray;
-    });
-    e.target.value = "";
+  const handleAddImage = (e: any) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setImagesArray((prevArray: any) => {
+        let newArray = [...prevArray];
+        newArray.push(files[0]);
+        return newArray;
+      });
+    }
+    files.length = 0;
   };
 
   /* Handle Add Ads */
   const handleAddAds = () => {
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("position", position);
+    imagesArray.forEach((image: any, i: number) => {
+      formData.append(`images[${i}]`, image);
+    });
     apiNational
-      .post(endPoint.addAds, {
-        title: title,
-        description: description,
-        position: position,
-        images: imagesArray,
+      .post(endPoint.addAds, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
         console.log(res);
-        location.reload();
+        getAdsData();
       });
   };
 
@@ -163,9 +176,12 @@ const AdminAds = () => {
               type="file"
               id="download-image-id"
               {...register("imageFile", {
-                required: "الصورة مطلوبة",
+                required: {
+                  value: imagesArray.length === 0,
+                  message: "الصورة مطلوبة",
+                },
               })}
-              onChange={handleAddImage}
+              onChange={(e: any) => handleAddImage(e)}
             />
             <label
               className="downlaod-image flexCenterColumn"
@@ -184,7 +200,12 @@ const AdminAds = () => {
           {imagesArray.length > 0 && (
             <div className="flexCenter flex-wrap bg-light mt-2 p-3">
               {imagesArray.map((item: any) => {
-                return <img src={item} className="images-array-item" />;
+                return (
+                  <img
+                    src={URL.createObjectURL(item)}
+                    className="images-array-item"
+                  />
+                );
               })}
             </div>
           )}

@@ -4,7 +4,7 @@ import logo from "../../assets/images/Header/logo darebni.png";
 import profileIcon from "../../assets/images/Header/profile.svg";
 import logoutIcon from "../../assets/images/Header/logout.svg";
 import ProfileEdit from "../ProfileEdit/ProfileEdit";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import React, { useRef } from "react";
 import { Transition } from "react-transition-group";
 import Cookies from "js-cookie";
@@ -16,7 +16,9 @@ const Header = () => {
   const ref = useRef();
   const [showProfileEdit, setShowProfileEdit] = React.useState(false);
   const [showProfileList, setShowProfileList] = React.useState(false);
-  const [active, setActive] = React.useState("");
+  const [active, setActive] = React.useState(
+    location.pathname === "/" ? "main" : ""
+  );
 
   const handleSetActive = (value: string) => {
     active === value ? setActive("") : setActive(value);
@@ -25,9 +27,9 @@ const Header = () => {
   const handleLogout = () => {
     apiNational.get(endPoint.logout).then((res) => {
       console.log(res);
-      Cookies.remove("token");
-      Cookies.remove("code");
     });
+    Cookies.remove("token");
+    Cookies.remove("code");
   };
 
   return (
@@ -39,7 +41,7 @@ const Header = () => {
 
       {/* Links */}
       <div className="links col-6 flexCenter">
-        <Link
+        <NavLink
           to="/"
           className={`link-template ${
             active === "main" && "link-template-active"
@@ -47,7 +49,7 @@ const Header = () => {
           onClick={() => handleSetActive("main")}
         >
           <p>الرئيسية</p>
-        </Link>
+        </NavLink>
         <a
           href="#specialists"
           className={`link-template ${

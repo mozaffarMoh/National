@@ -29,7 +29,9 @@ const Login = () => {
       .then((res) => {
         router("/");
         Cookies.set("token", res.data.data.token);
-        Cookies.set("code", code);
+        Cookies.set("code", res.data.data.code);
+        Cookies.set("collegeUUID", res.data.college_uuid);
+        console.log("from login : ", res.data.college_uuid);
       })
       .catch((err) => console.log(err));
   };

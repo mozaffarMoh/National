@@ -19,6 +19,7 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
     if (collegeID) {
       apiNational.get(endPoint.adminSubjects + collegeID).then((res: any) => {
         setSubjectsData(res.data.data);
+        setSubjectID(res.data.data[0].subject_id);
       });
     }
   }, []);
@@ -37,6 +38,9 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
         console.log(res);
         setQuestionNumber(0);
         setQuestionText("");
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -105,7 +109,7 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
                 className="select-answer-status"
                 onChange={(e) => handleAddAnswer(e, index)}
               >
-                <option value={"false"}>اجابة خاطئة</option>
+                <option value={""}>اجابة خاطئة</option>
                 <option value={"true"}>اجابة صحيحة</option>
               </select>
             </div>

@@ -11,19 +11,46 @@ import starFillIcon from "../../assets/images/QuizResult/starFill.svg";
 import bookIcon from "../../assets/images/QuizResult/book.svg";
 import { endPoint } from "../../api/endPoints";
 import useGet from "../../api/useGet";
+import Cookies from "js-cookie";
 
 const QuizQuestions = () => {
-  const squaresArray = Array(3).fill("");
   const navigate = useNavigate();
+  const squaresArray = Array(3).fill("");
+  const collegeUUID = Cookies.get("collegeUUID");
+  const specialityUUID = Cookies.get("specialityUUID");
+  const subjectUUID = Cookies.get("subjectUUID");
+  const examUUID = Cookies.get("examUUID");
+  const isSpecialityUUID = Boolean(Cookies.get("isSpecialityUUID"));
+  const isSubjectUUID = Boolean(Cookies.get("isSubjectUUID"));
+  const isExamUUID = Boolean(Cookies.get("isExamUUID"));
   const [showFillStar, setShowFillStar] = React.useState(false);
   const [showHoverStar, setShowHoverStar] = React.useState(false);
   const [lastIndex, setLastIndex] = React.useState<number | any>(1);
 
-  const uuid =
-    "06ae1f82-8df5-413f-bddb-bc2c1fc6ea51&specialty_uuid=e9d9a3b4-7448-4dad-a915-8443e131ff96&exam_uuid=8c0da07e-2ad6-4697-9dfd-d8dc626d75e2";
-  const [data]: any = useGet(endPoint.exam, {
-    isuuid: true,
-    uuid: uuid,
+  /* Quiz type based on boolean value that comes from cookies */
+  const handleQuizType = () => {
+    if (isSubjectUUID) {
+      return endPoint?.quizBySubject;
+    } else if (isSpecialityUUID && !isExamUUID) {
+      return endPoint?.quizByBook;
+    } else if (isSpecialityUUID && isExamUUID) {
+      return endPoint?.quizByExam;
+    }
+  };
+
+  console.log(isSubjectUUID, isSpecialityUUID,isExamUUID
+    )
+
+  const [data]: any = useGet(handleQuizType(), {
+    isCollege_UUID: true,
+    isSpeciality_UUID: isSpecialityUUID,
+    isExam_UUID: isExamUUID,
+    isSubject_UUID: isSubjectUUID,
+    ///////
+    college_UUID: collegeUUID,
+    speciality_UUID: specialityUUID,
+    subject_UUID: subjectUUID,
+    exam_UUID: examUUID,
   });
 
   const [questionsArray, setQuestionsArray]: any = React.useState();
@@ -91,7 +118,7 @@ const QuizQuestions = () => {
     navigate("/quiz-result", {
       state: {
         dataValue: JSON.stringify({ data: questionsArray.slice(0, lastIndex) }),
-        questionsNum : lastIndex
+        questionsNum: lastIndex,
       },
     });
   };

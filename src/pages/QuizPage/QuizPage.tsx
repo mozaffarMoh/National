@@ -1,4 +1,4 @@
-import "./DawratQuiz.scss";
+import "./QuizPage.scss";
 import React from "react";
 import Header from "../../components/Header/Header";
 import BackTo from "../../components/BackTo/BackTo";
@@ -7,7 +7,7 @@ import QuizQuestions from "../../components/QuizQuestions/QuizQuestions";
 import DawratDetails from "../../components/DawratDetails/DawratDetails";
 import Footer from "../../components/Footer/Footer";
 
-const DawratQuiz = () => {
+const QuizPage = () => {
   const [showQuestions, setShowQuestions] = React.useState(false);
   return (
     <div>
@@ -21,4 +21,4 @@ const DawratQuiz = () => {
   );
 };
 
-export default DawratQuiz;
+export default QuizPage;

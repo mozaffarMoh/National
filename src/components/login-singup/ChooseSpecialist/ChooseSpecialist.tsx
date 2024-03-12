@@ -1,18 +1,18 @@
 import React from "react";
 import "./ChooseSpecialist.scss";
-import { ChooseSpecialistArray } from "./ChooseSpecialistArray";
 import emptyCheckBox from "../../../assets/images/ChooseSpecialist/empty.svg";
 import filledCheckBox from "../../../assets/images/ChooseSpecialist/fill.svg";
+import { endPoint } from "../../../api/endPoints";
+import useGet from "../../../api/useGet";
 
-const ChooseSpecialist = () => {
-  const [checkedItems, setCheckedItems] = React.useState(
-    Array(ChooseSpecialistArray.length).fill(false)
-  );
+const ChooseSpecialist = ({ setCollegeUUIDProp }: any) => {
+  const [data]: any = useGet(endPoint.colleges);
+  const [collegeUUID, setCollegeUUID] = React.useState("");
 
-  const handleCheckbox = (index: number) => {
-    const newCheckedItems = [...checkedItems];
-    newCheckedItems[index] = !newCheckedItems[index];
-    setCheckedItems(newCheckedItems);
+  /* Handle press on college */
+  const handleCheckbox = (uuid: any) => {
+    setCollegeUUID(uuid);
+    setCollegeUUIDProp(uuid);
   };
 
   return (
@@ -21,17 +21,22 @@ const ChooseSpecialist = () => {
         <h6>اختر الإختصاص</h6>
       </div>
       <div className="specialist-items flexCenter">
-        {ChooseSpecialistArray.map((item, index) => {
-          return (
-            <div className="specialist-item flexCenter" key={index}>
-              <img
-                src={checkedItems[index] ? filledCheckBox : emptyCheckBox}
-                onClick={() => handleCheckbox(index)}
-              />
-              <p>{item.title}</p>
-            </div>
-          );
-        })}
+        {data &&
+          data.map((item: any, index: number) => {
+            return (
+              <div className="specialist-item flexCenter" key={index}>
+                <img
+                  src={
+                    item.college_uuid === collegeUUID
+                      ? filledCheckBox
+                      : emptyCheckBox
+                  }
+                  onClick={() => handleCheckbox(item.college_uuid)}
+                />
+                <p>{item.name}</p>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

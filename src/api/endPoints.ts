@@ -1,4 +1,4 @@
-export const endPoint = {
+export const endPoint: any = {
 
     /* Admin Paths */
     adminLogin: '/admin/log-in',
@@ -35,6 +35,11 @@ export const endPoint = {
     collegeSpeciality: '/college/specialty',
     collegeSubject: '/college/subject',
     dawrat: '/user/exams/show',
-    exam: "/user/exams/exam",
+    quizByExam: "/user/exams/exam",
+    quizByBook: "/user/exams/book",
+    quizBySubject: "/user/exams/subject",
+    quizByDegree: "/user/exams/show",
     calculate: "/user/exams/calculate",
+    showProfile: "/user/profile",
+    editProfile : "/user/profile/update"
 }

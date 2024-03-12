@@ -15,7 +15,6 @@ const usePost = (body: any, endPoint: any, isObject?: any) => {
             })
             .catch((err) => {
                 console.log(err.response.data.message);
-                err.response.data.message == "Unauthorize" && window.location.reload();
             });
     }, []);
     return [data];

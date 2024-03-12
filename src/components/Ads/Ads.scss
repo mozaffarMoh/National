@@ -1,6 +1,10 @@
 .ads {
-    width: 100%;
-    margin-top: 10px;
+    width: 80%;
+    max-height: 450px;
+    margin: 10px 0px 0px 0px;
+    border-radius: 10px;
+    user-select: none;
+    overflow: auto;
 
     .carousel-indicators,
     .carousel-control-prev-icon,
@@ -8,14 +12,24 @@
         display: none;
     }
 
+    .ads-item {
 
-    .ads-content {
-        width: 100%;
+        img {
+            width: 100%;
+            height: 350px;
+            margin: 10px 0px 0px 10px;
+            cursor: pointer;
+        }
+
     }
 
+    .slide-icons-container {
+        height: 50px;
+        margin-top: 10px;
 
-    .slide-icon {
-        width: 10px;
-        margin-left: 5px;
+        .slide-icon {
+            width: 10px;
+            margin-left: 5px;
+        }
     }
 }

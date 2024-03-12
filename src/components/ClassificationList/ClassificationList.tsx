@@ -1,32 +1,41 @@
 import "./ClassificationList.scss";
 import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const ClassificationList = () => {
-  const classificationsArray = [
-    { title: "المترجمات" },
-    { title: "الذكاء الاصطناعي" },
-    { title: "قواعد المعطيات" },
-    { title: "الأوتومات" },
-    { title: "الشبكات" },
-    { title: "هندسة البرمجيات" },
-    { title: "امن المعلومات" },
-  ];
+  const navigate = useNavigate();
+  const collegeUUID = Cookies.get("collegeUUID");
+  const specialityUUID = Cookies.get("specialityUUID");
 
-  const uuid = "06ae1f82-8df5-413f-bddb-bc2c1fc6ea51";
-  const [data] = useGet(endPoint.collegeSubject, {
-    isuuid: true,
-    uuid: uuid,
+  const [data]: any = useGet(endPoint.collegeSubject, {
+    isCollege_UUID: true,
+    isSpeciality_UUID: true,
+    college_UUID: collegeUUID,
+    speciality_UUID: specialityUUID,
   });
+
+  const handleChooseSubject = (uuid: any) => {
+    Cookies.set("isSpecialityUUID", "");
+    Cookies.set("isExamUUID", "");
+    Cookies.set("isSubjectUUID", "true");
+    Cookies.set("subjectUUID", uuid);
+    navigate("/quiz-page");
+  };
 
   return (
     <div className="classificationList flexCenterColumn">
       <h1>التصنيفات</h1>
       <div className="classificationList-items flexCenter">
         {data &&
-          data.map((item: any, index) => {
+          data.map((item: any, index: number) => {
             return (
-              <div key={index} className="classificationList-item flexCenter">
+              <div
+                key={index}
+                className="classificationList-item flexCenter"
+                onClick={() => handleChooseSubject(item.uuid)}
+              >
                 <p>{item.name}</p>
               </div>
             );
