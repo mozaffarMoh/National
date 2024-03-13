@@ -1,6 +1,6 @@
 import "./QuizQuestions.scss";
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import emptyCircle from "../../assets/images/QuizResult/nonSelected.svg";
 import fillCircle from "../../assets/images/QuizResult/selected.svg";
@@ -16,6 +16,7 @@ import Cookies from "js-cookie";
 const QuizQuestions = () => {
   const navigate = useNavigate();
   const squaresArray = Array(3).fill("");
+  const [questionsArray, setQuestionsArray]: any = React.useState([]);
   const collegeUUID = Cookies.get("collegeUUID");
   const specialityUUID = Cookies.get("specialityUUID");
   const subjectUUID = Cookies.get("subjectUUID");
@@ -23,9 +24,9 @@ const QuizQuestions = () => {
   const isSpecialityUUID = Boolean(Cookies.get("isSpecialityUUID"));
   const isSubjectUUID = Boolean(Cookies.get("isSubjectUUID"));
   const isExamUUID = Boolean(Cookies.get("isExamUUID"));
-  const [showFillStar, setShowFillStar] = React.useState(false);
   const [showHoverStar, setShowHoverStar] = React.useState(false);
-  const [lastIndex, setLastIndex] = React.useState<number | any>(1);
+  const [starsIndexArray, setStarsIndexArray]: any = React.useState([-1]);
+  const [lastIndex, setLastIndex] = React.useState<number | any>(3);
 
   /* Quiz type based on boolean value that comes from cookies */
   const handleQuizType = () => {
@@ -38,10 +39,7 @@ const QuizQuestions = () => {
     }
   };
 
-  console.log(isSubjectUUID, isSpecialityUUID,isExamUUID
-    )
-
-  const [data]: any = useGet(handleQuizType(), {
+  const [data, , , , loading]: any = useGet(handleQuizType(), {
     isCollege_UUID: true,
     isSpeciality_UUID: isSpecialityUUID,
     isExam_UUID: isExamUUID,
@@ -53,18 +51,13 @@ const QuizQuestions = () => {
     exam_UUID: examUUID,
   });
 
-  const [questionsArray, setQuestionsArray]: any = React.useState();
-
   /* add choose option to a new array */
   React.useEffect(() => {
     if (data) {
       const newArray = [...data];
       for (let i = 0; i < newArray.length; i++) {
         for (let j = 0; j < newArray[i].answers.length; j++) {
-          let answer_text = newArray[i].answers[j].answer_text;
-          let status = newArray[i].answers[j].status;
-
-          newArray[i].answers[j] = { answer_text, status, choose: 0 };
+          newArray[i].answers[j] = { ...newArray[i].answers[j], choose: 0 };
         }
       }
       setQuestionsArray(newArray);
@@ -73,6 +66,7 @@ const QuizQuestions = () => {
 
   /* Handle Select Answer */
   const handleSelectAnswer = (index: number, indexAnswer: number) => {
+    /* This for loop in only for empty all choose values */
     for (let i = 0; i < questionsArray[index].answers.length; i++) {
       setQuestionsArray((prevArray: any) => {
         const newArray = [...prevArray];
@@ -84,11 +78,59 @@ const QuizQuestions = () => {
       });
     }
 
+    /* set new choose value */
     setQuestionsArray((prevArray: any) => {
       const newArray = [...prevArray];
       newArray[index].answers[indexAnswer] = {
         ...newArray[index].answers[indexAnswer],
         choose: 1,
+      };
+      return newArray;
+    });
+  };
+
+  /* Handle show star icon */
+  const starIcon = (index: number) => {
+    if (!starsIndexArray.includes(index)) {
+      if (!showHoverStar) {
+        return starEmptyIcon;
+      } else {
+        return starHoverIcon;
+      }
+    } else {
+      return starFillIcon;
+    }
+  };
+
+  /* Handle enter hover on star icon */
+  const handleStarIconEnterHover = (index: number) => {
+    !starsIndexArray.includes(index) && setShowHoverStar(true);
+  };
+
+  /* Handle leave hover on star icon */
+  const handleStarIconLeaveHover = (index: number) => {
+    !starsIndexArray.includes(index) && setShowHoverStar(false);
+  };
+
+  /* Handle select favorite */
+  const handleSelectFavorite = (index: number, favoriteValue: any) => {
+    /* fill star icon and empty it if star filled */
+    setStarsIndexArray((prevArray: any) => {
+      const newArray = [...prevArray];
+      if (starsIndexArray.includes(index)) {
+        newArray.splice(index, 1);
+        setShowHoverStar(false);
+      } else {
+        newArray.push(index);
+        setShowHoverStar(false);
+      }
+      return newArray;
+    });
+    setQuestionsArray((prevArray: any) => {
+      const newArray = [...prevArray];
+      newArray[index] = {
+        ...newArray[index],
+        favorite: favoriteValue == 0 ? 1 : 0,
       };
       return newArray;
     });
@@ -166,28 +208,15 @@ const QuizQuestions = () => {
               <div className="quiz-footer flexBetween">
                 <div className="flexCenter gap-4 ">
                   <img src={successIcon} alt="" />
-                  {!showFillStar ? (
-                    !showHoverStar ? (
-                      <img
-                        src={starEmptyIcon}
-                        alt=""
-                        onMouseEnter={() => setShowHoverStar(true)}
-                      />
-                    ) : (
-                      <img
-                        src={starHoverIcon}
-                        alt=""
-                        onClick={() => setShowFillStar(true)}
-                        onMouseLeave={() => setShowHoverStar(false)}
-                      />
-                    )
-                  ) : (
-                    <img
-                      src={starFillIcon}
-                      alt=""
-                      onClick={() => setShowFillStar(false)}
-                    />
-                  )}
+
+                  <img
+                    src={starIcon(index)}
+                    alt=""
+                    onMouseEnter={() => handleStarIconEnterHover(index)}
+                    onMouseLeave={() => handleStarIconLeaveHover(index)}
+                    onClick={() => handleSelectFavorite(index, item.favorite)}
+                  />
+
                   <img src={bookIcon} alt="" />
                 </div>
                 <Button
@@ -200,19 +229,27 @@ const QuizQuestions = () => {
             </div>
           );
         })}
-
-      {/* Hide squares if questions array is fully visible */}
-      {!(lastIndex === data.length) &&
-        squaresArray.map((_: any, index: number) => {
-          return <div className="square" key={index}></div>;
-        })}
-      <Button
-        className="quiz-questions-button"
-        variant="secondary"
-        onClick={handleFinishExam}
-      >
-        أنه الاختبار الان
-      </Button>
+      {loading ? (
+        <div className="overflow-y-hidden">
+          <Spinner />
+        </div>
+      ) : (
+        //Hide squares if questions array is fully visible
+        !(lastIndex === data.length) && (
+          <div className="w-100 flexCenterColumn">
+            {squaresArray.map((_: any, index: number) => {
+              return <div className="square" key={index}></div>;
+            })}
+            <Button
+              className="quiz-questions-button"
+              variant="secondary"
+              onClick={handleFinishExam}
+            >
+              أنه الاختبار الان
+            </Button>
+          </div>
+        )
+      )}
     </div>
   );
 };

@@ -3,13 +3,14 @@ import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 
 const ClassificationList = () => {
   const navigate = useNavigate();
   const collegeUUID = Cookies.get("collegeUUID");
   const specialityUUID = Cookies.get("specialityUUID");
 
-  const [data]: any = useGet(endPoint.collegeSubject, {
+  const [data, , , , loading]: any = useGet(endPoint.collegeSubject, {
     isCollege_UUID: true,
     isSpeciality_UUID: true,
     college_UUID: collegeUUID,
@@ -40,6 +41,11 @@ const ClassificationList = () => {
               </div>
             );
           })}
+        {loading && (
+          <div className="overflow-y-hidden">
+            <Spinner />
+          </div>
+        )}
       </div>
     </div>
   );

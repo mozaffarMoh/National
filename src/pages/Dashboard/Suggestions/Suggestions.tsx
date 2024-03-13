@@ -5,18 +5,30 @@ import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./Suggestions.scss";
 import useGet from "../../../api/useGet";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { Spinner } from "react-bootstrap";
+import React from "react";
+import Loading from "../../../components/Loading/Loading";
 
 const Suggestions = () => {
-  const [data, setData]: any = useGet(endPoint.suggestions);
+  const [data, setData, , , loading]: any = useGet(endPoint.suggestions);
+  const [postLoading, setPostLoading] = React.useState(false);
 
   /* Handle delete Suggetions */
   const handleDelete = (id: any) => {
-    apiNational.get(endPoint.deleteSuggestions + id).then((res) => {
-      console.log(res);
-      setData((prevData: any) =>
-        prevData.filter((item: any) => item.suggestion_id !== id)
-      );
-    });
+    setPostLoading(true);
+    apiNational
+      .get(endPoint.deleteSuggestions + id)
+      .then((res) => {
+        setPostLoading(false);
+        console.log(res);
+        setData((prevData: any) =>
+          prevData.filter((item: any) => item.suggestion_id !== id)
+        );
+      })
+      .catch((err: any) => {
+        setPostLoading(false);
+        console.log(err);
+      });
   };
 
   const columns = [
@@ -53,10 +65,17 @@ const Suggestions = () => {
   return (
     <div>
       <AdminHeader />
+      {postLoading && <Loading />}
       <div className="suggestions-ads flexCenterColumn">
         <h2>الاقتراحات</h2>
         <div className="table-container">
-          <Table dataSource={data} columns={columns} />
+          {data && !loading ? (
+            <Table dataSource={data} columns={columns} />
+          ) : (
+            <div className="dashboard-spinner">
+              <Spinner />
+            </div>
+          )}{" "}
         </div>
       </div>
     </div>

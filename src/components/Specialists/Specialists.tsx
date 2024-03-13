@@ -5,15 +5,17 @@ import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
 import Cookies from "js-cookie";
 import LoginRequired from "../LoginRequired/LoginRequired";
+import { Spinner } from "react-bootstrap";
 
 const Specialists = () => {
-  const collegeRef: any = useRef();
+  const collegeRef: any = useRef(null);
+  const othersRef: any = useRef(null);
   const [showChooseSpecialist, setShowChooseSpecialist] = React.useState(false);
   const [showLoginRequired, setShowLoginRequired] = React.useState(false);
   const [hintYourCollege, setHintYourCollege] = React.useState(false);
   const collegeUUID = Cookies.get("collegeUUID");
   const token = Cookies.get("token");
-  const [data]: any = useGet(endPoint.colleges, {
+  const [data, , , , loading]: any = useGet(endPoint.colleges, {
     isCollege_UUID: true,
     college_UUID: collegeUUID,
   });
@@ -62,7 +64,9 @@ const Specialists = () => {
                 onClick={() => handleSelect(item.college_uuid)}
               >
                 <div
-                  ref={collegeRef}
+                  ref={
+                    collegeUUID == item.college_uuid ? collegeRef : othersRef
+                  }
                   className={`specialist-item-inside  ${
                     hintYourCollege &&
                     collegeUUID == item.college_uuid &&
@@ -81,6 +85,11 @@ const Specialists = () => {
               </div>
             );
           })}
+        {loading && (
+          <div className="overflow-y-hidden ">
+            <Spinner />
+          </div>
+        )}
       </div>
       {showChooseSpecialist && <ChooseSpecialistOnStart />}
       {showLoginRequired && (

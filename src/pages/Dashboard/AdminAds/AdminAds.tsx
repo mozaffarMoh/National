@@ -7,9 +7,16 @@ import { FaUpload } from "react-icons/fa";
 import apiNational from "../../../api/apiNational";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Spinner } from "react-bootstrap";
+import Loading from "../../../components/Loading/Loading";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const AdminAds = () => {
+  const navigate = useNavigate();
+  const [postLoading, setPostLoading] = React.useState(false);
   const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [position, setPosition] = React.useState("");
@@ -19,25 +26,53 @@ const AdminAds = () => {
     handleSubmit,
     formState: { errors },
   }: any = useForm();
+  const token = Cookies.get("token");
+
+  /* Check token */
+  React.useEffect(() => {
+    if (!token) {
+      navigate("/dashboard/login");
+    }
+  }, []);
 
   /* Get Ads Data */
   const getAdsData = () => {
-    apiNational.get(endPoint.showAds).then((res) => {
-      setData(res.data.data);
-    });
+    setLoading(true);
+    apiNational
+      .get(endPoint.showAds)
+      .then((res: any) => {
+        setLoading(false);
+        setData(res.data.data);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        if (err.response.data.message === "Unauthorize") {
+          navigate("/dashboard/login");
+        }
+        setLoading(false);
+      });
   };
+
   React.useEffect(() => {
     getAdsData();
   }, []);
 
   /* Handle delete Ads */
   const handleDelete = (id: any) => {
-    apiNational.get(endPoint.deleteAds + id).then((res) => {
-      console.log(res);
-      setData((prevArray: any) =>
-        prevArray.filter((item: any) => item.id !== id)
-      );
-    });
+    setPostLoading(true);
+    apiNational
+      .get(endPoint.deleteAds + id)
+      .then((res) => {
+        setPostLoading(false);
+        console.log(res);
+        setData((prevArray: any) =>
+          prevArray.filter((item: any) => item.id !== id)
+        );
+      })
+      .catch((err: any) => {
+        setPostLoading(false);
+        console.log(err);
+      });
   };
 
   /* Handle Add Image */
@@ -62,13 +97,20 @@ const AdminAds = () => {
     imagesArray.forEach((image: any, i: number) => {
       formData.append(`images[${i}]`, image);
     });
+
+    setPostLoading(true);
     apiNational
       .post(endPoint.addAds, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
+        setPostLoading(false);
         console.log(res);
         getAdsData();
+      })
+      .catch((err: any) => {
+        setPostLoading(false);
+        console.log(err);
       });
   };
 
@@ -123,10 +165,17 @@ const AdminAds = () => {
   return (
     <div>
       <AdminHeader />
+      {postLoading && <Loading />}
       <div className="admin-ads flexCenterColumn">
         <h2>الاعلانات</h2>
         <div className="table-container">
-          <Table dataSource={data} columns={columns} />
+          {data && !loading ? (
+            <Table dataSource={data} columns={columns} />
+          ) : (
+            <div className="dashboard-spinner">
+              <Spinner />
+            </div>
+          )}
         </div>
         <div className="add-ads flexCenterColumnItemsStart">
           <h4>إضافة إعلان : </h4>

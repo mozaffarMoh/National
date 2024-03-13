@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
 import Cookies from "js-cookie";
+import { Spinner } from "react-bootstrap";
 
 const AllDawrat = () => {
   const navigate = useNavigate();
   const collegeUUID = Cookies.get("collegeUUID");
   const specialityUUID = Cookies.get("specialityUUID");
   const degree = Cookies.get("degree");
-  const [data]: any = useGet(endPoint.quizByDegree, {
+  const [data, , , , loading]: any = useGet(endPoint.quizByDegree, {
     isCollege_UUID: true,
     isSpeciality_UUID: true,
     isDegree: true,
@@ -53,6 +54,11 @@ const AllDawrat = () => {
             </button>
           );
         })}
+      {loading && (
+        <div className="overflow-y-hidden">
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };

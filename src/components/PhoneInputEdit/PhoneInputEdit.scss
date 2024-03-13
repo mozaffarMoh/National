@@ -6,6 +6,12 @@
     justify-content: center;
     font-size: 18px;
 
+
+    p {
+        overflow-y: hidden;
+    }
+
+
     input {
         width: 100%;
         height: 57px;
@@ -14,8 +20,9 @@
         border-radius: 5px;
         background-color: #B9E5FB;
         border: none;
-        &:focus{
-            border : 1px solid;
+
+        &:focus {
+            border: 1px solid;
         }
     }
 

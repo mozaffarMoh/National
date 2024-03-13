@@ -1,4 +1,4 @@
-.admin-subjects {
+.admin-specialists {
 
     h2 {
         margin: 20px;
@@ -11,6 +11,13 @@
         font-size: 20px;
         margin-bottom: 10px;
         cursor: pointer;
+    }
+
+    .select-spinner{
+       width : 20px;
+       height: 20px;
+       font-size: 10px;
+       margin: 0px 10px 5px 0px;
     }
 
     .edit-field {
@@ -48,7 +55,7 @@
     }
 
 
-    .add-subject {
+    .add-speciality {
         width: 80%;
         margin-bottom: 20px;
 

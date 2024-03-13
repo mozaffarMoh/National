@@ -4,9 +4,10 @@ import emptyCheckBox from "../../../assets/images/ChooseSpecialist/empty.svg";
 import filledCheckBox from "../../../assets/images/ChooseSpecialist/fill.svg";
 import { endPoint } from "../../../api/endPoints";
 import useGet from "../../../api/useGet";
+import { Spinner } from "react-bootstrap";
 
 const ChooseSpecialist = ({ setCollegeUUIDProp }: any) => {
-  const [data]: any = useGet(endPoint.colleges);
+  const [data, , , , loading]: any = useGet(endPoint.colleges);
   const [collegeUUID, setCollegeUUID] = React.useState("");
 
   /* Handle press on college */
@@ -37,6 +38,11 @@ const ChooseSpecialist = ({ setCollegeUUIDProp }: any) => {
               </div>
             );
           })}
+        {loading && (
+          <div className="w-100 flexCenter overflow-y-hidden ">
+            <Spinner animation="border" color="blue" />
+          </div>
+        )}
       </div>
     </div>
   );

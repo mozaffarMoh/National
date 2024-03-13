@@ -6,10 +6,13 @@ import { LinksArray } from "./LinksArray";
 import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import Cookies from "js-cookie";
+import Loading from "../../Loading/Loading";
 
 const AdminHeader = () => {
   const [showHeaderText, setShowHeaderText] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
+
   /* Change Active Link */
   const handleChangeActive: any = (active: any) => {
     if (active.isActive) {
@@ -21,20 +24,25 @@ const AdminHeader = () => {
 
   /* Logout */
   const handleLogout = () => {
+    setLoading(true);
     apiNational
       .get(endPoint.adminLogout)
       .then((res: any) => {
+        setLoading(false);
         console.log(res);
+        navigate("/dashboard/login");
         Cookies.remove("token");
       })
       .catch((err) => {
-        console.log(err);
+        setLoading(false);
         navigate("/dashboard/login");
+        console.log(err);
       });
   };
 
   return (
     <div className="admin-header flexBetween">
+      {loading && <Loading />}
       <button
         className="menu-button flexCenter"
         onClick={() => setShowHeaderText(!showHeaderText)}

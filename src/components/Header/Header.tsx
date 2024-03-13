@@ -4,16 +4,19 @@ import logo from "../../assets/images/Header/logo darebni.png";
 import profileIcon from "../../assets/images/Header/profile.svg";
 import logoutIcon from "../../assets/images/Header/logout.svg";
 import ProfileEdit from "../ProfileEdit/ProfileEdit";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import React, { useRef } from "react";
 import { Transition } from "react-transition-group";
 import Cookies from "js-cookie";
 import { endPoint } from "../../api/endPoints";
 import apiNational from "../../api/apiNational";
+import Loading from "../Loading/Loading";
 
 const Header = () => {
   const token = Cookies.get("token");
+  const navigate = useNavigate();
   const ref = useRef();
+  const [loading, setLoading] = React.useState(false);
   const [showProfileEdit, setShowProfileEdit] = React.useState(false);
   const [showProfileList, setShowProfileList] = React.useState(false);
   const [active, setActive] = React.useState(
@@ -25,15 +28,26 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    apiNational.get(endPoint.logout).then((res) => {
-      console.log(res);
-    });
+    setLoading(true);
+    apiNational
+      .get(endPoint.logout)
+      .then((res) => {
+        setLoading(false);
+        navigate("/login");
+        console.log(res);
+      })
+      .catch((err: any) => {
+        setLoading(false);
+        navigate("/login");
+        console.log(err);
+      });
     Cookies.remove("token");
     Cookies.remove("code");
   };
 
   return (
     <div className="header flexCenter row ">
+      {loading && <Loading />}
       {/* Darrebni logo */}
       <div className="logo col-3 d-flex">
         <img src={logo} alt="" />
@@ -100,7 +114,7 @@ const Header = () => {
                       </div>
 
                       <Link
-                        to={"/login"}
+                        to={"#"}
                         className="handle-profile-item flexCenter"
                         onClick={handleLogout}
                       >

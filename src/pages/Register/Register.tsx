@@ -8,11 +8,13 @@ import React from "react";
 import apiNational from "../../api/apiNational";
 import { endPoint } from "../../api/endPoints";
 import { useForm } from "react-hook-form";
+import Loading from "../../components/Loading/Loading";
 
 const Register = () => {
   const [name, setName] = React.useState();
   const [phone, setPhone] = React.useState();
   const [collegeUUID, setCollegeUUID] = React.useState("");
+  const [loading, setLoading]: any = React.useState(false);
 
   const {
     register,
@@ -21,6 +23,7 @@ const Register = () => {
   }: any = useForm();
 
   const handleRegister = () => {
+    setLoading(true);
     apiNational
       .post(endPoint.register, {
         name: name,
@@ -29,12 +32,17 @@ const Register = () => {
       })
       .then((res) => {
         console.log(res);
+        setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   };
 
   return (
     <div className="register flexCenter row">
+      {loading && <Loading />}
       <div className="register-form-background col-6 flexCenter">
         <form className="register-form" onSubmit={handleSubmit(handleRegister)}>
           <div className="title flexCenter">

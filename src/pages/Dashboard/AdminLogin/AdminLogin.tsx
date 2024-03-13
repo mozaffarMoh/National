@@ -5,11 +5,13 @@ import { endPoint } from "../../../api/endPoints";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
+import Loading from "../../../components/Loading/Loading";
 
 const AdminLogin = () => {
   const router = useNavigate();
   const [email, setEmail] = React.useState();
   const [password, setPassword]: any = React.useState();
+  const [loading, setLoading]: any = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -17,20 +19,26 @@ const AdminLogin = () => {
   }: any = useForm();
 
   const handleLogin = () => {
+    setLoading(true);
     apiNational
       .post(endPoint.adminLogin, {
         email: email,
         password: password,
       })
       .then((res) => {
+        setLoading(false);
         router("/dashboard/users");
         Cookies.set("token", res.data.data.token);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   };
 
   return (
     <div className="admin-login flexCenterColumn">
+      {loading && <Loading />}
       <h4>تسجيل الدخول للمسؤول</h4>
       <form className="flexCenterColumn" onSubmit={handleSubmit(handleLogin)}>
         <input

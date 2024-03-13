@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import "./ChooseSpecialistOnStart.scss";
 import { useNavigate } from "react-router-dom";
 import useGet from "../../api/useGet";
@@ -13,7 +13,7 @@ const ChooseSpecialistOnStart = () => {
     { title: "ماستر", value: "master" },
     { title: "تخرج", value: "graduation" },
   ];
-  const [data]: any = useGet(endPoint.collegeSpeciality, {
+  const [data, , , , loading]: any = useGet(endPoint.collegeSpeciality, {
     isCollege_UUID: true,
     college_UUID: collegeUUID,
   });
@@ -58,6 +58,11 @@ const ChooseSpecialistOnStart = () => {
                 </div>
               );
             })}
+          {loading && (
+            <div className="w-100 h-100 overflow-y-hidden ">
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
 

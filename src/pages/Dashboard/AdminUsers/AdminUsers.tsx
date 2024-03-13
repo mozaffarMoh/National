@@ -4,11 +4,13 @@ import useGet from "../../../api/useGet";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./AdminUsers.scss";
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import apiNational from "../../../api/apiNational";
+import Loading from "../../../components/Loading/Loading";
 
 const AdminUsers = () => {
-  const [data]: any = useGet(endPoint.showUsers);
+  const [data, , , , loading]: any = useGet(endPoint.showUsers);
+  const [postLoading, setPostLoading]: any = React.useState(false);
   const [userID, setUserID] = React.useState();
   const [code, setCode] = React.useState();
   const columns: any = [
@@ -31,17 +33,24 @@ const AdminUsers = () => {
 
   /* Generate new code */
   const handleGenerateCode = () => {
+    setPostLoading(true);
     apiNational
       .post(endPoint.generateCode, { user_id: userID })
       .then((res: any) => {
+        setPostLoading(false);
         console.log(res);
         setCode(res.data.data.code);
+      })
+      .catch((err) => {
+        setPostLoading(false);
+        console.log(err);
       });
   };
 
   return (
     <div>
       <AdminHeader />
+      {postLoading && <Loading />}
       <div className="admin-users flexCenterColumn">
         <h2>جميع المستخدمين</h2>
         <div className="generate-code">
@@ -59,7 +68,13 @@ const AdminUsers = () => {
           {code && <p>Code generated is : {code}</p>}
         </div>
         <div className="table-container">
-          {data && <Table dataSource={data} columns={columns} />}
+          {data && !loading ? (
+            <Table dataSource={data} columns={columns} />
+          ) : (
+            <div className="dashboard-spinner">
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
     </div>

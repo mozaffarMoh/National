@@ -5,12 +5,14 @@ import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import { Table } from "antd";
 import useGet from "../../../api/useGet";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { IoAddCircleSharp } from "react-icons/io5";
 import AddQuestion from "../../../components/Dashboard/AddQuestion/AddQuestion";
+import Loading from "../../../components/Loading/Loading";
 
 const AdminExams = () => {
-  const [data]: any = useGet(endPoint.adminColleges);
+  const [data, , , , loading]: any = useGet(endPoint.adminColleges);
+  const [postLoading, setPostLoading] = React.useState(false);
   const [name, setName] = React.useState("");
   const [collegeID, setCollegeID] = React.useState("1");
   const [specialityID, setSpecialityID] = React.useState("");
@@ -18,6 +20,8 @@ const AdminExams = () => {
   const [examDegree, setExamDegree] = React.useState("graduation");
   const [specialistsData, setSpecialistsData] = React.useState([]);
   const [refreshData, setRefreshData] = React.useState(false);
+  const [specialistsLoading, setSpecialistsLoading] = React.useState(false);
+  const [examsLoading, setExamsLoading] = React.useState(false);
   const [examsData, setExamsData] = React.useState([]);
   const [examID, setExamID] = React.useState("");
   const [showAddQuestion, setShowAddQuestion] = React.useState(false);
@@ -85,22 +89,37 @@ const AdminExams = () => {
   /* Get Exams and specialists*/
   React.useEffect(() => {
     if (collegeID) {
-      apiNational.get(endPoint.adminExams + collegeID).then((res: any) => {
-        setExamsData(res.data.data);
-      });
+      setSpecialistsLoading(true);
+      setExamsLoading(true);
+      apiNational
+        .get(endPoint.adminExams + collegeID)
+        .then((res: any) => {
+          setExamsLoading(false);
+          setExamsData(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          setExamsLoading(false);
+        });
       apiNational
         .get(endPoint.adminSpecialists + collegeID)
         .then((res: any) => {
+          setSpecialistsLoading(false);
           setSpecialistsData(res.data.data);
           if (res.data.data.length > 0) {
             setSpecialityID(res.data.data[0].specialty_id);
           }
+        })
+        .catch((err) => {
+          console.log(err);
+          setSpecialistsLoading(false);
         });
     }
   }, [collegeID, refreshData]);
 
   /* Add Exam */
   const handleAddExam = () => {
+    setPostLoading(true);
     apiNational
       .post(endPoint.addExam, {
         name: name,
@@ -109,16 +128,21 @@ const AdminExams = () => {
         degree: examDegree,
       })
       .then((res) => {
+        setPostLoading(false);
         console.log(res);
         setRefreshData(!refreshData);
         setName("");
+      })
+      .catch((err: any) => {
+        setPostLoading(false);
+        console.log(err);
       });
   };
 
   return (
     <div>
       <AdminHeader />
-
+      {postLoading && <Loading />}
       <div className="admin-exams flexCenterColumn">
         <h2>الامتحانات</h2>
         {!showAddQuestion ? (
@@ -129,33 +153,52 @@ const AdminExams = () => {
                 <h5 className="mt-3">الاختصاص : &nbsp;</h5>
               </div>
               <div className="flexCenterColumnItemsStart w-100  ">
-                <select
-                  className="select-college"
-                  onChange={handleChooseCollege}
-                >
-                  {data &&
-                    data.map((item: any) => {
-                      return (
-                        <option value={item.college_id}>{item.name}</option>
-                      );
-                    })}
-                </select>
-                <select
-                  className="select-college"
-                  onChange={handleChooseSpecialist}
-                >
-                  {specialistsData &&
-                    specialistsData.map((item: any) => {
-                      return (
-                        <option value={item.specialty_id}>{item.name}</option>
-                      );
-                    })}
-                </select>
+                <div className="w-100 flexStart">
+                  <select
+                    className="select-college"
+                    onChange={handleChooseCollege}
+                  >
+                    {data &&
+                      data.map((item: any) => {
+                        return (
+                          <option value={item.college_id}>{item.name}</option>
+                        );
+                      })}
+                  </select>
+                  {loading && (
+                    <div className="flexCenter overflow-hidden">
+                      <Spinner className="select-spinner" />
+                    </div>
+                  )}
+                </div>
+                <div className="w-100 flexStart">
+                  <select
+                    className="select-college"
+                    onChange={handleChooseSpecialist}
+                  >
+                    {specialistsData &&
+                      specialistsData.map((item: any) => {
+                        return (
+                          <option value={item.specialty_id}>{item.name}</option>
+                        );
+                      })}
+                  </select>
+                  {specialistsLoading && (
+                    <div className="flexCenter overflow-hidden">
+                      <Spinner className="select-spinner" />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-
             <div className="table-container">
-              {examsData && <Table dataSource={examsData} columns={columns} />}
+              {examsData && !examsLoading ? (
+                <Table dataSource={examsData} columns={columns} />
+              ) : (
+                <div className="dashboard-spinner">
+                  <Spinner />
+                </div>
+              )}
             </div>
 
             <div className="add-exam flexCenterColumn">

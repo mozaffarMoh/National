@@ -4,8 +4,12 @@ import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import { BsArrowLeftCircle } from "react-icons/bs";
 import { answersInputsArray } from "./answersArray";
+import Loading from "../../Loading/Loading";
+import { Spinner } from "react-bootstrap";
 
 const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
+  const [loading, setLoading] = React.useState(false);
+  const [postLoading, setPostLoading] = React.useState(false);
   const [subjectsData, setSubjectsData] = React.useState([]);
   const [questionText, setQuestionText] = React.useState("");
   const [questionNumber, setQuestionNumber] = React.useState<number>();
@@ -17,15 +21,24 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
   /* Get Subject */
   React.useEffect(() => {
     if (collegeID) {
-      apiNational.get(endPoint.adminSubjects + collegeID).then((res: any) => {
-        setSubjectsData(res.data.data);
-        setSubjectID(res.data.data[0].subject_id);
-      });
+      setLoading(true);
+      apiNational
+        .get(endPoint.adminSubjects + collegeID)
+        .then((res: any) => {
+          setLoading(false);
+          setSubjectsData(res.data.data);
+          setSubjectID(res.data.data[0].subject_id);
+        })
+        .catch((err: any) => {
+          setLoading(false);
+          console.log(err);
+        });
     }
   }, []);
 
   /* Handle Add Question */
   const handleAddQuestion = () => {
+    setPostLoading(true);
     apiNational
       .post(endPoint.addQuestion, {
         exam_id: examID,
@@ -35,11 +48,13 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
         answers: answersArray,
       })
       .then((res) => {
+        setPostLoading(false);
         console.log(res);
         setQuestionNumber(0);
         setQuestionText("");
       })
       .catch((err) => {
+        setPostLoading(false);
         console.log(err);
       });
   };
@@ -61,6 +76,7 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
 
   return (
     <div className="add-question flexCenterColumn">
+      {postLoading && <Loading />}
       <button onClick={() => setShowAddQuestion(false)} className="back-button">
         {" "}
         الرجوع <BsArrowLeftCircle size={30} />{" "}
@@ -70,15 +86,22 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
       {/* Select subject */}
       <div className="flexCenter w-100 ">
         <h6>اختر المادة : &nbsp;</h6>
-        <select
-          className="select-college"
-          onChange={(e: any) => setSubjectID(e.target.value)}
-        >
-          {subjectsData &&
-            subjectsData.map((item: any) => {
-              return <option value={item.subject_id}>{item.name}</option>;
-            })}
-        </select>
+        <div className="flexStart w-50 ">
+          <select
+            className="select-college"
+            onChange={(e: any) => setSubjectID(e.target.value)}
+          >
+            {subjectsData &&
+              subjectsData.map((item: any) => {
+                return <option value={item.subject_id}>{item.name}</option>;
+              })}
+          </select>
+          {loading && (
+            <div className="flexCenter overflow-hidden">
+              <Spinner className="select-spinner" />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Choose by inputs */}

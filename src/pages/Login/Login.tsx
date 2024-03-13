@@ -9,11 +9,13 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { endPoint } from "../../api/endPoints";
 import { useForm } from "react-hook-form";
+import Loading from "../../components/Loading/Loading";
 
 const Login = () => {
   const router = useNavigate();
   const [name, setName] = React.useState();
   const [code, setCode]: any = React.useState();
+  const [loading, setLoading]: any = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -21,23 +23,28 @@ const Login = () => {
   }: any = useForm();
 
   const handleLogin = () => {
+    setLoading(true);
     apiNational
       .post(endPoint.login, {
         name: name,
         code: code,
       })
       .then((res) => {
+        setLoading(false);
         router("/");
         Cookies.set("token", res.data.data.token);
         Cookies.set("code", res.data.data.code);
         Cookies.set("collegeUUID", res.data.college_uuid);
-        console.log("from login : ", res.data.college_uuid);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   };
 
   return (
     <div className="login flexCenter">
+      {loading && <Loading />}
       <div className="login-form-background col-6 flexCenter">
         <form className="login-form" onSubmit={handleSubmit(handleLogin)}>
           <div className="title flexCenter">

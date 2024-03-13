@@ -4,20 +4,34 @@ import { endPoint } from "../../../api/endPoints";
 import React from "react";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import { useForm } from "react-hook-form";
+import Loading from "../../../components/Loading/Loading";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const AdminRegister = () => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [loading, setLoading]: any = React.useState(false);
   const [password, setPassword]: any = React.useState("");
   const [successMessage, setSuccessMesssage] = React.useState("");
   const [showSuccessMessage, setShowSuccessMessage] = React.useState(false);
+  const navigate = useNavigate();
+  const token = Cookies.get("token");
   const {
     register,
     handleSubmit,
     formState: { errors },
   }: any = useForm();
 
+  /* Check token */
+  React.useEffect(() => {
+    if (!token) {
+      navigate("/dashboard/login");
+    }
+  }, []);
+  /* Handle register proccess */
   const handleRegister = () => {
+    setLoading(true);
     apiNational
       .post(endPoint.adminRegister, {
         name: name,
@@ -25,6 +39,7 @@ const AdminRegister = () => {
         password: password,
       })
       .then((res) => {
+        setLoading(false);
         setSuccessMesssage(res.data.data);
         setEmail("");
         setName("");
@@ -34,11 +49,15 @@ const AdminRegister = () => {
           setShowSuccessMessage(false);
         }, 5000);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   };
   return (
     <div className="admin-register flexCenterColumn">
       <AdminHeader />
+      {loading && <Loading />}
       <h4>إنشاء حساب مسؤول جديد</h4>
       <form
         className="flexCenterColumn"

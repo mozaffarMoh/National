@@ -1,6 +1,6 @@
 import "./ProfileEdit.scss";
 import avatarIcon from "../../assets/images/ProfileEdit/avatar.svg";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import UsernameInputEdit from "../../components/UsernameInputEdit/UsernameInputEdit";
 import PhoneInputEdit from "../../components/PhoneInputEdit/PhoneInputEdit";
 import { endPoint } from "../../api/endPoints";
@@ -12,7 +12,7 @@ import React from "react";
 const ProfileEdit = ({ setShowProfileEdit }: any) => {
   const collegeUUID = Cookies.get("collegeUUID");
 
-  const [, , , profileData]: any = useGet(endPoint.showProfile, {
+  const [, , , profileData, loading]: any = useGet(endPoint.showProfile, {
     isCollege_UUID: true,
     college_UUID: collegeUUID,
   });
@@ -59,7 +59,11 @@ const ProfileEdit = ({ setShowProfileEdit }: any) => {
       <div className="profile-edit-avatar">
         <img src={avatarIcon} alt="" />
         <div>
-          <p>{profileData && profileData.name} </p>
+          {profileData ? (
+            <p>{profileData.name} </p>
+          ) : (
+            <Spinner className="profile-data-spinner" />
+          )}
         </div>
       </div>
 

@@ -7,9 +7,12 @@ import { FaUpload } from "react-icons/fa";
 import apiNational from "../../../api/apiNational";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Spinner } from "react-bootstrap";
+import Loading from "../../../components/Loading/Loading";
 
 const AdminColleges = () => {
-  const [data, setData]: any = useGet(endPoint.adminColleges);
+  const [data, setData, , , loading]: any = useGet(endPoint.adminColleges);
+  const [postLoading, setPostLoading] = React.useState(false);
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState("");
   const [imageFile, setImageFile]: any = React.useState<File | null>(null);
@@ -34,11 +37,13 @@ const AdminColleges = () => {
     formData.append("type", type);
     formData.append("image", imageFile);
 
+    setPostLoading(true);
     apiNational
       .post(endPoint.addCollege, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res: any) => {
+        setPostLoading(false);
         console.log(res);
         setData([
           ...data,
@@ -52,6 +57,10 @@ const AdminColleges = () => {
         setName("");
         setType("");
         setImageFile(null);
+      })
+      .catch((err: any) => {
+        setPostLoading(false);
+        console.log(err);
       });
   };
 
@@ -82,10 +91,17 @@ const AdminColleges = () => {
   return (
     <div>
       <AdminHeader />
+      {postLoading && <Loading />}
       <div className="admin-colleges flexCenterColumn">
         <h2>الكليات</h2>
         <div className="table-container">
-          <Table dataSource={data} columns={columns} />
+          {data && !loading ? (
+            <Table dataSource={data} columns={columns} />
+          ) : (
+            <div className="dashboard-spinner">
+              <Spinner />
+            </div>
+          )}
         </div>
         <div className="add-ads flexCenterColumnItemsStart">
           <h4>إضافة كلية : </h4>

@@ -5,12 +5,14 @@ import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import { Table } from "antd";
 import useGet from "../../../api/useGet";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import { BsCheckSquare, BsXCircle } from "react-icons/bs";
+import Loading from "../../../components/Loading/Loading";
 
 const AdminSubjects = () => {
-  const [data]: any = useGet(endPoint.adminColleges);
+  const [data, , , , loading]: any = useGet(endPoint.adminColleges);
+  const [postLoading, setPostLoading] = React.useState(false);
   const [name, setName] = React.useState("");
   const [subjectID, setSubjectID] = React.useState("");
   const [specialityID, setSpecialityID] = React.useState("");
@@ -18,11 +20,14 @@ const AdminSubjects = () => {
   const [collegeID, setCollegeID] = React.useState("1");
   const [refreshData, setRefreshData] = React.useState(false);
   const [startEdit, setStartEdit] = React.useState(false);
+  const [specialistsLoading, setSpecialistsLoading] = React.useState(false);
+  const [subjectsLoading, setSubjectsLoading] = React.useState(false);
   const [subjectsData, setSubjectsData] = React.useState([]);
   const [specialistsData, setSpecialistsData] = React.useState([]);
 
   /* Edit Subject */
   const handleEditSubject = () => {
+    setPostLoading(true);
     apiNational
       .post(endPoint.editSubject, {
         subject_id: subjectID,
@@ -32,8 +37,13 @@ const AdminSubjects = () => {
       })
       .then((res: any) => {
         console.log(res);
+        setPostLoading(false);
         setStartEdit(false);
         setRefreshData(!refreshData);
+      })
+      .catch((err: any) => {
+        setPostLoading(false);
+        console.log(err);
       });
   };
 
@@ -102,19 +112,34 @@ const AdminSubjects = () => {
   /* Get Subjects and Specialists by ID */
   React.useEffect(() => {
     if (collegeID) {
-      apiNational.get(endPoint.adminSubjects + collegeID).then((res: any) => {
-        setSubjectsData(res.data.data);
-      });
+      setSpecialistsLoading(true);
+      setSubjectsLoading(true);
+      apiNational
+        .get(endPoint.adminSubjects + collegeID)
+        .then((res: any) => {
+          setSpecialistsLoading(false);
+          setSubjectsData(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          setSpecialistsLoading(false);
+        });
       apiNational
         .get(endPoint.adminSpecialists + collegeID)
         .then((res: any) => {
+          setSubjectsLoading(false);
           setSpecialistsData(res.data.data);
+        })
+        .catch((err) => {
+          setSubjectsLoading(false);
+          console.log(err);
         });
     }
   }, [collegeID, refreshData]);
 
   /* Add subject */
   const handleAddSubject = () => {
+    setPostLoading(true);
     apiNational
       .post(endPoint.addSubject, {
         name: name,
@@ -122,15 +147,21 @@ const AdminSubjects = () => {
         specialty_id: specialityID,
       })
       .then((res) => {
+        setPostLoading(false);
         console.log(res);
         setRefreshData(!refreshData);
         setName("");
+      })
+      .catch((err: any) => {
+        setPostLoading(false);
+        console.log(err);
       });
   };
 
   return (
     <div>
       <AdminHeader />
+      {postLoading && <Loading />}
       <div className="admin-subjects flexCenterColumn">
         <h2>المواد</h2>
 
@@ -140,27 +171,47 @@ const AdminSubjects = () => {
             <h5 className="mt-3">الاختصاص : &nbsp;</h5>
           </div>
           <div className="flexCenterColumnItemsStart w-100  ">
-            <select className="select-college" onChange={handleChooseCollege}>
-              {data &&
-                data.map((item: any) => {
-                  return <option value={item.college_id}>{item.name}</option>;
-                })}
-            </select>
-            <select
-              className="select-college"
-              onChange={handleChooseSpecialist}
-            >
-              <option value={""}>جميع الاختصاصات</option>;
-              {specialistsData &&
-                specialistsData.map((item: any) => {
-                  return <option value={item.specialty_id}>{item.name}</option>;
-                })}
-            </select>
+            <div className="w-100 flexStart">
+              <select className="select-college" onChange={handleChooseCollege}>
+                {data &&
+                  data.map((item: any) => {
+                    return <option value={item.college_id}>{item.name}</option>;
+                  })}
+              </select>
+              {loading && (
+                <div className="flexCenter overflow-hidden">
+                  <Spinner className="select-spinner" />
+                </div>
+              )}
+            </div>
+            <div className="w-100 flexStart">
+              <select
+                className="select-college"
+                onChange={handleChooseSpecialist}
+              >
+                <option value={""}>جميع الاختصاصات</option>;
+                {specialistsData &&
+                  specialistsData.map((item: any) => {
+                    return (
+                      <option value={item.specialty_id}>{item.name}</option>
+                    );
+                  })}
+              </select>
+              {specialistsLoading && (
+                <div className="flexCenter overflow-hidden">
+                  <Spinner className="select-spinner" />
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="table-container">
-          {subjectsData && (
+          {subjectsData && !subjectsLoading ? (
             <Table dataSource={subjectsData} columns={columns} />
+          ) : (
+            <div className="dashboard-spinner">
+              <Spinner />
+            </div>
           )}
         </div>
 
