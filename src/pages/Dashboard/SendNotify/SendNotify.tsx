@@ -1,24 +1,38 @@
 import React from "react";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./SendNotify.scss";
-import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import useGet from "../../../api/useGet";
 import { Spinner } from "react-bootstrap";
 import Loading from "../../../components/Loading/Loading";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
+import usePost from "../../../api/usePost";
 
 const SendNotify = () => {
   const navigate = useNavigate();
-  const [data, , , , loading]: any = useGet(endPoint.colleges);
-  const [postLoading, setPostLoading] = React.useState(false);
+  const [data, , loading]: any = useGet(endPoint.colleges);
   const [title, setTitle] = React.useState("");
   const [body, setBody] = React.useState("");
   const [collegeUUID, setCollegeUUID] = React.useState("all");
-  const [successMessage, setSuccessMesssage] = React.useState("");
-  const [showSuccessMessage, setShowSuccessMessage] = React.useState(false);
   const token = Cookies.get("token");
+  /* Send notify */
+  const [
+    ,
+    handelSendNotify,
+    postLoading,
+    success,
+    errorMessage,
+    successStatus,
+  ]: any = usePost(
+    {
+      title: title,
+      body: body,
+      college_uuid: collegeUUID,
+    },
+    endPoint.sendNotify
+  );
 
   /* Check token */
   React.useEffect(() => {
@@ -32,36 +46,20 @@ const SendNotify = () => {
     setCollegeUUID(e.target.value);
   };
 
-  /* send notify */
-  const handelSendNotify = () => {
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.sendNotify, {
-        title: title,
-        body: body,
-        college_uuid: collegeUUID,
-      })
-      .then((res: any) => {
-        setPostLoading(false);
-        console.log(res);
-        setSuccessMesssage(res.data.message);
-        setTitle("");
-        setBody("");
-        setShowSuccessMessage(true);
-        setTimeout(() => {
-          setShowSuccessMessage(false);
-        }, 5000);
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
-  };
+  /* Remove values when success */
+  React.useEffect(() => {
+    if (successStatus) {
+      setTitle("");
+      setBody("");
+    }
+  }, [successStatus]);
 
   return (
     <div>
       <AdminHeader />
       {postLoading && <Loading />}
+      {success && <MessageAlert message="تم الارسال بنجاح" type="success" />}
+      {errorMessage && <MessageAlert message={errorMessage} type="error" />}
       <div className="send-notify flexCenterColumn">
         <h2>إرسال إشعار</h2>
 
@@ -94,12 +92,6 @@ const SendNotify = () => {
           onChange={(e) => setBody(e.target.value)}
         ></textarea>
         <button onClick={handelSendNotify}>إرسال</button>
-
-        {successMessage && showSuccessMessage && (
-          <div className="success-Message flexCenter">
-            <p>{successMessage}</p>
-          </div>
-        )}
       </div>
     </div>
   );

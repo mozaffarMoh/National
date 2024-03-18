@@ -3,60 +3,64 @@ import registerImage from "../../assets/images/Login/sign-up.svg";
 import UsernameInput from "../../components/login-singup/UsernameInput/UsernameInput";
 import PhoneInput from "../../components/login-singup/PhoneInput/PhoneInput";
 import RegisterButton from "../../components/login-singup/RegisterButton/RegisterButton";
-import ChooseSpecialist from "../../components/login-singup/ChooseSpecialist/ChooseSpecialist";
+import ChooseCollege from "../../components/login-singup/ChooseCollege/ChooseCollege";
 import React from "react";
-import apiNational from "../../api/apiNational";
 import { endPoint } from "../../api/endPoints";
-import { useForm } from "react-hook-form";
 import Loading from "../../components/Loading/Loading";
+import MessageAlert from "../../components/MessageAlert/MessageAlert";
+import usePost from "../../api/usePost";
+import { useForm } from "react-hook-form";
 
 const Register = () => {
-  const [name, setName] = React.useState();
-  const [phone, setPhone] = React.useState();
+  const [name, setName] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const [collegeUUID, setCollegeUUID] = React.useState("");
-  const [loading, setLoading]: any = React.useState(false);
-
+  const [, handleRegister, loading, success, errorMessage] = usePost(
+    {
+      name: name,
+      phone: phone,
+      college_uuid: collegeUUID,
+    },
+    endPoint.register
+  );
   const {
     register,
     handleSubmit,
     formState: { errors },
   }: any = useForm();
 
-  const handleRegister = () => {
-    setLoading(true);
-    apiNational
-      .post(endPoint.register, {
-        name: name,
-        phone: phone,
-        college_uuid: collegeUUID,
-      })
-      .then((res) => {
-        console.log(res);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  };
+  /* Empty the fields when success */
+  React.useEffect(() => {
+    setName("");
+    setPhone("");
+    setCollegeUUID("");
+  }, [success]);
 
   return (
     <div className="register flexCenter row">
       {loading && <Loading />}
+
       <div className="register-form-background col-6 flexCenter">
+        {success && (
+          <MessageAlert message="تم إنشاء الحساب بنجاح " type="success" />
+        )}
+        {errorMessage && <MessageAlert message={errorMessage} type="error" />}
         <form className="register-form" onSubmit={handleSubmit(handleRegister)}>
           <div className="title flexCenter">
             <p>إنشاء حساب</p>
           </div>
-          <UsernameInput setName={setName} register={register} />
+          <UsernameInput name={name} setName={setName} register={register} />
           {errors.username && (
             <div className="error-message p-2">{errors.username.message}</div>
           )}
-          <PhoneInput setPhone={setPhone} register={register} />
+          <PhoneInput phone={phone} setPhone={setPhone} register={register} />
           {errors.phone && (
             <div className="error-message p-2">{errors.phone.message}</div>
           )}
-          <ChooseSpecialist setCollegeUUIDProp={setCollegeUUID} />
+          <ChooseCollege
+            collegeUUID={collegeUUID}
+            setCollegeUUID={setCollegeUUID}
+          />
           <RegisterButton handleRegister={handleRegister} />
         </form>
       </div>

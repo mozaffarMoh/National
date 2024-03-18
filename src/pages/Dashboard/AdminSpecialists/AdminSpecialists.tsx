@@ -1,7 +1,6 @@
 import React from "react";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./AdminSpecialists.scss";
-import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import { Table } from "antd";
 import useGet from "../../../api/useGet";
@@ -9,41 +8,86 @@ import { Button, Spinner } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import { BsCheckSquare, BsXCircle } from "react-icons/bs";
 import Loading from "../../../components/Loading/Loading";
+import usePost from "../../../api/usePost";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
 
 const AdminSpecialists = () => {
-  const [data, , , , loading]: any = useGet(endPoint.adminColleges);
-  const [postLoading, setPostLoading] = React.useState(false);
+  const [data, , loading]: any = useGet(endPoint.adminColleges);
+  const [collegeID, setCollegeID] = React.useState("");
+  const [
+    specialistsData,
+    getSpecialistsData,
+    specialistsLoading,
+    ,
+    ,
+    ,
+    specialistsError,
+  ]: any = useGet(endPoint.adminSpecialists + collegeID);
   const [name, setName] = React.useState("");
   const [sepcialityID, setSepcialityID] = React.useState("");
   const [nameEdited, setNameEdited] = React.useState("");
-  const [collegeID, setCollegeID] = React.useState("");
-  const [refreshData, setRefreshData] = React.useState(false);
   const [startEdit, setStartEdit] = React.useState(false);
-  const [specialistsData, setSpecialistsData] = React.useState([]);
-  const [specialistsLoading, setSpecialistsLoading] = React.useState(false);
+  /* fill CollegeId when data fetched */
+  React.useEffect(() => {
+    if (!collegeID) {
+      setCollegeID(data[0]?.college_id);
+    }
+  }, [data]);
 
-  /* Edit Speciality */
-  const handleEditSpeciality = () => {
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.editSpecialist, {
-        specialty_id: sepcialityID,
-        name: nameEdited,
-        college_id: collegeID,
-      })
-      .then((res: any) => {
-        setPostLoading(false);
-        console.log(res);
-        setStartEdit(false);
-        setRefreshData(!refreshData);
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
+  /* Choose college */
+  const handleChooseCollege = (e: any) => {
+    setCollegeID(e.target.value);
+    getSpecialistsData();
   };
 
-  /* start edit process */
+  /* Get Specialists if not fetched */
+  React.useEffect(() => {
+    getSpecialistsData();
+  }, [specialistsError]);
+
+  /* Add Speciality */
+  const [
+    ,
+    handleAddSpeciality,
+    loadingAdd,
+    successAdd,
+    errorMessageAdd,
+    successStatusAdd,
+  ]: any = usePost(
+    { name: name, college_id: collegeID },
+    endPoint.addSpecialist
+  );
+
+  /* Edit Speciality */
+  const [
+    ,
+    handleEditSpeciality,
+    loadingEdit,
+    successEdit,
+    errorMessageEdit,
+    successStatusEdit,
+  ]: any = usePost(
+    {
+      specialty_id: sepcialityID,
+      name: nameEdited,
+      college_id: collegeID,
+    },
+    endPoint.editSpecialist
+  );
+
+  /* Remove values when success */
+  React.useEffect(() => {
+    if (successStatusAdd) {
+      setName("");
+      getSpecialistsData();
+    }
+    if (successStatusEdit) {
+      setStartEdit(false);
+      getSpecialistsData();
+    }
+  }, [successStatusAdd, successStatusEdit]);
+
+  /* start start Edit */
   const handlePressOnEdit = (id: any) => {
     setStartEdit(true);
     setSepcialityID(id);
@@ -101,56 +145,22 @@ const AdminSpecialists = () => {
     },
   ];
 
-  /* Choose college */
-  const handleChooseCollege = (e: any) => {
-    setCollegeID(e.target.value);
-  };
-
-  /* Get Specialists by ID */
-  React.useEffect(() => {
-    if (collegeID) {
-      setSpecialistsLoading(true);
-      apiNational
-        .get(endPoint.adminSpecialists + collegeID)
-        .then((res: any) => {
-          setSpecialistsLoading(false);
-          setSpecialistsData(res.data.data);
-        })
-        .catch((err: any) => {
-          console.log(err);
-          setSpecialistsLoading(false);
-        });
-    }
-  }, [collegeID, refreshData]);
-
-  /* Add speciality */
-  const handleAddSpeciality = () => {
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.addSpecialist, { name: name, college_id: collegeID })
-      .then((res) => {
-        setPostLoading(false);
-        console.log(res);
-        setRefreshData(!refreshData);
-        setName("");
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
-  };
-
-  /* fill CollegeId when data fetched */
-  React.useEffect(() => {
-    if (!collegeID) {
-      setCollegeID(data[0]?.college_id);
-    }
-  }, [data]);
-
   return (
     <div>
       <AdminHeader />
-      {postLoading && <Loading />}
+      {(loadingAdd || loadingEdit) && <Loading />}
+      {(successAdd || successEdit) && (
+        <MessageAlert
+          message={`تم ${successAdd ? "إضافة" : "تعديل"} الاختصاص بنجاح`}
+          type="success"
+        />
+      )}{" "}
+      {(errorMessageAdd || errorMessageEdit) && (
+        <MessageAlert
+          message={errorMessageAdd ? errorMessageAdd : errorMessageEdit}
+          type="error"
+        />
+      )}
       <div className="admin-specialists flexCenterColumn">
         <h2>الإختصاصات</h2>
         <div className="flexCenter w-100 ">

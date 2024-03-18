@@ -4,15 +4,15 @@ import { endPoint } from "../../../api/endPoints";
 import useGet from "../../../api/useGet";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import { FaUpload } from "react-icons/fa";
-import apiNational from "../../../api/apiNational";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Spinner } from "react-bootstrap";
 import Loading from "../../../components/Loading/Loading";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
+import usePost from "../../../api/usePost";
 
 const AdminColleges = () => {
-  const [data, setData, , , loading]: any = useGet(endPoint.adminColleges);
-  const [postLoading, setPostLoading] = React.useState(false);
+  const [data, getData, loading]: any = useGet(endPoint.adminColleges);
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState("");
   const [imageFile, setImageFile]: any = React.useState<File | null>(null);
@@ -21,6 +21,18 @@ const AdminColleges = () => {
     handleSubmit,
     formState: { errors },
   }: any = useForm();
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("type", type);
+  formData.append("image", imageFile);
+  const [
+    ,
+    handleAddCollege,
+    postLoading,
+    success,
+    errorMessage,
+    successStatus,
+  ]: any = usePost(formData, endPoint.addCollege, null, true);
 
   /* Handle Add Image */
   const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,40 +40,6 @@ const AdminColleges = () => {
     if (files && files.length > 0) {
       setImageFile(files[0]);
     }
-  };
-
-  /* Handle Add College */
-  const handleAddCollege = () => {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("type", type);
-    formData.append("image", imageFile);
-
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.addCollege, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((res: any) => {
-        setPostLoading(false);
-        console.log(res);
-        setData([
-          ...data,
-          {
-            image: imageFile,
-            name,
-            type,
-            college_id: data[data.length - 1].college_id + 1,
-          },
-        ]);
-        setName("");
-        setType("");
-        setImageFile(null);
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
   };
 
   const columns: any = [
@@ -88,10 +66,24 @@ const AdminColleges = () => {
     },
   ];
 
+  /* Remove inputs when success */
+  React.useEffect(() => {
+    if (successStatus) {
+      setName("");
+      setType("");
+      setImageFile(null);
+      getData();
+    }
+  }, [successStatus]);
+
   return (
     <div>
       <AdminHeader />
       {postLoading && <Loading />}
+      {success && (
+        <MessageAlert message={"تم اضافة الكلية بنجاح"} type="success" />
+      )}
+      {errorMessage && <MessageAlert message={errorMessage} type="error" />}
       <div className="admin-colleges flexCenterColumn">
         <h2>الكليات</h2>
         <div className="table-container">

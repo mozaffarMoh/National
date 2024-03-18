@@ -1,31 +1,29 @@
-import React from "react";
-import "./ChooseSpecialist.scss";
-import emptyCheckBox from "../../../assets/images/ChooseSpecialist/empty.svg";
-import filledCheckBox from "../../../assets/images/ChooseSpecialist/fill.svg";
+import "./ChooseCollege.scss";
+import emptyCheckBox from "../../../assets/images/ChooseCollege/empty.svg";
+import filledCheckBox from "../../../assets/images/ChooseCollege/fill.svg";
 import { endPoint } from "../../../api/endPoints";
 import useGet from "../../../api/useGet";
 import { Spinner } from "react-bootstrap";
 
-const ChooseSpecialist = ({ setCollegeUUIDProp }: any) => {
-  const [data, , , , loading]: any = useGet(endPoint.colleges);
-  const [collegeUUID, setCollegeUUID] = React.useState("");
+const ChooseCollege = ({ collegeUUID, setCollegeUUID }: any) => {
+  const [data, , loading, errorMessage]: any = useGet(endPoint.colleges);
 
   /* Handle press on college */
   const handleCheckbox = (uuid: any) => {
     setCollegeUUID(uuid);
-    setCollegeUUIDProp(uuid);
   };
 
+  console.log(errorMessage);
   return (
-    <div className="choose-specialist-from-register">
+    <div className="choose-college-from-register">
       <div className="h-25 ">
-        <h6>اختر الإختصاص</h6>
+        <h6>اختر الكلية</h6>
       </div>
-      <div className="specialist-items flexCenter">
+      <div className="college-items flexCenter">
         {data &&
           data.map((item: any, index: number) => {
             return (
-              <div className="specialist-item flexCenter" key={index}>
+              <div className="college-item flexCenter" key={index}>
                 <img
                   src={
                     item.college_uuid === collegeUUID
@@ -48,4 +46,4 @@ const ChooseSpecialist = ({ setCollegeUUIDProp }: any) => {
   );
 };
 
-export default ChooseSpecialist;
+export default ChooseCollege;

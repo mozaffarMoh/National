@@ -12,10 +12,12 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            border: 4px dashed #6F2877;
             padding: 30px 75px;
             border-radius: 15px;
             background-color: white;
+            border: 4px dashed #6F2877;
+            //background-clip: padding-box;
+            //box-shadow: 0 0 0 1px #6F2877 inset, 0 0 0 1px white;
 
             .title {
                 p {
@@ -24,6 +26,7 @@
                 }
             }
         }
+
     }
 
     .login-hello {

@@ -1,22 +1,18 @@
 import "./CorrectQuestions.scss";
 import React from "react";
-import { Button } from "react-bootstrap";
-import { CorrectQuestionsArray } from "./CorrectQuestionsArray";
+import { Button, Spinner } from "react-bootstrap";
+import { qestionsTextsArray } from "../QuizQuestions/َQuestionsTextsArray";
 import emptyCircle from "../../assets/images/QuizResult/nonSelected.svg";
 import successIcon from "../../assets/images/QuizResult/answerSuccessIcon.svg";
 import successCircle from "../../assets/images/QuizResult/answerSuccess.svg";
 import wrongIcon from "../../assets/images/QuizResult/answerWrongIcon.svg";
 import wrongCircle from "../../assets/images/QuizResult/answerWrong.svg";
 import starEmptyIcon from "../../assets/images/QuizResult/starEmpty.png";
-import starHoverIcon from "../../assets/images/QuizResult/starHover.png";
 import starFillIcon from "../../assets/images/QuizResult/starFill.svg";
 import bookIcon from "../../assets/images/QuizResult/book.svg";
 
-
-const CorrectQuestions = ({data}:any) => {
+const CorrectQuestions = ({ data, loading }: any) => {
   const squaresArray = Array(3).fill("");
-  const [showFillStar, setShowFillStar] = React.useState(false);
-  const [showHoverStar, setShowHoverStar] = React.useState(false);
   const [lastIndex, setLastIndex] = React.useState<number | any>(1);
 
   /* Handle Circle Image */
@@ -35,11 +31,14 @@ const CorrectQuestions = ({data}:any) => {
 
   /* Show next question | If the last element of the Correct Questions Array is shown, this function will not work. */
   const handleNextQuestions = (index: number) => {
-    if (index === lastIndex - 1 && lastIndex < CorrectQuestionsArray.length) {
-      setLastIndex((prev: number) => {
-        const newValue = (prev += +1);
-        return newValue;
-      });
+    if (data) {
+      if (index === lastIndex - 1 && lastIndex !== data?.questions?.length) {
+        setLastIndex((prev: number) => {
+          const newValue = (prev += +1);
+          return newValue;
+        });
+      }
+      window.scrollTo(0, window.scrollY + 500);
     }
   };
 
@@ -54,14 +53,15 @@ const CorrectQuestions = ({data}:any) => {
     }
   };
 
-
   return (
     <div className="correct-questions flexCenterColumn">
-      {data.questions &&
-        data.questions.slice(0, lastIndex).map((item: any, index: number) => {
+      {loading && <Spinner />}
+
+      {data &&
+        data.questions?.slice(0, lastIndex).map((item: any, index: number) => {
           return (
             <div className="correct-questions-item" key={index}>
-              <p>السؤال الأول</p>
+              <p>{qestionsTextsArray[index]} </p>
               <p>{item.question_text}</p>
 
               <div className="answers flexCenterColumn">
@@ -92,28 +92,11 @@ const CorrectQuestions = ({data}:any) => {
               <div className="correct-footer flexBetween">
                 <div className="flexCenter gap-4 ">
                   <img src={successIcon} alt="" />
-                  {!showFillStar ? (
-                    !showHoverStar ? (
-                      <img
-                        src={starEmptyIcon}
-                        alt=""
-                        onMouseEnter={() => setShowHoverStar(true)}
-                      />
-                    ) : (
-                      <img
-                        src={starHoverIcon}
-                        alt=""
-                        onClick={() => setShowFillStar(true)}
-                        onMouseLeave={() => setShowHoverStar(false)}
-                      />
-                    )
-                  ) : (
-                    <img
-                      src={starFillIcon}
-                      alt=""
-                      onClick={() => setShowFillStar(false)}
-                    />
-                  )}
+
+                  <img
+                    src={item.favorite === 0 ? starEmptyIcon : starFillIcon}
+                  />
+
                   <img src={bookIcon} alt="" />
                 </div>
                 <Button
@@ -128,10 +111,15 @@ const CorrectQuestions = ({data}:any) => {
         })}
 
       {/* Hide squares if questions array is fully visible */}
-      {!(lastIndex === CorrectQuestionsArray.length) &&
+      {data &&
+        data?.questions?.length > 0 &&
+        lastIndex !== data?.questions?.length &&
         squaresArray.map((_, index) => {
           return <div className="square" key={index}></div>;
         })}
+      {!loading && data.length === 0 && (
+        <h1 className="mb-5"> ليس لديك أسئلة خاطئة</h1>
+      )}
     </div>
   );
 };

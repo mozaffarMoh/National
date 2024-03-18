@@ -1,7 +1,6 @@
 import React from "react";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./AdminSubjects.scss";
-import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import { Table } from "antd";
 import useGet from "../../../api/useGet";
@@ -9,48 +8,120 @@ import { Button, Spinner } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import { BsCheckSquare, BsXCircle } from "react-icons/bs";
 import Loading from "../../../components/Loading/Loading";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
+import usePost from "../../../api/usePost";
 
 const AdminSubjects = () => {
-  const [data, , , , loading]: any = useGet(endPoint.adminColleges);
-  const [postLoading, setPostLoading] = React.useState(false);
+  const [data, , loading]: any = useGet(endPoint.adminColleges);
+  const [collegeID, setCollegeID] = React.useState("");
   const [name, setName] = React.useState("");
   const [subjectID, setSubjectID] = React.useState("");
-  const [specialityID, setSpecialityID] = React.useState("");
+  const [specialityID, setSpecialityID]: any = React.useState("");
   const [nameEdited, setNameEdited] = React.useState("");
-  const [collegeID, setCollegeID] = React.useState("1");
-  const [refreshData, setRefreshData] = React.useState(false);
   const [startEdit, setStartEdit] = React.useState(false);
-  const [specialistsLoading, setSpecialistsLoading] = React.useState(false);
-  const [subjectsLoading, setSubjectsLoading] = React.useState(false);
-  const [subjectsData, setSubjectsData] = React.useState([]);
-  const [specialistsData, setSpecialistsData] = React.useState([]);
+
+  /* Get Specialists */
+  const [
+    specialistsData,
+    getSpecialistsData,
+    specialistsLoading,
+    ,
+    ,
+    ,
+    specialistsError,
+  ]: any = useGet(endPoint.adminSpecialists + collegeID);
+
+  /* Get Subjects */
+  const [
+    subjectsData,
+    getSubjectsData,
+    subjectsLoading,
+    ,
+    ,
+    ,
+    subjectsError,
+  ]: any = useGet(endPoint.adminSubjects + collegeID);
+
+  /* Add Subject */
+  const [
+    ,
+    handleAddSubject,
+    loadingAdd,
+    successAdd,
+    errorMessageAdd,
+    successStatusAdd,
+  ]: any = usePost(
+    {
+      name: name,
+      college_id: collegeID,
+      ...(specialityID && { specialty_id: specialityID }),
+    },
+    endPoint.addSubject
+  );
 
   /* Edit Subject */
-  const handleEditSubject = () => {
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.editSubject, {
-        subject_id: subjectID,
-        specialty_id: specialityID,
-        name: nameEdited,
-        college_id: collegeID,
-      })
-      .then((res: any) => {
-        console.log(res);
-        setPostLoading(false);
-        setStartEdit(false);
-        setRefreshData(!refreshData);
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
+  const [
+    ,
+    handleEditSubject,
+    loadingEdit,
+    successEdit,
+    errorMessageEdit,
+    successStatusEdit,
+  ]: any = usePost(
+    {
+      subject_id: subjectID,
+      ...(specialityID && { specialty_id: specialityID }),
+      name: nameEdited,
+      college_id: collegeID,
+    },
+    endPoint.editSubject
+  );
+
+  /* fill CollegeId when data fetched */
+  React.useEffect(() => {
+    if (!collegeID) {
+      setCollegeID(data[0]?.college_id);
+    }
+  }, [data]);
+
+  /* Choose college */
+  const handleChooseCollege = (e: any) => {
+    setCollegeID(e.target.value);
+    getSubjectsData();
   };
 
+  /* Choose Specialist */
+  const handleChooseSpecialist = (e: any) => {
+    setSpecialityID(e.target.value);
+  };
+
+  /* Get Subjects and Specialists if not fetched */
+  React.useEffect(() => {
+    if (specialistsError) {
+      getSpecialistsData();
+    }
+    if (subjectsError) {
+      getSubjectsData();
+    }
+  }, [specialistsError, subjectsError]);
+
+  /* Handle start edit */
   const handlePressOnEdit = (id: any) => {
     setStartEdit(true);
     setSubjectID(id);
   };
+
+  /* Remove values when success */
+  React.useEffect(() => {
+    if (successStatusAdd) {
+      setName("");
+      getSubjectsData();
+    }
+    if (successStatusEdit) {
+      setStartEdit(false);
+      getSubjectsData();
+    }
+  }, [successStatusAdd, successStatusEdit]);
 
   const columns: any = [
     {
@@ -73,7 +144,7 @@ const AdminSubjects = () => {
             <div className="edit-field">
               <input
                 type="text"
-                placeholder="الاسم الجديد"
+                placeholder="حدد الكلية والاختصاص ثم اكتب الاسم"
                 onChange={(e) => setNameEdited(e.target.value)}
               />
               <BsXCircle
@@ -99,69 +170,22 @@ const AdminSubjects = () => {
     },
   ];
 
-  /* Choose college */
-  const handleChooseCollege = (e: any) => {
-    setCollegeID(e.target.value);
-  };
-
-  /* Choose Specialist */
-  const handleChooseSpecialist = (e: any) => {
-    setSpecialityID(e.target.value);
-  };
-
-  /* Get Subjects and Specialists by ID */
-  React.useEffect(() => {
-    if (collegeID) {
-      setSpecialistsLoading(true);
-      setSubjectsLoading(true);
-      apiNational
-        .get(endPoint.adminSubjects + collegeID)
-        .then((res: any) => {
-          setSpecialistsLoading(false);
-          setSubjectsData(res.data.data);
-        })
-        .catch((err) => {
-          console.log(err);
-          setSpecialistsLoading(false);
-        });
-      apiNational
-        .get(endPoint.adminSpecialists + collegeID)
-        .then((res: any) => {
-          setSubjectsLoading(false);
-          setSpecialistsData(res.data.data);
-        })
-        .catch((err) => {
-          setSubjectsLoading(false);
-          console.log(err);
-        });
-    }
-  }, [collegeID, refreshData]);
-
-  /* Add subject */
-  const handleAddSubject = () => {
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.addSubject, {
-        name: name,
-        college_id: collegeID,
-        specialty_id: specialityID,
-      })
-      .then((res) => {
-        setPostLoading(false);
-        console.log(res);
-        setRefreshData(!refreshData);
-        setName("");
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
-  };
-
   return (
     <div>
       <AdminHeader />
-      {postLoading && <Loading />}
+      {(loadingAdd || loadingEdit) && <Loading />}
+      {(successAdd || successEdit) && (
+        <MessageAlert
+          message={`تم ${successAdd ? "إضافة" : "التعديل على"} المادة بنجاح`}
+          type="success"
+        />
+      )}{" "}
+      {(errorMessageAdd || errorMessageEdit) && (
+        <MessageAlert
+          message={errorMessageAdd ? errorMessageAdd : errorMessageEdit}
+          type="error"
+        />
+      )}
       <div className="admin-subjects flexCenterColumn">
         <h2>المواد</h2>
 

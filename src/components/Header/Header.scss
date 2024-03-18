@@ -6,6 +6,12 @@
     background-size: cover;
     padding: 20px;
 
+    .edit-profile-success-message {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+
     .header-profile {
         color: #464547;
         cursor: pointer;

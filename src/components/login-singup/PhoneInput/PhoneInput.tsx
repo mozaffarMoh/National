@@ -1,13 +1,14 @@
 import "./PhoneInput.scss";
 import phoneIcon from "../../../assets/images/Login/phone.svg";
 
-const PhoneInput = ({ setPhone, register }: any) => {
+const PhoneInput = ({ phone, setPhone, register }: any) => {
   return (
     <div className="phone-input-component">
       <p>رقم الموبايل</p>
       <input
         type="text"
         placeholder="رقم الموبايل"
+        value={phone}
         {...register("phone", {
           required: "رقم الهاتف مطلوب",
           pattern: {

@@ -1,11 +1,13 @@
 import "./DawratDetails.scss";
 
-const DawratDetails = () => {
+const DawratDetails = ({ dawraName }: any) => {
   return (
     <div className="dawrat-details flexCenterColumnItemsStart">
-      <div className="dawrat-details-item flexCenter">
-        <h1>2023 دورة تشرين</h1>
-      </div>
+      {dawraName && (
+        <div className="dawrat-details-item flexCenter">
+          <h1>{dawraName}</h1>
+        </div>
+      )}
       <div className="dawrat-details-item flexCenter">
         <p>50 سؤال</p>
         <p>علامة النجاح 100</p>

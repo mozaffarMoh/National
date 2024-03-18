@@ -1,5 +1,4 @@
 import "./AdminRegister.scss";
-import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import React from "react";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
@@ -7,14 +6,13 @@ import { useForm } from "react-hook-form";
 import Loading from "../../../components/Loading/Loading";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import usePost from "../../../api/usePost";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
 
 const AdminRegister = () => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [loading, setLoading]: any = React.useState(false);
   const [password, setPassword]: any = React.useState("");
-  const [successMessage, setSuccessMesssage] = React.useState("");
-  const [showSuccessMessage, setShowSuccessMessage] = React.useState(false);
   const navigate = useNavigate();
   const token = Cookies.get("token");
   const {
@@ -29,35 +27,34 @@ const AdminRegister = () => {
       navigate("/dashboard/login");
     }
   }, []);
+
   /* Handle register proccess */
-  const handleRegister = () => {
-    setLoading(true);
-    apiNational
-      .post(endPoint.adminRegister, {
+  const [, handleRegister, loading, success, errorMessage, successStatus]: any =
+    usePost(
+      {
         name: name,
         email: email,
         password: password,
-      })
-      .then((res) => {
-        setLoading(false);
-        setSuccessMesssage(res.data.data);
-        setEmail("");
-        setName("");
-        setPassword("");
-        setShowSuccessMessage(true);
-        setTimeout(() => {
-          setShowSuccessMessage(false);
-        }, 5000);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      });
-  };
+      },
+      endPoint.adminRegister
+    );
+
+  /* Remove values when success */
+  React.useEffect(() => {
+    setEmail("");
+    setName("");
+    setPassword("");
+  }, [successStatus]);
+
   return (
     <div className="admin-register flexCenterColumn">
       <AdminHeader />
       {loading && <Loading />}
+      {errorMessage && <MessageAlert message={errorMessage} type="error" />}
+
+      {success && (
+        <MessageAlert message={"تم إنشاء الحساب بنجاح"} type="success" />
+      )}
       <h4>إنشاء حساب مسؤول جديد</h4>
       <form
         className="flexCenterColumn"
@@ -115,12 +112,6 @@ const AdminRegister = () => {
           انشاء حساب
         </button>
       </form>
-
-      {successMessage && showSuccessMessage && (
-        <div className="success-Message flexCenter">
-          <p>{successMessage}</p>
-        </div>
-      )}
     </div>
   );
 };

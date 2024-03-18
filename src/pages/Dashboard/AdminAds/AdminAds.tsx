@@ -4,23 +4,24 @@ import { endPoint } from "../../../api/endPoints";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaUpload } from "react-icons/fa";
-import apiNational from "../../../api/apiNational";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Spinner } from "react-bootstrap";
 import Loading from "../../../components/Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import usePost from "../../../api/usePost";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
+import useGet from "../../../api/useGet";
 
 const AdminAds = () => {
   const navigate = useNavigate();
-  const [postLoading, setPostLoading] = React.useState(false);
-  const [data, setData] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [position, setPosition] = React.useState("");
   const [imagesArray, setImagesArray]: any = React.useState([]);
+  const [startDelete, setStartDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
   const {
     register,
     handleSubmit,
@@ -36,44 +37,30 @@ const AdminAds = () => {
   }, []);
 
   /* Get Ads Data */
-  const getAdsData = () => {
-    setLoading(true);
-    apiNational
-      .get(endPoint.showAds)
-      .then((res: any) => {
-        setLoading(false);
-        setData(res.data.data);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        if (err.response.data.message === "Unauthorize") {
-          navigate("/dashboard/login");
-        }
-        setLoading(false);
-      });
+  const [data, getData, loading]: any = useGet(endPoint.showAds);
+
+  /* Delete Ads */
+  const [
+    ,
+    handleDelete,
+    loadingDelete,
+    successDelete,
+    errorMessageDelete,
+  ]: any = useGet(endPoint.deleteAds + deleteID);
+
+  /* set delete id and make start delete to true*/
+  const startDeleteProcess = (id: any) => {
+    setDeleteID(id);
+    setStartDelete(true);
   };
 
+  /* Start delete based on startDelete value */
   React.useEffect(() => {
-    getAdsData();
-  }, []);
-
-  /* Handle delete Ads */
-  const handleDelete = (id: any) => {
-    setPostLoading(true);
-    apiNational
-      .get(endPoint.deleteAds + id)
-      .then((res) => {
-        setPostLoading(false);
-        console.log(res);
-        setData((prevArray: any) =>
-          prevArray.filter((item: any) => item.id !== id)
-        );
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
-  };
+    if (startDelete) {
+      handleDelete();
+      setStartDelete(false);
+    }
+  }, [startDelete]);
 
   /* Handle Add Image */
   const handleAddImage = (e: any) => {
@@ -88,31 +75,38 @@ const AdminAds = () => {
     files.length = 0;
   };
 
-  /* Handle Add Ads */
-  const handleAddAds = () => {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("position", position);
-    imagesArray.forEach((image: any, i: number) => {
-      formData.append(`images[${i}]`, image);
-    });
+  /* Store data in formData */
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("description", description);
+  formData.append("position", position);
+  imagesArray.forEach((image: any, i: number) => {
+    formData.append(`images[${i}]`, image);
+  });
 
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.addAds, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((res) => {
-        setPostLoading(false);
-        console.log(res);
-        getAdsData();
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
-  };
+  /* Handle Add Ads */
+  const [
+    ,
+    handleAddAds,
+    loadingAdd,
+    successAdd,
+    errorMessageAdd,
+    successStatusAdd,
+  ]: any = usePost(formData, endPoint.addAds, null, true);
+
+  /* Remove values when success */
+  React.useEffect(() => {
+    if (successStatusAdd) {
+      setTitle("");
+      setDescription("");
+      setPosition("");
+      setImagesArray([]);
+      getData();
+    }
+    if (successDelete) {
+      getData();
+    }
+  }, [successStatusAdd, successDelete]);
 
   const columns: any = [
     {
@@ -155,7 +149,7 @@ const AdminAds = () => {
         <RiDeleteBin5Line
           color="blue"
           size={30}
-          onClick={() => handleDelete(id)}
+          onClick={() => startDeleteProcess(id)}
           cursor={"pointer"}
         />
       ),
@@ -165,7 +159,17 @@ const AdminAds = () => {
   return (
     <div>
       <AdminHeader />
-      {postLoading && <Loading />}
+      {(loadingAdd || loadingDelete) && <Loading />}
+      {successAdd && <MessageAlert message="تم الاضافة بنجاح" type="success" />}
+      {successDelete && (
+        <MessageAlert message="تم الحذف بنجاح" type="success" />
+      )}
+      {errorMessageAdd && (
+        <MessageAlert message={errorMessageAdd} type="error" />
+      )}
+      {errorMessageDelete && (
+        <MessageAlert message={errorMessageDelete} type="error" />
+      )}
       <div className="admin-ads flexCenterColumn">
         <h2>الاعلانات</h2>
         <div className="table-container">

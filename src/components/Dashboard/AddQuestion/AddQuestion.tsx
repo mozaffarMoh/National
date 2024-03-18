@@ -1,63 +1,59 @@
 import React from "react";
 import "./AddQuestion.scss";
-import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import { BsArrowLeftCircle } from "react-icons/bs";
 import { answersInputsArray } from "./answersArray";
 import Loading from "../../Loading/Loading";
 import { Spinner } from "react-bootstrap";
+import useGet from "../../../api/useGet";
+import usePost from "../../../api/usePost";
+import MessageAlert from "../../MessageAlert/MessageAlert";
 
 const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
-  const [loading, setLoading] = React.useState(false);
-  const [postLoading, setPostLoading] = React.useState(false);
-  const [subjectsData, setSubjectsData] = React.useState([]);
   const [questionText, setQuestionText] = React.useState("");
-  const [questionNumber, setQuestionNumber] = React.useState<number>();
+  const [questionNumber, setQuestionNumber] = React.useState<number>(0);
   const [subjectID, setSubjectID] = React.useState<number>();
   const [answersArray, setAnswersArray]: any = React.useState(
     Array(5).fill({ answer_text: "", status: false })
   );
 
   /* Get Subject */
+  const [data, , loading]: any = useGet(endPoint.adminSubjects + collegeID);
+
+  /* Set first value as initial value for sujectID */
   React.useEffect(() => {
-    if (collegeID) {
-      setLoading(true);
-      apiNational
-        .get(endPoint.adminSubjects + collegeID)
-        .then((res: any) => {
-          setLoading(false);
-          setSubjectsData(res.data.data);
-          setSubjectID(res.data.data[0].subject_id);
-        })
-        .catch((err: any) => {
-          setLoading(false);
-          console.log(err);
-        });
+    if (data && data.length > 0) {
+      setSubjectID(data[0].subject_id);
     }
-  }, []);
+  }, [data]);
 
   /* Handle Add Question */
-  const handleAddQuestion = () => {
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.addQuestion, {
-        exam_id: examID,
-        subject_id: Number(subjectID),
-        question_text: questionText,
-        question_number: Number(questionNumber),
-        answers: answersArray,
-      })
-      .then((res) => {
-        setPostLoading(false);
-        console.log(res);
-        setQuestionNumber(0);
-        setQuestionText("");
-      })
-      .catch((err) => {
-        setPostLoading(false);
-        console.log(err);
-      });
-  };
+  const [
+    ,
+    handleAddQuestion,
+    loadingAdd,
+    successAdd,
+    errorMessageAdd,
+    successStatusAdd,
+  ]: any = usePost(
+    {
+      exam_id: examID,
+      subject_id: Number(subjectID),
+      question_text: questionText,
+      question_number: Number(questionNumber),
+      answers: answersArray,
+    },
+    endPoint.addQuestion
+  );
+
+  /* Remove values when success */
+  React.useEffect(() => {
+    if (successStatusAdd) {
+      setQuestionNumber(0);
+      setQuestionText("");
+      setAnswersArray(Array(5).fill({ answer_text: "", status: false }));
+    }
+  }, [successStatusAdd]);
 
   /* Handle add answers to answersArray */
   const handleAddAnswer = (e: any, index: number) => {
@@ -76,7 +72,13 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
 
   return (
     <div className="add-question flexCenterColumn">
-      {postLoading && <Loading />}
+      {loadingAdd && <Loading />}
+      {successAdd && (
+        <MessageAlert message="تم إضافة السؤال بنجاح" type="success" />
+      )}
+      {errorMessageAdd && (
+        <MessageAlert message={errorMessageAdd} type="error" />
+      )}
       <button onClick={() => setShowAddQuestion(false)} className="back-button">
         {" "}
         الرجوع <BsArrowLeftCircle size={30} />{" "}
@@ -91,8 +93,8 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
             className="select-college"
             onChange={(e: any) => setSubjectID(e.target.value)}
           >
-            {subjectsData &&
-              subjectsData.map((item: any) => {
+            {data &&
+              data.map((item: any) => {
                 return <option value={item.subject_id}>{item.name}</option>;
               })}
           </select>
@@ -125,12 +127,14 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
               <textarea
                 name="answerText"
                 placeholder={item.placeholder}
+                value={answersArray[index]?.answer_text}
                 onChange={(e) => handleAddAnswer(e, index)}
               ></textarea>
               <select
                 name="answerStatus"
                 className="select-answer-status"
                 onChange={(e) => handleAddAnswer(e, index)}
+                value={answersArray[index]?.status}
               >
                 <option value={""}>اجابة خاطئة</option>
                 <option value={"true"}>اجابة صحيحة</option>

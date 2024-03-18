@@ -1,12 +1,13 @@
 import "./PasswordInput.scss";
 import passwordIcon from "../../../assets/images/Login/password.svg";
 
-const PasswordInput = ({ setCode, register }: any) => {
+const PasswordInput = ({ code, setCode, register }: any) => {
   return (
     <div className="password-input-component">
       <p>رمز الدخول</p>
       <input
         type="password"
+        value={code}
         placeholder="رمز الدخول"
         {...register("password", {
           required: "رمز الدخول مطلوب",

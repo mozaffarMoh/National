@@ -6,20 +6,24 @@ import useGet from "../../api/useGet";
 import { endPoint } from "../../api/endPoints";
 import Cookies from "js-cookie";
 import { Spinner } from "react-bootstrap";
+import Retry from "../Retry/Retry";
 
 const AllDawrat = () => {
   const navigate = useNavigate();
   const collegeUUID = Cookies.get("collegeUUID");
   const specialityUUID = Cookies.get("specialityUUID");
   const degree = Cookies.get("degree");
-  const [data, , , , loading]: any = useGet(endPoint.quizByDegree, {
-    isCollege_UUID: true,
-    isSpeciality_UUID: true,
-    isDegree: true,
-    college_UUID: collegeUUID,
-    speciality_UUID: specialityUUID,
-    degree: degree,
-  });
+  const [data, getData, loading, , , success, error]: any = useGet(
+    endPoint.quizByDegree,
+    {
+      isCollege_UUID: true,
+      isSpeciality_UUID: true,
+      isDegree: true,
+      college_UUID: collegeUUID,
+      speciality_UUID: specialityUUID,
+      degree: degree,
+    }
+  );
 
   const changeBgColor = (index: number) => {
     if (index % 2 === 0) {
@@ -30,12 +34,12 @@ const AllDawrat = () => {
   };
 
   /* Handle choose dawrat */
-  const handleChooseDawrat = (uuid: any) => {
+  const handleChooseDawrat = (uuid: any, name: any) => {
     Cookies.set("isSpecialityUUID", "true");
     Cookies.set("isExamUUID", "true");
     Cookies.set("isSubjectUUID", "");
     Cookies.set("examUUID", uuid);
-    navigate("/quiz-page");
+    navigate("/quiz-page", { state: { dawraName: name } });
   };
 
   return (
@@ -46,7 +50,7 @@ const AllDawrat = () => {
             <button
               key={index}
               className={`${changeBgColor(index)} flexStart`}
-              onClick={() => handleChooseDawrat(item.exam_uuid)}
+              onClick={() => handleChooseDawrat(item.exam_uuid, item.name)}
             >
               <img src={bookIcon} alt="" />
               <p>{item.name}</p>
@@ -58,7 +62,13 @@ const AllDawrat = () => {
         <div className="overflow-y-hidden">
           <Spinner />
         </div>
+      )}{" "}
+      {success && data.length === 0 && (
+        <div>
+          <h1>لايوجد دورات</h1>
+        </div>
       )}
+      {error && <Retry getData={getData} />}
     </div>
   );
 };

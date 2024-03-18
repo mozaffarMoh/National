@@ -27,16 +27,15 @@ const AdminHeader = () => {
     setLoading(true);
     apiNational
       .get(endPoint.adminLogout)
-      .then((res: any) => {
+      .then(() => {
         setLoading(false);
-        console.log(res);
         navigate("/dashboard/login");
         Cookies.remove("token");
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false);
         navigate("/dashboard/login");
-        console.log(err);
+        Cookies.remove("token");
       });
   };
 

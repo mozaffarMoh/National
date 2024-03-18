@@ -3,12 +3,9 @@ import cupIcon from "../../assets/images/QuizResult/cup.svg";
 import { Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
-const Result = ({ checkAnswers, data }: any) => {
+const Result = ({ showCheckAnswers, data }: any) => {
   const location = useLocation();
   let questionsNum = location.state?.questionsNum;
-  const handleCheck = () => {
-    checkAnswers();
-  };
 
   return (
     <div className="result flexCenterColumn">
@@ -30,7 +27,7 @@ const Result = ({ checkAnswers, data }: any) => {
       <Button
         className="result-button"
         variant="secondary"
-        onClick={handleCheck}
+        onClick={() => showCheckAnswers(true)}
       >
         التحقق من الاجابات
       </Button>

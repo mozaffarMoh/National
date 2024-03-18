@@ -12,19 +12,29 @@ import Cookies from "js-cookie";
 
 const QuizResult = () => {
   const location = useLocation();
-  const [checkAnswers, setCheckAnswers] = React.useState(false);
+  const [showCheckAnswers, setShowCheckAnswers] = React.useState(false);
   const collegeUUID = Cookies.get("collegeUUID");
-  const [data]: any = usePost(location.state.dataValue, endPoint.calculate, {
-    isuuid: true,
-    uuid: collegeUUID,
-  });
+  const [data, handleCheckAnswers, loading, success]: any = usePost(
+    location.state.dataValue,
+    endPoint.calculate,
+    {
+      isCollege_UUID: true,
+      college_UUID: collegeUUID,
+    }
+  );
+
+  React.useEffect(() => {
+    handleCheckAnswers();
+  }, [showCheckAnswers]);
 
   return (
     <div className="quiz-result flexCenterColumn">
       <Header />
       <BackTo />
-      <Result checkAnswers={() => setCheckAnswers(true)} data={data} />
-      {checkAnswers && <CorrectQuestions data={data} />}
+      <Result showCheckAnswers={setShowCheckAnswers} data={data} />
+      {showCheckAnswers && (
+        <CorrectQuestions data={data} loading={loading} success={success} />
+      )}
       <Footer />
     </div>
   );

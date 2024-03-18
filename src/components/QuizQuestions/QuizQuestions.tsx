@@ -2,6 +2,7 @@ import "./QuizQuestions.scss";
 import React from "react";
 import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { qestionsTextsArray } from "./َQuestionsTextsArray";
 import emptyCircle from "../../assets/images/QuizResult/nonSelected.svg";
 import fillCircle from "../../assets/images/QuizResult/selected.svg";
 import successIcon from "../../assets/images/QuizResult/answerSuccessIcon.svg";
@@ -12,11 +13,14 @@ import bookIcon from "../../assets/images/QuizResult/book.svg";
 import { endPoint } from "../../api/endPoints";
 import useGet from "../../api/useGet";
 import Cookies from "js-cookie";
+import Retry from "../Retry/Retry";
 
 const QuizQuestions = () => {
   const navigate = useNavigate();
   const squaresArray = Array(3).fill("");
   const [questionsArray, setQuestionsArray]: any = React.useState([]);
+  const [showCheckAnswer, setShowCheckAnswer] = React.useState(false);
+  const [currenQuestionIndex, setCurrenQuestionIndex]: any = React.useState();
   const collegeUUID = Cookies.get("collegeUUID");
   const specialityUUID = Cookies.get("specialityUUID");
   const subjectUUID = Cookies.get("subjectUUID");
@@ -26,7 +30,6 @@ const QuizQuestions = () => {
   const isExamUUID = Boolean(Cookies.get("isExamUUID"));
   const [showHoverStar, setShowHoverStar] = React.useState(false);
   const [starsIndexArray, setStarsIndexArray]: any = React.useState([-1]);
-  const [lastIndex, setLastIndex] = React.useState<number | any>(3);
 
   /* Quiz type based on boolean value that comes from cookies */
   const handleQuizType = () => {
@@ -39,17 +42,36 @@ const QuizQuestions = () => {
     }
   };
 
-  const [data, , , , loading]: any = useGet(handleQuizType(), {
-    isCollege_UUID: true,
-    isSpeciality_UUID: isSpecialityUUID,
-    isExam_UUID: isExamUUID,
-    isSubject_UUID: isSubjectUUID,
-    ///////
-    college_UUID: collegeUUID,
-    speciality_UUID: specialityUUID,
-    subject_UUID: subjectUUID,
-    exam_UUID: examUUID,
-  });
+  const [data, getData, loading, , , success, error]: any = useGet(
+    handleQuizType(),
+    {
+      isCollege_UUID: true,
+      isSpeciality_UUID: isSpecialityUUID,
+      isExam_UUID: isExamUUID,
+      isSubject_UUID: isSubjectUUID,
+      ///////
+      college_UUID: collegeUUID,
+      speciality_UUID: specialityUUID,
+      subject_UUID: subjectUUID,
+      exam_UUID: examUUID,
+    }
+  );
+  const [lastIndex, setLastIndex] = React.useState<number | any>(1);
+  React.useEffect(() => {
+    if (data.length > 3) {
+      setLastIndex(3);
+    }
+  }, [data]);
+
+  /* Handle show check the answer is correct aor wrong */
+  const handleCheckAnswer = (index: number) => {
+    if (index !== currenQuestionIndex) {
+      setShowCheckAnswer(true);
+    } else {
+      setShowCheckAnswer(!showCheckAnswer);
+    }
+    setCurrenQuestionIndex(index);
+  };
 
   /* add choose option to a new array */
   React.useEffect(() => {
@@ -118,7 +140,7 @@ const QuizQuestions = () => {
     setStarsIndexArray((prevArray: any) => {
       const newArray = [...prevArray];
       if (starsIndexArray.includes(index)) {
-        newArray.splice(index, 1);
+        newArray.splice(newArray.indexOf(index), 1);
         setShowHoverStar(false);
       } else {
         newArray.push(index);
@@ -153,6 +175,7 @@ const QuizQuestions = () => {
     if (index === lastIndex - 1 && lastIndex < data.length) {
       setLastIndex((prev: any) => prev + 1);
     }
+    window.scrollTo(0, window.scrollY + 500);
   };
 
   /* Handle Finish Exam */
@@ -168,10 +191,10 @@ const QuizQuestions = () => {
   return (
     <div className="quiz-questions flexCenterColumn">
       {questionsArray &&
-        questionsArray.slice(0, lastIndex).map((item: any, index: number) => {
+        questionsArray?.slice(0, lastIndex).map((item: any, index: number) => {
           return (
             <div className="quiz-questions-item" key={index}>
-              <p>السؤال الأول</p>
+              <p>{qestionsTextsArray[index]}</p>
               <p>{item.question_text}</p>
 
               <div className="answers flexCenterColumn">
@@ -200,6 +223,17 @@ const QuizQuestions = () => {
                       <div className="flexCenter">
                         <p>{answer.answer_text}</p>
                       </div>
+
+                      {showCheckAnswer && index == currenQuestionIndex && (
+                        <div>
+                          {answer.choose == 1 && answer.status == 1 && (
+                            <h5 className="right-answer">اجابة صحيحة</h5>
+                          )}
+                          {answer.choose == 1 && answer.status == 0 && (
+                            <h5 className="wrong-answer">اجابة خاطئة</h5>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -207,8 +241,11 @@ const QuizQuestions = () => {
 
               <div className="quiz-footer flexBetween">
                 <div className="flexCenter gap-4 ">
-                  <img src={successIcon} alt="" />
-
+                  <img
+                    src={successIcon}
+                    alt=""
+                    onClick={() => handleCheckAnswer(index)}
+                  />
                   <img
                     src={starIcon(index)}
                     alt=""
@@ -216,7 +253,6 @@ const QuizQuestions = () => {
                     onMouseLeave={() => handleStarIconLeaveHover(index)}
                     onClick={() => handleSelectFavorite(index, item.favorite)}
                   />
-
                   <img src={bookIcon} alt="" />
                 </div>
                 <Button
@@ -229,27 +265,30 @@ const QuizQuestions = () => {
             </div>
           );
         })}
-      {loading ? (
+      {loading && (
         <div className="overflow-y-hidden">
           <Spinner />
         </div>
-      ) : (
-        //Hide squares if questions array is fully visible
-        !(lastIndex === data.length) && (
-          <div className="w-100 flexCenterColumn">
-            {squaresArray.map((_: any, index: number) => {
-              return <div className="square" key={index}></div>;
-            })}
-            <Button
-              className="quiz-questions-button"
-              variant="secondary"
-              onClick={handleFinishExam}
-            >
-              أنه الاختبار الان
-            </Button>
-          </div>
-        )
       )}
+      {/*    Hide squares if questions array is fully visible */}
+      {success && lastIndex != data.length && questionsArray.length > 0 && (
+        <div className="w-100 flexCenterColumn">
+          {squaresArray.map((_: any, index: number) => {
+            return <div className="square" key={index}></div>;
+          })}
+          <Button
+            className="quiz-questions-button"
+            variant="secondary"
+            onClick={handleFinishExam}
+          >
+            أنه الاختبار الان
+          </Button>
+        </div>
+      )}
+      {success && questionsArray.length === 0 && (
+        <h3 className="mb-5">لايوجد أسئلة </h3>
+      )}
+      {error && <Retry getData={getData} />}
     </div>
   );
 };

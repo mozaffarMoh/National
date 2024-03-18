@@ -2,15 +2,17 @@ import "./UsernameInputEdit.scss";
 import usernameIcon from "../../assets/images/Login/username.svg";
 import editIcon from "../../assets/images/ProfileEdit/edit.svg";
 
-const UsernameInputEdit = ({ name, setName }: any) => {
+const UsernameInputEdit = ({ name, setName, register }: any) => {
   return (
     <div className="username-input-edit">
       <p>اسم المستخدم</p>
       <input
         type="text"
-        required
         placeholder="اسم المستخدم"
         value={name}
+        {...register("username", {
+          required: !name && "اسم المستخدم مطلوب",
+        })}
         onChange={(e) => setName(e.target.value)}
       />
       <img src={usernameIcon} className="username-icon" alt="" />

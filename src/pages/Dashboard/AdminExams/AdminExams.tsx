@@ -1,7 +1,6 @@
 import React from "react";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./AdminExams.scss";
-import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import { Table } from "antd";
 import useGet from "../../../api/useGet";
@@ -9,28 +8,94 @@ import { Button, Spinner } from "react-bootstrap";
 import { IoAddCircleSharp } from "react-icons/io5";
 import AddQuestion from "../../../components/Dashboard/AddQuestion/AddQuestion";
 import Loading from "../../../components/Loading/Loading";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
+import usePost from "../../../api/usePost";
 
 const AdminExams = () => {
-  const [data, , , , loading]: any = useGet(endPoint.adminColleges);
-  const [postLoading, setPostLoading] = React.useState(false);
+  const [data, , loading]: any = useGet(endPoint.adminColleges);
   const [name, setName] = React.useState("");
   const [collegeID, setCollegeID] = React.useState("1");
   const [specialityID, setSpecialityID] = React.useState("");
+  const [examID, setExamID] = React.useState("");
   const [examType, setExamType] = React.useState("exam");
   const [examDegree, setExamDegree] = React.useState("graduation");
-  const [specialistsData, setSpecialistsData] = React.useState([]);
-  const [refreshData, setRefreshData] = React.useState(false);
-  const [specialistsLoading, setSpecialistsLoading] = React.useState(false);
-  const [examsLoading, setExamsLoading] = React.useState(false);
-  const [examsData, setExamsData] = React.useState([]);
-  const [examID, setExamID] = React.useState("");
   const [showAddQuestion, setShowAddQuestion] = React.useState(false);
+
+  /* Get Specialists */
+  const [
+    specialistsData,
+    getSpecialistsData,
+    specialistsLoading,
+    ,
+    ,
+    ,
+    specialistsError,
+  ]: any = useGet(endPoint.adminSpecialists + collegeID);
+
+  /* Get Exams */
+  const [examsData, getExamsData, examsLoading, , , , examsError]: any = useGet(
+    endPoint.adminExams + collegeID
+  );
+
+  /* Add Exam */
+  const [
+    ,
+    handleAddExam,
+    loadingAdd,
+    successAdd,
+    errorMessageAdd,
+    successStatusAdd,
+  ]: any = usePost(
+    {
+      name: name,
+      ...(specialityID && { specialty_id: specialityID }),
+      type: examType,
+      degree: examDegree,
+    },
+    endPoint.addExam
+  );
+
+  /* fill CollegeId when data fetched */
+  React.useEffect(() => {
+    if (!collegeID) {
+      setCollegeID(data[0]?.college_id);
+    }
+  }, [data]);
+
+  /* Get Exams and Specialists if not fetched */
+  React.useEffect(() => {
+    if (specialistsError) {
+      getSpecialistsData();
+    }
+    if (examsError) {
+      getExamsData();
+    }
+  }, [specialistsError, examsError]);
 
   /* Handle add question */
   const handleAddQuestion = (id: any) => {
     setShowAddQuestion(true);
     setExamID(id);
   };
+
+  /* Choose college */
+  const handleChooseCollege = (e: any) => {
+    setCollegeID(e.target.value);
+    getExamsData();
+  };
+
+  /* Choose Specialist */
+  const handleChooseSpecialist = (e: any) => {
+    setSpecialityID(e.target.value);
+  };
+
+  /* Remove values when success */
+  React.useEffect(() => {
+    if (successStatusAdd) {
+      setName("");
+      getExamsData();
+    }
+  }, [successStatusAdd]);
 
   const columns: any = [
     {
@@ -76,75 +141,18 @@ const AdminExams = () => {
     },
   ];
 
-  /* Choose college */
-  const handleChooseCollege = (e: any) => {
-    setCollegeID(e.target.value);
-  };
-
-  /* Choose Specialist */
-  const handleChooseSpecialist = (e: any) => {
-    setSpecialityID(e.target.value);
-  };
-
-  /* Get Exams and specialists*/
-  React.useEffect(() => {
-    if (collegeID) {
-      setSpecialistsLoading(true);
-      setExamsLoading(true);
-      apiNational
-        .get(endPoint.adminExams + collegeID)
-        .then((res: any) => {
-          setExamsLoading(false);
-          setExamsData(res.data.data);
-        })
-        .catch((err) => {
-          console.log(err);
-          setExamsLoading(false);
-        });
-      apiNational
-        .get(endPoint.adminSpecialists + collegeID)
-        .then((res: any) => {
-          setSpecialistsLoading(false);
-          setSpecialistsData(res.data.data);
-          if (res.data.data.length > 0) {
-            setSpecialityID(res.data.data[0].specialty_id);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setSpecialistsLoading(false);
-        });
-    }
-  }, [collegeID, refreshData]);
-
-  /* Add Exam */
-  const handleAddExam = () => {
-    setPostLoading(true);
-    apiNational
-      .post(endPoint.addExam, {
-        name: name,
-        specialty_id: specialityID,
-        type: examType,
-        degree: examDegree,
-      })
-      .then((res) => {
-        setPostLoading(false);
-        console.log(res);
-        setRefreshData(!refreshData);
-        setName("");
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
-  };
-
   return (
     <div>
       <AdminHeader />
-      {postLoading && <Loading />}
+      {loadingAdd && <Loading />}
+      {successAdd && (
+        <MessageAlert message="تم إضافة الامتحان بنجاح" type="success" />
+      )}
+      {errorMessageAdd && (
+        <MessageAlert message={errorMessageAdd} type="error" />
+      )}
       <div className="admin-exams flexCenterColumn">
-        <h2>الامتحانات</h2>
+        <h2>الإمتحانات</h2>
         {!showAddQuestion ? (
           <div className="w-100 flexCenterColumn">
             <div className="flexCenter w-100">

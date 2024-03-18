@@ -1,5 +1,4 @@
 import { Table } from "antd";
-import apiNational from "../../../api/apiNational";
 import { endPoint } from "../../../api/endPoints";
 import AdminHeader from "../../../components/Dashboard/AdminHeader/AdminHeader";
 import "./Suggestions.scss";
@@ -8,28 +7,42 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { Spinner } from "react-bootstrap";
 import React from "react";
 import Loading from "../../../components/Loading/Loading";
+import MessageAlert from "../../../components/MessageAlert/MessageAlert";
 
 const Suggestions = () => {
-  const [data, setData, , , loading]: any = useGet(endPoint.suggestions);
-  const [postLoading, setPostLoading] = React.useState(false);
+  const [data, getData, loading]: any = useGet(endPoint.suggestions);
+  const [startDelete, setStartDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
 
-  /* Handle delete Suggetions */
-  const handleDelete = (id: any) => {
-    setPostLoading(true);
-    apiNational
-      .get(endPoint.deleteSuggestions + id)
-      .then((res) => {
-        setPostLoading(false);
-        console.log(res);
-        setData((prevData: any) =>
-          prevData.filter((item: any) => item.suggestion_id !== id)
-        );
-      })
-      .catch((err: any) => {
-        setPostLoading(false);
-        console.log(err);
-      });
+  const [
+    ,
+    handleDelete,
+    loadingDelete,
+    success,
+    errorMessage,
+    successStatus,
+  ]: any = useGet(endPoint.deleteSuggestions + deleteID);
+
+  /* set delete id and make start delete to true*/
+  const startDeleteProcess = (id: any) => {
+    setDeleteID(id);
+    setStartDelete(true);
   };
+
+  /* Start delete based on startDelete value */
+  React.useEffect(() => {
+    if (startDelete) {
+      handleDelete();
+      setStartDelete(false);
+    }
+  }, [startDelete]);
+
+  /* refresh data when success */
+  React.useEffect(() => {
+    if (successStatus) {
+      getData();
+    }
+  }, [successStatus]);
 
   const columns = [
     {
@@ -51,11 +64,11 @@ const Suggestions = () => {
       title: "حذف الاقتراح",
       dataIndex: "suggestion_id",
       key: "suggestion_id",
-      render: (id: number) => (
+      render: (id: any) => (
         <RiDeleteBin5Line
           color="blue"
           size={30}
-          onClick={() => handleDelete(id)}
+          onClick={() => startDeleteProcess(id)}
           cursor={"pointer"}
         />
       ),
@@ -65,7 +78,9 @@ const Suggestions = () => {
   return (
     <div>
       <AdminHeader />
-      {postLoading && <Loading />}
+      {loadingDelete && <Loading />}
+      {success && <MessageAlert message="تم الحذف بنجاح" type="success" />}
+      {errorMessage && <MessageAlert message={errorMessage} type="error" />}
       <div className="suggestions-ads flexCenterColumn">
         <h2>الاقتراحات</h2>
         <div className="table-container">

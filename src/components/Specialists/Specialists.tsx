@@ -10,12 +10,13 @@ import { Spinner } from "react-bootstrap";
 const Specialists = () => {
   const collegeRef: any = useRef(null);
   const othersRef: any = useRef(null);
-  const [showChooseSpecialist, setShowChooseSpecialist] = React.useState(false);
+  const [showChooseSpecialists, setShowChooseSpecialists] =
+    React.useState(false);
   const [showLoginRequired, setShowLoginRequired] = React.useState(false);
   const [hintYourCollege, setHintYourCollege] = React.useState(false);
   const collegeUUID = Cookies.get("collegeUUID");
   const token = Cookies.get("token");
-  const [data, , , , loading]: any = useGet(endPoint.colleges, {
+  const [data, , loading]: any = useGet(endPoint.colleges, {
     isCollege_UUID: true,
     college_UUID: collegeUUID,
   });
@@ -24,7 +25,7 @@ const Specialists = () => {
   const handleSelect = (currentUUID: any) => {
     if (token) {
       if (collegeUUID == currentUUID) {
-        setShowChooseSpecialist(true);
+        setShowChooseSpecialists(true);
       } else {
         setHintYourCollege(true);
         const rect = collegeRef.current.getBoundingClientRect();
@@ -91,7 +92,11 @@ const Specialists = () => {
           </div>
         )}
       </div>
-      {showChooseSpecialist && <ChooseSpecialistOnStart />}
+      {showChooseSpecialists && (
+        <ChooseSpecialistOnStart
+          setShowChooseSpecialists={setShowChooseSpecialists}
+        />
+      )}
       {showLoginRequired && (
         <LoginRequired setShowLoginRequired={setShowLoginRequired} />
       )}

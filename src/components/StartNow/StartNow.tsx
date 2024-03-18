@@ -10,7 +10,10 @@ const StartNow = () => {
           فقط “اطلع - اختبر - احصل على النتيجة
         </p>
       </div>
-      <button>ابدأ الآن</button>
+
+      <a href="#specialists" className="w-100">
+        <button>ابدأ الآن</button>
+      </a>
     </div>
   );
 };

@@ -4,18 +4,22 @@ import { endPoint } from "../../api/endPoints";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
+import Retry from "../Retry/Retry";
 
 const ClassificationList = () => {
   const navigate = useNavigate();
   const collegeUUID = Cookies.get("collegeUUID");
   const specialityUUID = Cookies.get("specialityUUID");
 
-  const [data, , , , loading]: any = useGet(endPoint.collegeSubject, {
-    isCollege_UUID: true,
-    isSpeciality_UUID: true,
-    college_UUID: collegeUUID,
-    speciality_UUID: specialityUUID,
-  });
+  const [data, getData, loading, , , success, error]: any = useGet(
+    endPoint.collegeSubject,
+    {
+      isCollege_UUID: true,
+      isSpeciality_UUID: true,
+      college_UUID: collegeUUID,
+      speciality_UUID: specialityUUID,
+    }
+  );
 
   const handleChooseSubject = (uuid: any) => {
     Cookies.set("isSpecialityUUID", "");
@@ -46,6 +50,12 @@ const ClassificationList = () => {
             <Spinner />
           </div>
         )}
+        {success && data.length === 0 && (
+          <div>
+            <h1>لايوجد مواد</h1>
+          </div>
+        )}
+        {error && <Retry getData={getData} />}
       </div>
     </div>
   );

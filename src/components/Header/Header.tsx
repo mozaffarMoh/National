@@ -9,14 +9,18 @@ import React, { useRef } from "react";
 import { Transition } from "react-transition-group";
 import Cookies from "js-cookie";
 import { endPoint } from "../../api/endPoints";
-import apiNational from "../../api/apiNational";
 import Loading from "../Loading/Loading";
+import MessageAlert from "../MessageAlert/MessageAlert";
+import apiNational from "../../api/apiNational";
 
 const Header = () => {
   const token = Cookies.get("token");
+  const collegeUUID = Cookies.get("collegeUUID");
   const navigate = useNavigate();
   const ref = useRef();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading]: any = React.useState(false);
+  const [showEditSuccessMessage, setShowEditSuccessMessage] =
+    React.useState(false);
   const [showProfileEdit, setShowProfileEdit] = React.useState(false);
   const [showProfileList, setShowProfileList] = React.useState(false);
   const [active, setActive] = React.useState(
@@ -27,27 +31,43 @@ const Header = () => {
     active === value ? setActive("") : setActive(value);
   };
 
+  /* Handle Logout */
   const handleLogout = () => {
     setLoading(true);
     apiNational
-      .get(endPoint.logout)
-      .then((res) => {
+      .get(endPoint.logout + "?college_uuid=" + collegeUUID)
+      .then(() => {
         setLoading(false);
+        Cookies.remove("token");
+        Cookies.remove("code");
         navigate("/login");
-        console.log(res);
       })
-      .catch((err: any) => {
+      .catch(() => {
         setLoading(false);
+        Cookies.remove("token");
+        Cookies.remove("code");
         navigate("/login");
-        console.log(err);
       });
-    Cookies.remove("token");
-    Cookies.remove("code");
   };
+
+  /* Hide success edit message */
+  React.useEffect(() => {
+    if (showEditSuccessMessage) {
+      setTimeout(() => {
+        setShowEditSuccessMessage(false);
+      }, 4000);
+    }
+  }, [showEditSuccessMessage]);
 
   return (
     <div className="header flexCenter row ">
       {loading && <Loading />}
+      {showEditSuccessMessage && (
+        <div className="edit-profile-success-message">
+          <MessageAlert message="تم التعديل بنجاح" type="success" />
+        </div>
+      )}
+
       {/* Darrebni logo */}
       <div className="logo col-3 d-flex">
         <img src={logo} alt="" />
@@ -64,15 +84,17 @@ const Header = () => {
         >
           <p>الرئيسية</p>
         </NavLink>
-        <a
-          href="#specialists"
-          className={`link-template ${
-            active === "specialists" && "link-template-active"
-          }`}
-          onClick={() => handleSetActive("specialists")}
-        >
-          <p>الإختصاصات</p>
-        </a>
+        {location.pathname === "/" && (
+          <a
+            href="#specialists"
+            className={`link-template ${
+              active === "specialists" && "link-template-active"
+            }`}
+            onClick={() => handleSetActive("specialists")}
+          >
+            <p>الإختصاصات</p>
+          </a>
+        )}
         <a
           className={`link-template ${
             active === "about" && "link-template-active"
@@ -139,7 +161,10 @@ const Header = () => {
       </div>
 
       {showProfileEdit && (
-        <ProfileEdit setShowProfileEdit={() => setShowProfileEdit(false)} />
+        <ProfileEdit
+          setShowProfileEdit={() => setShowProfileEdit(false)}
+          setShowEditSuccessMessage={setShowEditSuccessMessage}
+        />
       )}
     </div>
   );

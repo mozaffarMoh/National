@@ -1,23 +1,24 @@
-.choose-specialist-from-register {
+.choose-college-from-register {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 300px;
     margin-top: 20px;
+    margin-bottom: 10px;
 
     h3 {
         font-weight: 800;
     }
 
-    .specialist-items {
+    .college-items {
         width: 100%;
         height: 100%;
         justify-content: space-between;
         flex-wrap: wrap;
         font-size: 10px;
 
-     
-        .specialist-item {
+
+        .college-item {
             width: 100px;
             height: 50px;
             justify-content: flex-start;

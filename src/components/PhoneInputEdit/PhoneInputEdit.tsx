@@ -2,15 +2,22 @@ import "./PhoneInputEdit.scss";
 import phoneIcon from "../../assets/images/Login/phone.svg";
 import editIcon from "../../assets/images/ProfileEdit/edit.svg";
 
-const PhoneInputEdit = ({ phone, setPhone }: any) => {
+const PhoneInputEdit = ({ phone, setPhone, register }: any) => {
   return (
-    <div className="phone-input-edit">
+    <div className="phone-input-edit mt-4">
       <p>رقم الموبايل</p>
       <input
         type="text"
-        required
         placeholder="رقم الموبايل"
         value={phone}
+        {...register("phone", {
+          required: !phone && "رقم الهاتف مطلوب",
+
+          pattern: {
+            value: /^09\d{8}$/,
+            message: "يجب أن يتكون رقم الهاتف من 10 أرقام وأن تبدا ب 09 ",
+          },
+        })}
         onChange={(e) => setPhone(e.target.value)}
       />
       <img src={phoneIcon} className="phone-icon" alt="" />

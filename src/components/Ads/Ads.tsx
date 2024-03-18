@@ -11,7 +11,7 @@ const Ads = () => {
   const [indexValue, setIndexValue] = React.useState(2);
   const collegeUUID = Cookies.get("collegeUUID");
   const position = location.pathname == "/subject-selection" ? "exam" : "home";
-  const [data, , , , loading]: any = useGet(endPoint.sliders, {
+  const [data, , loading]: any = useGet(endPoint.sliders, {
     isCollege_UUID: true,
     college_UUID: collegeUUID,
     isPosition: true,
