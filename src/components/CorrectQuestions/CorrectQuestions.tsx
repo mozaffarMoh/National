@@ -17,11 +17,11 @@ const CorrectQuestions = ({ data, loading }: any) => {
 
   /* Handle Circle Image */
   const handleCircleImage = (child: any) => {
-    if (child.status === 1) {
+    if (child.status === true) {
       return successCircle;
     }
     if (child.choose === 1) {
-      if (child.status === 0) {
+      if (child.status === false) {
         return wrongCircle;
       }
     } else {
@@ -78,9 +78,9 @@ const CorrectQuestions = ({ data, loading }: any) => {
                         <p>{child.answer_text}</p>
                       </div>
                       <div className="flexCenter">
-                        {(child.choose == 1 && child.status == 1) ||
-                          (child.status == 1 && <img src={successIcon} />)}
-                        {child.choose == 1 && child.status == 0 && (
+                        {(child.choose == 1 && child.status == true) ||
+                          (child.status == true && <img src={successIcon} />)}
+                        {child.choose == 1 && child.status == false && (
                           <img src={wrongIcon} className="" />
                         )}
                       </div>
@@ -118,7 +118,7 @@ const CorrectQuestions = ({ data, loading }: any) => {
           return <div className="square" key={index}></div>;
         })}
       {!loading && data.length === 0 && (
-        <h1 className="mb-5"> ليس لديك أسئلة خاطئة</h1>
+        <h1 className="mb-5">ليس لديك أسئلة خاطئة</h1>
       )}
     </div>
   );
