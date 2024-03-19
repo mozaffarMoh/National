@@ -93,7 +93,6 @@ const ProfileEdit = ({
           type="submit"
           className="save-changes-button"
           variant="secondary"
-          onSubmit={editProfileFunc}
         >
           حفظ التغييرات
         </Button>

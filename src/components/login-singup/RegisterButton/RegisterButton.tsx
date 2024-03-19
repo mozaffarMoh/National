@@ -2,15 +2,10 @@ import { Button } from "react-bootstrap";
 import "./RegisterButton.scss";
 import { Link } from "react-router-dom";
 
-const RegisterButton = ({ handleRegister }: any) => {
+const RegisterButton = () => {
   return (
     <div className="register-button-component">
-      <Button
-        onSubmit={handleRegister}
-        className="register-button"
-        type="submit"
-        variant="secondary"
-      >
+      <Button className="register-button" type="submit" variant="secondary">
         {" "}
         إنشاء حساب
       </Button>

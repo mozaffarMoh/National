@@ -21,6 +21,7 @@ const PasswordInput = ({ code, setCode, register }: any) => {
           },
         })}
         onChange={(e) => setCode(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
       />
       <img src={passwordIcon} alt="" />
     </div>

@@ -17,6 +17,7 @@ const PhoneInput = ({ phone, setPhone, register }: any) => {
           },
         })}
         onChange={(e) => setPhone(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
       />
       <img src={phoneIcon} alt="" />
     </div>

@@ -12,8 +12,13 @@ const UsernameInputEdit = ({ name, setName, register }: any) => {
         value={name}
         {...register("username", {
           required: !name && "اسم المستخدم مطلوب",
+          pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "يجب ألا يحتوي الاسم على رموز وأرقام",
+          },
         })}
         onChange={(e) => setName(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
       />
       <img src={usernameIcon} className="username-icon" alt="" />
       <img src={editIcon} className="edit-icon" alt="" />

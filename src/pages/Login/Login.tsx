@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 const Login = () => {
   const [name, setName] = React.useState("");
   const [code, setCode]: any = React.useState("");
-  const [, handleLogin, loading, success, errorMessage] = usePost(
+  const [, handleLogin, loading, success, errorMessage]: any = usePost(
     {
       name: name,
       code: code,
@@ -55,7 +55,7 @@ const Login = () => {
           {errors.password && (
             <div className="error-message">{errors.password.message}</div>
           )}
-          <LoginButton handleLogin={handleLogin} handleSubmit={handleSubmit} />
+          <LoginButton />
         </form>
       </div>
       <div className="login-hello col-6 flexCenter">

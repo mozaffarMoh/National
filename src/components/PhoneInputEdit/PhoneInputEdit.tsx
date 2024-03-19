@@ -19,6 +19,7 @@ const PhoneInputEdit = ({ phone, setPhone, register }: any) => {
           },
         })}
         onChange={(e) => setPhone(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
       />
       <img src={phoneIcon} className="phone-icon" alt="" />
       <img src={editIcon} className="edit-icon" alt="" />

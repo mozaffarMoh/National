@@ -61,7 +61,7 @@ const Register = () => {
             collegeUUID={collegeUUID}
             setCollegeUUID={setCollegeUUID}
           />
-          <RegisterButton handleRegister={handleRegister} />
+          <RegisterButton />
         </form>
       </div>
       <div className="register-image col-6 flexCenter">
