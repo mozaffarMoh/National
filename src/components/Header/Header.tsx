@@ -31,22 +31,25 @@ const Header = () => {
     active === value ? setActive("") : setActive(value);
   };
 
+  /* Remove data from cookies when logout and navigate to login page*/
+  const removeCookiesAndNavigate = () => {
+    setLoading(false);
+    Cookies.remove("token");
+    Cookies.remove("code");
+    Cookies.remove("collegeUUID");
+    navigate("/login");
+  };
+
   /* Handle Logout */
   const handleLogout = () => {
     setLoading(true);
     apiNational
       .get(endPoint.logout + "?college_uuid=" + collegeUUID)
       .then(() => {
-        setLoading(false);
-        Cookies.remove("token");
-        Cookies.remove("code");
-        navigate("/login");
+        removeCookiesAndNavigate();
       })
       .catch(() => {
-        setLoading(false);
-        Cookies.remove("token");
-        Cookies.remove("code");
-        navigate("/login");
+        removeCookiesAndNavigate();
       });
   };
 

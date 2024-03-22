@@ -5,21 +5,23 @@ import { endPoint } from "../../../api/endPoints";
 import { Table } from "antd";
 import useGet from "../../../api/useGet";
 import { Button, Spinner } from "react-bootstrap";
-import { IoAddCircleSharp } from "react-icons/io5";
+import { IoAddCircleSharp, IoBookOutline } from "react-icons/io5";
 import AddQuestion from "../../../components/Dashboard/AddQuestion/AddQuestion";
 import Loading from "../../../components/Loading/Loading";
 import MessageAlert from "../../../components/MessageAlert/MessageAlert";
 import usePost from "../../../api/usePost";
+import AllQuestions from "../../../components/Dashboard/AllQuestions/AllQuestions";
 
 const AdminExams = () => {
   const [data, , loading]: any = useGet(endPoint.adminColleges);
   const [name, setName] = React.useState("");
-  const [collegeID, setCollegeID] = React.useState("1");
+  const [collegeID, setCollegeID] = React.useState("");
   const [specialityID, setSpecialityID] = React.useState("");
   const [examID, setExamID] = React.useState("");
   const [examType, setExamType] = React.useState("exam");
   const [examDegree, setExamDegree] = React.useState("graduation");
   const [showAddQuestion, setShowAddQuestion] = React.useState(false);
+  const [showAllQuestions, setShowAllQuestions] = React.useState(false);
 
   /* Get Specialists */
   const [
@@ -28,7 +30,7 @@ const AdminExams = () => {
     specialistsLoading,
     ,
     ,
-    ,
+    specialistsSuccess,
     specialistsError,
   ]: any = useGet(endPoint.adminSpecialists + collegeID);
 
@@ -62,19 +64,25 @@ const AdminExams = () => {
     }
   }, [data]);
 
-  /* Get Exams and Specialists if not fetched */
+  /* Get Exams and Specialists if not fetched also get it when collegeID change */
   React.useEffect(() => {
-    if (specialistsError) {
+    if (specialistsError || collegeID) {
       getSpecialistsData();
     }
-    if (examsError) {
+    if (examsError || collegeID) {
       getExamsData();
     }
-  }, [specialistsError, examsError]);
+  }, [specialistsError, examsError, collegeID]);
 
   /* Handle add question */
   const handleAddQuestion = (id: any) => {
     setShowAddQuestion(true);
+    setExamID(id);
+  };
+
+  /* Handle add question */
+  const handleAllQuestions = (id: any) => {
+    setShowAllQuestions(true);
     setExamID(id);
   };
 
@@ -89,13 +97,16 @@ const AdminExams = () => {
     setSpecialityID(e.target.value);
   };
 
-  /* Remove values when success */
+  /* Remove values when success and add if specialities successs add first value to speciality ID */
   React.useEffect(() => {
     if (successStatusAdd) {
       setName("");
       getExamsData();
     }
-  }, [successStatusAdd]);
+    if (specialistsSuccess) {
+      setSpecialityID(specialistsData[0]?.specialty_id);
+    }
+  }, [successStatusAdd, specialistsSuccess]);
 
   const columns: any = [
     {
@@ -124,17 +135,31 @@ const AdminExams = () => {
       key: "type",
     },
     {
-      title: "اضافة سؤال",
+      title: "أسئلة الامتحان",
       dataIndex: "exam_id",
       key: "exam_id",
       render: (id: any) => {
         return (
-          <div className="flexCenter w-50 ">
-            <IoAddCircleSharp
-              size={28}
-              cursor={"pointer"}
-              onClick={() => handleAddQuestion(id)}
-            />
+          <div
+            className="flexCenter w-50"
+            onClick={() => handleAllQuestions(id)}
+          >
+            <IoBookOutline size={30} cursor={"pointer"} />
+          </div>
+        );
+      },
+    },
+    {
+      title: "إضافة سؤال",
+      dataIndex: "exam_id",
+      key: "exam_id",
+      render: (id: any) => {
+        return (
+          <div
+            className="flexCenter w-50"
+            onClick={() => handleAddQuestion(id)}
+          >
+            <IoAddCircleSharp size={30} cursor={"pointer"} />
           </div>
         );
       },
@@ -153,7 +178,7 @@ const AdminExams = () => {
       )}
       <div className="admin-exams flexCenterColumn">
         <h2>الإمتحانات</h2>
-        {!showAddQuestion ? (
+        {!showAddQuestion && !showAllQuestions && (
           <div className="w-100 flexCenterColumn">
             <div className="flexCenter w-100">
               <div className="flexCenterColumn w-50">
@@ -225,15 +250,15 @@ const AdminExams = () => {
                     className="select-to-add-exam"
                     onChange={(e) => setExamType(e.target.value)}
                   >
-                    <option value={"exam"}>Exam</option>
-                    <option value={"book"}>Book</option>
+                    <option value={"exam"}>exam</option>
+                    <option value={"book"}>book</option>
                   </select>
                   <select
                     className="select-to-add-exam"
                     onChange={(e) => setExamDegree(e.target.value)}
                   >
-                    <option value={"graduation"}>Graduation</option>
-                    <option value={"master"}>Master</option>
+                    <option value={"graduation"}>تخرج</option>
+                    <option value={"master"}>ماستر</option>
                   </select>
                 </div>
               </div>
@@ -249,11 +274,18 @@ const AdminExams = () => {
               </Button>
             </div>
           </div>
-        ) : (
+        )}
+        {showAddQuestion && (
           <AddQuestion
             setShowAddQuestion={setShowAddQuestion}
             examID={examID}
             collegeID={collegeID}
+          />
+        )}
+        {showAllQuestions && (
+          <AllQuestions
+            setShowAllQuestions={setShowAllQuestions}
+            examID={examID}
           />
         )}
       </div>

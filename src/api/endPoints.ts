@@ -22,7 +22,9 @@ export const endPoint: any = {
     editSubject: '/admin/update-subject',
     adminExams: '/admin/exams?college_id=',
     addExam: '/admin/add-exam',
+    allQuestions: '/admin/show-questions?exam_id=',
     addQuestion: '/admin/add-question',
+    editQuestion: '/admin/update-question',
 
 
 

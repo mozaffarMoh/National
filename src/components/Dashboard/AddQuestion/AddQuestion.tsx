@@ -11,7 +11,7 @@ import MessageAlert from "../../MessageAlert/MessageAlert";
 
 const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
   const [questionText, setQuestionText] = React.useState("");
-  const [questionNumber, setQuestionNumber] = React.useState<number>(0);
+  const [questionNumber, setQuestionNumber] = React.useState("");
   const [subjectID, setSubjectID] = React.useState<number>();
   const [answersArray, setAnswersArray]: any = React.useState(
     Array(5).fill({ answer_text: "", status: false })
@@ -49,7 +49,7 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
   /* Remove values when success */
   React.useEffect(() => {
     if (successStatusAdd) {
-      setQuestionNumber(0);
+      setQuestionNumber("");
       setQuestionText("");
       setAnswersArray(Array(5).fill({ answer_text: "", status: false }));
     }
@@ -86,9 +86,9 @@ const AddQuestion = ({ setShowAddQuestion, examID, collegeID }: any) => {
       <h4>إضافة سؤال</h4>
 
       {/* Select subject */}
-      <div className="flexCenter w-100 ">
+      <div className="choose-subject flexCenter">
         <h6>اختر المادة : &nbsp;</h6>
-        <div className="flexStart w-50 ">
+        <div className="flexCenter w-50">
           <select
             className="select-college"
             onChange={(e: any) => setSubjectID(e.target.value)}

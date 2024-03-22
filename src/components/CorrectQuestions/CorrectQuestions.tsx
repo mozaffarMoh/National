@@ -44,11 +44,11 @@ const CorrectQuestions = ({ data, loading }: any) => {
 
   /* Handle Change Color */
   const handleChangeColor = (child: any) => {
-    if (child.status === 1) {
+    if (child.status === true) {
       return "success-answer";
     }
 
-    if (child.choose === 1 && child.status === 0) {
+    if (child.choose === 1 && child.status === false) {
       return "wrong-answer";
     }
   };

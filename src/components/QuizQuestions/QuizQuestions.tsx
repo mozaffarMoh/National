@@ -14,6 +14,7 @@ import { endPoint } from "../../api/endPoints";
 import useGet from "../../api/useGet";
 import Cookies from "js-cookie";
 import Retry from "../Retry/Retry";
+import MessageAlert from "../MessageAlert/MessageAlert";
 
 const QuizQuestions = () => {
   const navigate = useNavigate();
@@ -29,7 +30,10 @@ const QuizQuestions = () => {
   const isSubjectUUID = Boolean(Cookies.get("isSubjectUUID"));
   const isExamUUID = Boolean(Cookies.get("isExamUUID"));
   const [showHoverStar, setShowHoverStar] = React.useState(false);
+  const [showMessage, setShowMessage] = React.useState(false);
   const [starsIndexArray, setStarsIndexArray]: any = React.useState([-1]);
+  const [lastIndex, setLastIndex] = React.useState<number | any>(1);
+  const [checkChoicesArray, setCheckChoicesArray]: any = React.useState([]);
 
   /* Quiz type based on boolean value that comes from cookies */
   const handleQuizType = () => {
@@ -56,7 +60,8 @@ const QuizQuestions = () => {
       exam_UUID: examUUID,
     }
   );
-  const [lastIndex, setLastIndex] = React.useState<number | any>(1);
+
+  /* If questions more than three show 3 questions from start and if letter show one question from start */
   React.useEffect(() => {
     if (data.length > 3) {
       setLastIndex(3);
@@ -109,6 +114,15 @@ const QuizQuestions = () => {
       };
       return newArray;
     });
+
+    /* add value to checkChoices Array to force use not leave until he fill the choices */
+    if (!checkChoicesArray.includes(index)) {
+      setCheckChoicesArray((prevArray: any) => {
+        const newArray = [...prevArray];
+        newArray.push(index);
+        return newArray;
+      });
+    }
   };
 
   /* Handle show star icon */
@@ -158,18 +172,6 @@ const QuizQuestions = () => {
     });
   };
 
-  /* Handle Remove answer selected */
-  const handleRemoveSelectAnswer = (index: number, indexAnswer: number) => {
-    setQuestionsArray((prevArray: any) => {
-      const newArray = [...prevArray];
-      newArray[index].answers[indexAnswer] = {
-        ...newArray[index].answers[indexAnswer],
-        choose: 0,
-      };
-      return newArray;
-    });
-  };
-
   /* Show next question | If the last element of the Correct Questions Array is shown, this function will not work */
   const handleNextQuestions = (index: number) => {
     if (index === lastIndex - 1 && lastIndex < data.length) {
@@ -180,16 +182,28 @@ const QuizQuestions = () => {
 
   /* Handle Finish Exam */
   const handleFinishExam = () => {
-    navigate("/quiz-result", {
-      state: {
-        dataValue: JSON.stringify({ data: questionsArray.slice(0, lastIndex) }),
-        questionsNum: lastIndex,
-      },
-    });
+    if (checkChoicesArray.length == lastIndex) {
+      navigate("/quiz-result", {
+        state: {
+          dataValue: JSON.stringify({
+            data: questionsArray.slice(0, lastIndex),
+          }),
+          questionsNum: lastIndex,
+        },
+      });
+    } else {
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+      }, 4000);
+    }
   };
 
   return (
     <div className="quiz-questions flexCenterColumn">
+      {showMessage && (
+        <MessageAlert message="لإنهاء الاختبار يجب عليك الاجابة على جميع الاسئلة المتوفرة أمامك" />
+      )}{" "}
       {questionsArray &&
         questionsArray?.slice(0, lastIndex).map((item: any, index: number) => {
           return (
@@ -211,13 +225,7 @@ const QuizQuestions = () => {
                             }
                           />
                         ) : (
-                          <img
-                            src={fillCircle}
-                            alt=""
-                            onClick={() =>
-                              handleRemoveSelectAnswer(index, indexAnswer)
-                            }
-                          />
+                          <img src={fillCircle} alt="" />
                         )}
                       </div>
                       <div className="flexCenter">

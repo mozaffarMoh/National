@@ -15,7 +15,7 @@ const QuizResult = () => {
   const [showCheckAnswers, setShowCheckAnswers] = React.useState(false);
   const collegeUUID = Cookies.get("collegeUUID");
   const [data, handleCheckAnswers, loading, success]: any = usePost(
-    location.state.dataValue,
+    location.state?.dataValue,
     endPoint.calculate,
     {
       isCollege_UUID: true,

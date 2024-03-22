@@ -58,7 +58,8 @@ const useGet = (endPoint: any, isObject?: any) => {
     React.useEffect(() => {
         if (!token) {
             if (location.pathname.includes("/dashboard")) {
-                navigate('/dashboard/login')
+                navigate('/dashboard/login');
+                Cookies.remove("token");
             } else {
                 if (location.pathname !== '/' && location.pathname !== '/register') {
                     navigate('/')
