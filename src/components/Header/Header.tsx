@@ -132,7 +132,7 @@ const Header = () => {
                         className="handle-profile-item flexStart"
                         onClick={() => setShowProfileEdit(true)}
                       >
-                        <div className="icon-field mt-3">
+                        <div className="icon-field">
                           <img src={profileIcon} />{" "}
                         </div>
                         <p className="mt-3">تعديل الملف الشخصي</p>
@@ -143,7 +143,7 @@ const Header = () => {
                         className="handle-profile-item flexCenter"
                         onClick={handleLogout}
                       >
-                        <div className="icon-field mt-3">
+                        <div className="icon-field mt-2">
                           <img src={logoutIcon} />
                         </div>
                         <p className="mt-3">تسجيل الخروج</p>

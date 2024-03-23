@@ -293,7 +293,7 @@ const QuizQuestions = () => {
         </div>
       )}
       {success && questionsArray.length === 0 && (
-        <h3 className="mb-5">لايوجد أسئلة </h3>
+        <h3 className="mb-5 lh-base">لايوجد أسئلة </h3>
       )}
       {error && <Retry getData={getData} />}
     </div>
