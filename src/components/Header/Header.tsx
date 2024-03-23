@@ -3,19 +3,18 @@ import { Button } from "react-bootstrap";
 import logo from "../../assets/images/Header/logo darebni.png";
 import profileIcon from "../../assets/images/Header/profile.svg";
 import logoutIcon from "../../assets/images/Header/logout.svg";
-import ProfileEdit from "../ProfileEdit/ProfileEdit";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import React, { useRef } from "react";
 import { Transition } from "react-transition-group";
 import Cookies from "js-cookie";
 import { endPoint } from "../../api/endPoints";
-import Loading from "../Loading/Loading";
-import MessageAlert from "../MessageAlert/MessageAlert";
 import apiNational from "../../api/apiNational";
+import { Loading, MessageAlert, ProfileEdit } from "..";
 
 const Header = () => {
   const token = Cookies.get("token");
   const collegeUUID = Cookies.get("collegeUUID");
+  const specialityUUID = Cookies.get("specialityUUID");
   const navigate = useNavigate();
   const ref = useRef();
   const [loading, setLoading]: any = React.useState(false);
@@ -37,6 +36,7 @@ const Header = () => {
     Cookies.remove("token");
     Cookies.remove("code");
     Cookies.remove("collegeUUID");
+    Cookies.remove("specialityUUID");
     navigate("/login");
   };
 
@@ -87,7 +87,7 @@ const Header = () => {
         >
           <p>الرئيسية</p>
         </NavLink>
-        {location.pathname === "/" && (
+        {!specialityUUID && (
           <a
             href="#specialists"
             className={`link-template ${

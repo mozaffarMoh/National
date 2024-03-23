@@ -1,15 +1,16 @@
 import "./Register.scss";
 import registerImage from "../../assets/images/Login/sign-up.svg";
-import UsernameInput from "../../components/login-singup/UsernameInput/UsernameInput";
-import PhoneInput from "../../components/login-singup/PhoneInput/PhoneInput";
-import RegisterButton from "../../components/login-singup/RegisterButton/RegisterButton";
-import ChooseCollege from "../../components/login-singup/ChooseCollege/ChooseCollege";
 import React from "react";
 import { endPoint } from "../../api/endPoints";
-import Loading from "../../components/Loading/Loading";
-import MessageAlert from "../../components/MessageAlert/MessageAlert";
 import usePost from "../../api/usePost";
 import { useForm } from "react-hook-form";
+import { Loading, MessageAlert } from "../../components";
+import {
+  RegisterButton,
+  UsernameInput,
+  PhoneInput,
+  ChooseCollege,
+} from "../../components/login-singup";
 
 const Register = () => {
   const [name, setName] = React.useState("");

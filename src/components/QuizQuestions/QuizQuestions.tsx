@@ -13,8 +13,7 @@ import bookIcon from "../../assets/images/QuizResult/book.svg";
 import { endPoint } from "../../api/endPoints";
 import useGet from "../../api/useGet";
 import Cookies from "js-cookie";
-import Retry from "../Retry/Retry";
-import MessageAlert from "../MessageAlert/MessageAlert";
+import { MessageAlert, Retry } from "..";
 
 const QuizQuestions = () => {
   const navigate = useNavigate();
