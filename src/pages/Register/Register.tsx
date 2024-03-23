@@ -38,10 +38,10 @@ const Register = () => {
   }, [success]);
 
   return (
-    <div className="register flexCenter row">
+    <div className="register flexCenter">
       {loading && <Loading />}
 
-      <div className="register-form-background col-6 flexCenter">
+      <div className="register-form-background flexCenter">
         {success && (
           <MessageAlert message="تم إنشاء الحساب بنجاح " type="success" />
         )}
@@ -65,7 +65,7 @@ const Register = () => {
           <RegisterButton />
         </form>
       </div>
-      <div className="register-image col-6 flexCenter">
+      <div className="register-image flexCenter">
         <img src={registerImage} alt="" />
       </div>
     </div>
