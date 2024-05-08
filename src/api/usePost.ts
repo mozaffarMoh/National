@@ -30,7 +30,7 @@ const usePost = (body: any, endPoint: any, isObject?: any, isFormData?: any) => 
 
                 setTimeout(() => {
                     if (res?.data?.data?.token) {
-                        Cookies.set("token", res.data.data.token);
+                        Cookies.set("token", res.data.data.token, { httpOnly: true });
                         Cookies.set("code", res.data.data.code);
                         Cookies.set("collegeUUID", res.data.college_uuid);
                         navigate("/");
