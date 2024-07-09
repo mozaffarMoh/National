@@ -24,7 +24,7 @@ const useGet = (endPoint: any, isObject?: any) => {
     const getData = () => {
         setErrorStatus(false);
         setSuccessStatus(false);
-        setLoading(true)
+        setLoading(true);
         apiNational
             .get(endPoint + college_UUID + speciality_UUID + subject_UUID + exam_UUID + degree + position)
             .then((res) => {
