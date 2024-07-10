@@ -28,7 +28,9 @@ const AdminLogin = () => {
       .then((res) => {
         setLoading(false);
         router("/dashboard/users");
-        Cookies.set("token", res.data.data.token);
+        Cookies.set("token", res.data.data.token, {
+          expires: new Date("9999-12-31T23:59:59"),
+        });
       })
       .catch((err) => {
         setLoading(false);

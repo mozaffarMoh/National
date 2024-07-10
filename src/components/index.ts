@@ -21,4 +21,6 @@ export { default as AllDawrat } from './AllDawrat/AllDawrat';
 export { default as ProfileEdit } from './ProfileEdit/ProfileEdit';
 export { default as UsernameInputEdit } from './UsernameInputEdit/UsernameInputEdit';
 export { default as PhoneInputEdit } from './PhoneInputEdit/PhoneInputEdit';
+export { default as DeleteConfirmation } from './DeleteConfirmation/DeleteConfirmation';
+
 

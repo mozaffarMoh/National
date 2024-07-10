@@ -9,12 +9,17 @@ import { Spinner } from "react-bootstrap";
 import usePost from "../../../api/usePost";
 import { AdminHeader } from "../../../components/Dashboard";
 import { Loading, MessageAlert } from "../../../components";
+import { RiImageEditLine } from "react-icons/ri";
 
 const AdminColleges = () => {
   const [data, getData, loading]: any = useGet(endPoint.adminColleges);
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState("");
+  const [editId, setEditId] = React.useState(-1);
   const [imageFile, setImageFile]: any = React.useState<File | null>(null);
+  const [editImageFile, setEditImageFile]: any = React.useState<File | null>(
+    null
+  );
   const {
     register,
     handleSubmit,
@@ -33,13 +38,28 @@ const AdminColleges = () => {
     successStatus,
   ]: any = usePost(formData, endPoint.addCollege, null, true);
 
-  /* Handle Add Image */
+  /* Handle Add Edit */
   const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       setImageFile(files[0]);
     }
   };
+
+  /* Handle Add Image */
+  const handleAddImageEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setEditImageFile(files[0]);
+    }
+  };
+
+  React.useEffect(() => {
+    if (setEditImageFile) {
+      console.log("start edit this image : ", editId);
+      setEditImageFile(null);
+    }
+  }, [editImageFile]);
 
   const columns: any = [
     {
@@ -62,6 +82,26 @@ const AdminColleges = () => {
       dataIndex: "image",
       key: "image",
       render: (url: any) => <img src={url} width={100} height={100} />,
+    },
+    {
+      title: "تعديل الصورة",
+      dataIndex: "college_id",
+      key: "college_id",
+      render: (id: number) => {
+        return (
+          <div className="flexStart">
+            <input
+              type="file"
+              id="edit-image-id"
+              hidden
+              onChange={handleAddImageEdit}
+            />
+            <label htmlFor="edit-image-id" onClick={() => setEditId(id)}>
+              <RiImageEditLine size={40} cursor={"pointer"} />
+            </label>
+          </div>
+        );
+      },
     },
   ];
 

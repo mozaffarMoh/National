@@ -6,12 +6,13 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { Spinner } from "react-bootstrap";
 import React from "react";
 import { AdminHeader } from "../../../components/Dashboard";
-import { Loading, MessageAlert } from "../../../components";
+import { DeleteConfirmation, Loading, MessageAlert } from "../../../components";
 
 const Suggestions = () => {
   const [data, getData, loading]: any = useGet(endPoint.suggestions);
   const [startDelete, setStartDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
+  const [showConfirmation, setShowConfirmation] = React.useState(false);
 
   const [
     ,
@@ -25,7 +26,7 @@ const Suggestions = () => {
   /* set delete id and make start delete to true*/
   const startDeleteProcess = (id: any) => {
     setDeleteID(id);
-    setStartDelete(true);
+    setShowConfirmation(true);
   };
 
   /* Start delete based on startDelete value */
@@ -39,6 +40,7 @@ const Suggestions = () => {
   /* refresh data when success */
   React.useEffect(() => {
     if (successStatus) {
+      setShowConfirmation(false);
       getData();
     }
   }, [successStatus]);
@@ -77,6 +79,12 @@ const Suggestions = () => {
   return (
     <div>
       <AdminHeader />
+      {showConfirmation && (
+        <DeleteConfirmation
+          setShowConfirmation={setShowConfirmation}
+          setStartDelete={setStartDelete}
+        />
+      )}
       {loadingDelete && <Loading />}
       {success && <MessageAlert message="تم الحذف بنجاح" type="success" />}
       {errorMessage && <MessageAlert message={errorMessage} type="error" />}

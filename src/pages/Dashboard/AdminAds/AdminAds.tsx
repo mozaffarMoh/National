@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 import usePost from "../../../api/usePost";
 import useGet from "../../../api/useGet";
 import { AdminHeader } from "../../../components/Dashboard";
-import { Loading, MessageAlert } from "../../../components";
+import { DeleteConfirmation, Loading, MessageAlert } from "../../../components";
 
 const AdminAds = () => {
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ const AdminAds = () => {
   const [imagesArray, setImagesArray]: any = React.useState([]);
   const [startDelete, setStartDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
+  const [showConfirmation, setShowConfirmation] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -50,7 +51,7 @@ const AdminAds = () => {
   /* set delete id and make start delete to true*/
   const startDeleteProcess = (id: any) => {
     setDeleteID(id);
-    setStartDelete(true);
+    setShowConfirmation(true);
   };
 
   /* Start delete based on startDelete value */
@@ -103,6 +104,7 @@ const AdminAds = () => {
       getData();
     }
     if (successDelete) {
+      setShowConfirmation(false);
       getData();
     }
   }, [successStatusAdd, successDelete]);
@@ -168,6 +170,12 @@ const AdminAds = () => {
       )}
       {errorMessageDelete && (
         <MessageAlert message={errorMessageDelete} type="error" />
+      )}
+      {showConfirmation && (
+        <DeleteConfirmation
+          setShowConfirmation={setShowConfirmation}
+          setStartDelete={setStartDelete}
+        />
       )}
       <div className="admin-ads flexCenterColumn">
         <h2>الإعلانات</h2>

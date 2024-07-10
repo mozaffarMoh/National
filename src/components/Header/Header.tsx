@@ -83,7 +83,7 @@ const Header = () => {
         </NavLink>
         {!specialityUUID && !location.pathname.includes("about") && (
           <a
-            href="/#specialists"
+            href="#specialists"
             className={`link-template ${
               location.hash.includes("#specialists") && "link-template-active"
             }`}
