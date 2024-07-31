@@ -4,6 +4,21 @@
             overflow-y: hidden;
         }
 
+        .close-icon-edit {
+            path {
+                transition: all .5s ease;
+                color: #6F2877;
+            }
+
+            cursor: pointer;
+
+            &:hover {
+                path {
+                    color: #6F287799;
+                }
+            }
+        }
+
         position: fixed;
         top: 10px;
         z-index: 30;

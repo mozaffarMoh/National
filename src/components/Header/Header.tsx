@@ -158,7 +158,7 @@ const Header = () => {
         )}
       </div>
 
-      {showProfileEdit && (
+      {!showProfileEdit && (
         <ProfileEdit
           setShowProfileEdit={() => setShowProfileEdit(false)}
           setShowEditSuccessMessage={setShowEditSuccessMessage}

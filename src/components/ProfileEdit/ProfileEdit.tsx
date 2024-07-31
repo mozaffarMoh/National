@@ -14,6 +14,7 @@ import {
   Retry,
   UsernameInputEdit,
 } from "..";
+import { FaWindowClose } from "react-icons/fa";
 
 const ProfileEdit = ({
   setShowProfileEdit,
@@ -99,7 +100,14 @@ const ProfileEdit = ({
     <div className="profile-edit flexCenter">
       {postLoading && <Loading />}
       {errorMessage && <MessageAlert message={errorMessage} type="error" />}
-
+      <div className="d-flex justify-content-start  w-100">
+        <FaWindowClose 
+          size={30}
+          className="close-icon-edit"
+          color="white"
+          onClick={() => setShowProfileEdit(false)}
+        />
+      </div>
       <p>تعديل المعلومات الشخصية</p>
 
       <div className="profile-edit-avatar flexCenterColumn">
@@ -141,7 +149,7 @@ const ProfileEdit = ({
         >
           حفظ التغييرات
         </Button>
-        <span onClick={() => setShowProfileEdit(false)}>خروج</span>
+        <span onClick={() => setShowProfileEdit(false)}>تراجع</span>
       </form>
     </div>
   );
